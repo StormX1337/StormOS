@@ -147,7 +147,8 @@ jobs:
           if (-not (Get-ChildItem artifacts/preview -Filter *.png -ErrorAction SilentlyContinue)) { Write-Host 'No screenshots captured.'; exit 0 }
           # Orphan commit built from a separate index: the screenshots never touch a branch.
           $env:GIT_INDEX_FILE = Join-Path $env:RUNNER_TEMP 'preview.index'
-          git add -f -- 'artifacts/preview/*.png' 'artifacts/preview/*.txt'
+          $files = Get-ChildItem artifacts/preview -File | Where-Object { $_.Extension -in '.png', '.txt' } | ForEach-Object { "artifacts/preview/$($_.Name)" }
+          git add -f -- @files
           $tree = git write-tree
           $commit = git commit-tree $tree -m "Installer preview for ${{ github.sha }} (run ${{ github.run_number }})"
           git push -f origin "${commit}:refs/ci/installer-preview"
