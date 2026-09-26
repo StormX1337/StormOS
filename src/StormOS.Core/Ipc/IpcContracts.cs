@@ -160,3 +160,8 @@ public sealed record RunningGamesResponse(IReadOnlyList<RunningGame> Games);
 /// <param name="WarmupSeconds">Warm-up period.</param>
 /// <param name="Label">Label such as "before" or "after".</param>
 public sealed record GamingBenchmarkRequest(int ProcessId, int DurationSeconds = 60, int WarmupSeconds = 5, string? Label = null);
+
+/// <summary>Metric history request (maximum range seven days).</summary>
+/// <param name="From">Range start.</param>
+/// <param name="To">Range end.</param>
+public sealed record MetricHistoryRequest(DateTimeOffset From, DateTimeOffset To);

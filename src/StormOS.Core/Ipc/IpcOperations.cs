@@ -68,6 +68,9 @@ public static class IpcOperations
 
     /// <summary>Runs a gaming benchmark via the service frame capture.</summary>
     public const string BenchmarkGaming = "benchmark.gaming";
+
+    /// <summary>Reads downsampled metric history recorded by the service.</summary>
+    public const string MetricHistory = "history.metrics";
 }
 
 /// <summary>Event topics pushed by the service.</summary>

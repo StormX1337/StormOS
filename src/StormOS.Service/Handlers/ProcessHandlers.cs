@@ -103,3 +103,22 @@ public sealed class SessionsListHandler(IHistoryStore history) : IpcHandler<NoPa
     protected override async Task<object?> HandleAsync(NoPayload payload, IIpcSession session, CancellationToken cancellationToken) =>
         await history.ListSessionsAsync(limit: 200, cancellationToken: cancellationToken).ConfigureAwait(false);
 }
+
+/// <summary>history.metrics: downsampled history (at most 2000 points).</summary>
+public sealed class MetricHistoryHandler(IHistoryStore history) : IpcHandler<MetricHistoryRequest>
+{
+    /// <inheritdoc />
+    public override string Operation => IpcOperations.MetricHistory;
+
+    /// <inheritdoc />
+    protected override string? Validate(MetricHistoryRequest payload) =>
+        payload.To <= payload.From || payload.To - payload.From > TimeSpan.FromDays(7) ? "The range must be positive and at most seven days." : null;
+
+    /// <inheritdoc />
+    protected override async Task<object?> HandleAsync(MetricHistoryRequest payload, IIpcSession session, CancellationToken cancellationToken)
+    {
+        var points = await history.ReadMetricHistoryAsync(payload.From, payload.To, cancellationToken).ConfigureAwait(false);
+        var step = Math.Max(1, points.Count / 2000);
+        return step == 1 ? points : points.Where((_, i) => i % step == 0).ToList();
+    }
+}

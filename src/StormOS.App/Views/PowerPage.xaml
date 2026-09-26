@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="StormOS.App.Views.PowerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:h="using:StormOS.App.Helpers"
+    xmlns:vm="using:StormOS.App.ViewModels">
+
+    <ScrollViewer>
+        <StackPanel Padding="28,16,28,28" Spacing="16" MaxWidth="1200" HorizontalAlignment="Left">
+            <Grid>
+                <StackPanel>
+                    <TextBlock Text="Power" Style="{StaticResource StormPageTitleStyle}" />
+                    <TextBlock Text="Plan changes are backed up and can be restored from History." Style="{StaticResource StormPageSubtitleStyle}" />
+                </StackPanel>
+                <Button HorizontalAlignment="Right" VerticalAlignment="Center" Content="Refresh" Command="{x:Bind ViewModel.RefreshCommand}" />
+            </Grid>
+
+            <Border Style="{StaticResource StormPanelStyle}">
+                <Grid ColumnSpacing="24">
+                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                    <StackPanel>
+                        <TextBlock Text="ACTIVE PLAN" Style="{StaticResource StormLabelStyle}" />
+                        <TextBlock Text="{x:Bind ViewModel.ActivePlan, Mode=OneWay}" Style="{StaticResource StormMetricValueStyle}" />
+                    </StackPanel>
+                    <StackPanel Grid.Column="1">
+                        <TextBlock Text="EFFECTIVE POWER MODE" Style="{StaticResource StormLabelStyle}" />
+                        <TextBlock Text="{x:Bind ViewModel.PowerMode, Mode=OneWay}" Style="{StaticResource StormMetricValueStyle}" />
+                    </StackPanel>
+                    <Button Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center" Content="Create Ultimate Performance plan…" Command="{x:Bind ViewModel.CreateUltimateCommand}" Visibility="{x:Bind h:Format.Hide(ViewModel.HasUltimate), Mode=OneWay}" />
+                </Grid>
+            </Border>
+
+            <ItemsControl ItemsSource="{x:Bind ViewModel.Plans}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:PowerPlanRow">
+                        <Border Style="{StaticResource StormPanelStyle}" Margin="0,0,0,10">
+                            <Grid ColumnSpacing="16">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                <StackPanel Spacing="4">
+                                    <StackPanel Orientation="Horizontal" Spacing="10">
+                                        <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" FontSize="16" />
+                                        <Border Style="{StaticResource StormBadgeStyle}" Visibility="{x:Bind h:Format.Show(IsActive)}"><TextBlock Text="{x:Bind Status}" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource StormAccentBrush}" /></Border>
+                                    </StackPanel>
+                                    <TextBlock Text="{x:Bind Description}" Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" />
+                                    <TextBlock Text="{x:Bind Guid}" Style="{StaticResource StormCaptionStyle}" IsTextSelectionEnabled="True" />
+                                </StackPanel>
+                                <Button Grid.Column="1" VerticalAlignment="Center" Content="ACTIVATE…" Click="OnActivate" IsEnabled="{x:Bind h:Format.Not(IsActive)}" />
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

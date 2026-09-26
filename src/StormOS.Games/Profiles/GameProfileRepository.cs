@@ -85,8 +85,7 @@ public sealed class GameProfileRepository : IGameProfileRepository
     public static bool Matches(ExecutableMatch match, string executablePath, string? commandLine)
     {
         ArgumentNullException.ThrowIfNull(match);
-        var fileName = Path.GetFileName(executablePath.Replace('/', '\\').Split('\\')[^1]);
-        if (!WildcardMatcher.IsMatch(match.Name, fileName))
+        if (!WildcardMatcher.IsMatch(match.Name, FileName(executablePath)))
         {
             return false;
         }
@@ -136,7 +135,17 @@ public sealed class GameProfileRepository : IGameProfileRepository
     /// <param name="executablePath">Executable path or name.</param>
     /// <returns><see langword="true"/> when a command line check is needed.</returns>
     public bool NeedsCommandLine(string executablePath) =>
-        Profiles.Any(p => p.Detection.Executables.Any(m => m.CommandLineContains is not null && WildcardMatcher.IsMatch(m.Name, Path.GetFileName(executablePath))));
+        Profiles.Any(p => p.Detection.Executables.Any(m => m.CommandLineContains is not null && WildcardMatcher.IsMatch(m.Name, FileName(executablePath))));
+
+    /// <summary>Returns the file name of a Windows or POSIX style path.</summary>
+    /// <param name="path">Path.</param>
+    /// <returns>The file name.</returns>
+    public static string FileName(string path)
+    {
+        ArgumentNullException.ThrowIfNull(path);
+        var index = path.LastIndexOfAny(['\\', '/']);
+        return index >= 0 ? path[(index + 1)..] : path;
+    }
 
     /// <inheritdoc />
     public void Reload()

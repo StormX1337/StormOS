@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="StormOS.App.Views.NetworkPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:h="using:StormOS.App.Helpers"
+    xmlns:c="using:StormOS.App.Controls"
+    xmlns:vm="using:StormOS.App.ViewModels">
+
+    <ScrollViewer>
+        <StackPanel Padding="28,16,28,28" Spacing="16" MaxWidth="1600">
+            <Grid>
+                <StackPanel>
+                    <TextBlock Text="Network" Style="{StaticResource StormPageTitleStyle}" />
+                    <TextBlock Text="{x:Bind ViewModel.ReportTime, Mode=OneWay}" Style="{StaticResource StormPageSubtitleStyle}" />
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Spacing="10">
+                    <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" Width="18" Height="18" />
+                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" VerticalAlignment="Center" />
+                    <CheckBox Content="Include download test" IsChecked="{x:Bind ViewModel.IncludeThroughput, Mode=TwoWay}" ToolTipService.ToolTip="Downloads about 25 MB from the configured test endpoint." />
+                    <Button Style="{StaticResource AccentButtonStyle}" Command="{x:Bind ViewModel.RunCommand}" IsEnabled="{x:Bind h:Format.Not(ViewModel.IsBusy), Mode=OneWay}">
+                        <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE774;" FontSize="14" /><TextBlock Text="RUN NETWORK TEST" /></StackPanel>
+                    </Button>
+                    <Button Content="Cancel" Command="{x:Bind ViewModel.CancelCommand}" IsEnabled="{x:Bind ViewModel.IsBusy, Mode=OneWay}" />
+                </StackPanel>
+            </Grid>
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="CONNECTION" Style="{StaticResource StormSectionTitleStyle}" />
+                        <TextBlock Text="{x:Bind ViewModel.InterfaceText, Mode=OneWay}" FontWeight="SemiBold" />
+                        <TextBlock Text="{x:Bind ViewModel.AddressText, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                        <Grid ColumnSpacing="12" RowSpacing="6">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                            <TextBlock Text="Internet" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Column="1" Text="{x:Bind ViewModel.InternetText, Mode=OneWay}" Style="{StaticResource StormValueStyle}" TextWrapping="Wrap" />
+                            <TextBlock Grid.Row="1" Text="Router" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind ViewModel.GatewayText, Mode=OneWay}" Style="{StaticResource StormValueStyle}" TextWrapping="Wrap" />
+                            <TextBlock Grid.Row="2" Text="Download" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind ViewModel.ThroughputText, Mode=OneWay}" Style="{StaticResource StormValueStyle}" TextWrapping="Wrap" />
+                        </Grid>
+                        <TextBlock Text="LATENCY PER PING" Style="{StaticResource StormLabelStyle}" Margin="0,6,0,0" />
+                        <c:LineChart Height="120" Values="{x:Bind ViewModel.PingSamples, Mode=OneWay}" Unit=" ms" />
+                        <ItemsControl ItemsSource="{x:Bind ViewModel.Issues}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="x:String">
+                                    <StackPanel Orientation="Horizontal" Spacing="8" Margin="0,2">
+                                        <FontIcon Glyph="&#xE7BA;" FontSize="13" Foreground="{ThemeResource StormWarningBrush}" />
+                                        <TextBlock Text="{x:Bind}" Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" />
+                                    </StackPanel>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="STORM NETWORK SCORE" Style="{StaticResource StormSectionTitleStyle}" />
+                        <c:ScoreView Breakdown="{x:Bind ViewModel.Score, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border Style="{StaticResource StormPanelStyle}">
+                <StackPanel Spacing="10">
+                    <Grid>
+                        <TextBlock Text="DNS" Style="{StaticResource StormSectionTitleStyle}" />
+                        <Button HorizontalAlignment="Right" Content="Restore previous DNS" Command="{x:Bind ViewModel.RestoreDnsCommand}" Visibility="{x:Bind h:Format.Show(ViewModel.HasDnsChange), Mode=OneWay}" />
+                    </Grid>
+                    <TextBlock Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap"
+                               Text="Response times of your current DNS servers and alternatives. Changing DNS is optional, applies to the active adapter only and can be restored. Faster DNS speeds up lookups, not in-game ping." />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Dns}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:DnsRow">
+                                <Grid ColumnSpacing="16" Padding="0,6" BorderBrush="{ThemeResource StormPanelBorderBrush}" BorderThickness="0,0,0,1">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="160" /><ColumnDefinition Width="110" /><ColumnDefinition Width="110" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                    <TextBlock Text="{x:Bind Server}" FontWeight="SemiBold" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="1" Text="{x:Bind Role}" Style="{StaticResource StormLabelStyle}" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="2" Text="{x:Bind Latency}" Style="{StaticResource StormValueStyle}" Foreground="{x:Bind h:Format.PassBrush(Success)}" VerticalAlignment="Center" />
+                                    <TextBlock Grid.Column="3" Text="{x:Bind Detail}" Style="{StaticResource StormCaptionStyle}" TextTrimming="CharacterEllipsis" VerticalAlignment="Center" />
+                                    <Button Grid.Column="4" Content="USE THIS DNS…" Click="OnUseDns" Visibility="{x:Bind h:Format.Show(CanUse)}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition /></Grid.ColumnDefinitions>
+                <Border Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="TCP CONNECT" Style="{StaticResource StormSectionTitleStyle}" />
+                        <ItemsControl ItemsSource="{x:Bind ViewModel.Tcp}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:TcpRow">
+                                    <Grid Padding="0,3">
+                                        <TextBlock Text="{x:Bind Endpoint}" Style="{StaticResource StormBodyStyle}" />
+                                        <TextBlock HorizontalAlignment="Right" Text="{x:Bind Value}" Style="{StaticResource StormValueStyle}" Foreground="{x:Bind h:Format.PassBrush(Success)}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="ROUTE" Style="{StaticResource StormSectionTitleStyle}" />
+                        <ItemsControl ItemsSource="{x:Bind ViewModel.Route}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:HopRow">
+                                    <Grid Padding="0,2" ColumnSpacing="12">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="30" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                        <TextBlock Text="{x:Bind Number}" Style="{StaticResource StormLabelStyle}" />
+                                        <TextBlock Grid.Column="1" Text="{x:Bind Address}" Style="{StaticResource StormBodyStyle}" IsTextSelectionEnabled="True" />
+                                        <TextBlock Grid.Column="2" Text="{x:Bind Rtt}" Style="{StaticResource StormValueStyle}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

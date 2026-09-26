@@ -1,0 +1,246 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="StormOS.App.Views.DashboardPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:h="using:StormOS.App.Helpers"
+    xmlns:c="using:StormOS.App.Controls"
+    xmlns:telemetry="using:StormOS.Core.Telemetry">
+
+    <ScrollViewer>
+        <StackPanel Padding="28,16,28,28" Spacing="18" MaxWidth="1600">
+            <Grid>
+                <StackPanel>
+                    <TextBlock Text="STORM OS" Style="{StaticResource StormPageTitleStyle}" CharacterSpacing="160" />
+                    <TextBlock Text="Your PC. Your performance. Your control." Style="{StaticResource StormPageSubtitleStyle}" />
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Spacing="10">
+                    <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" Width="18" Height="18" />
+                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" VerticalAlignment="Center" />
+                </StackPanel>
+            </Grid>
+
+            <!-- Quick actions -->
+            <Grid ColumnSpacing="10">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Style="{StaticResource StormQuickActionButtonStyle}" Command="{x:Bind ViewModel.QuickOptimizeCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><FontIcon Glyph="&#xE945;" Foreground="{ThemeResource StormAccentBrush}" /><TextBlock Text="QUICK OPTIMIZE" FontWeight="SemiBold" FontSize="12" CharacterSpacing="40" /></StackPanel>
+                </Button>
+                <Button Grid.Column="1" Style="{StaticResource StormQuickActionButtonStyle}" Command="{x:Bind ViewModel.QuickBenchmarkCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><FontIcon Glyph="&#xEC4A;" Foreground="{ThemeResource StormAccentBrush}" /><TextBlock Text="QUICK BENCHMARK" FontWeight="SemiBold" FontSize="12" CharacterSpacing="40" /></StackPanel>
+                </Button>
+                <Button Grid.Column="2" Style="{StaticResource StormQuickActionButtonStyle}" Command="{x:Bind ViewModel.QuickNetworkTestCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><FontIcon Glyph="&#xE774;" Foreground="{ThemeResource StormAccentBrush}" /><TextBlock Text="QUICK NETWORK TEST" FontWeight="SemiBold" FontSize="12" CharacterSpacing="40" /></StackPanel>
+                </Button>
+                <Button Grid.Column="3" Style="{StaticResource StormQuickActionButtonStyle}" Command="{x:Bind ViewModel.ToggleOverlayCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><FontIcon Glyph="&#xE7F4;" Foreground="{ThemeResource StormAccentBrush}" /><TextBlock Text="START / STOP OVERLAY" FontWeight="SemiBold" FontSize="12" CharacterSpacing="40" /></StackPanel>
+                </Button>
+                <Button Grid.Column="4" Style="{StaticResource StormQuickActionButtonStyle}" Command="{x:Bind ViewModel.OpenGameCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><FontIcon Glyph="&#xE7FC;" Foreground="{ThemeResource StormAccentBrush}" /><TextBlock Text="OPEN GAME" FontWeight="SemiBold" FontSize="12" CharacterSpacing="40" /></StackPanel>
+                </Button>
+                <Button Grid.Column="5" Style="{StaticResource StormQuickActionButtonStyle}" Command="{x:Bind ViewModel.SystemScanCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="10"><FontIcon Glyph="&#xE9D9;" Foreground="{ThemeResource StormAccentBrush}" /><TextBlock Text="SYSTEM SCAN" FontWeight="SemiBold" FontSize="12" CharacterSpacing="40" /></StackPanel>
+                </Button>
+            </Grid>
+
+            <!-- CPU / GPU / FPS -->
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="CPU" Style="{StaticResource StormSectionTitleStyle}" />
+                        <TextBlock Text="{x:Bind ViewModel.CpuName, Mode=OneWay}" Style="{StaticResource StormLabelStyle}" />
+                        <TextBlock Text="{x:Bind h:Format.Reading(ViewModel.Snapshot.Cpu.Usage, '0', ' %'), Mode=OneWay}" Style="{StaticResource StormMetricValueStyle}" />
+                        <c:LineChart Height="70" Values="{x:Bind ViewModel.CpuHistory, Mode=OneWay}" Maximum="100" Unit=" %" />
+                        <Grid RowSpacing="6" ColumnSpacing="8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                            <TextBlock Text="Clock" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Column="1" Text="{x:Bind h:Format.Reading(ViewModel.Snapshot.Cpu.FrequencyMhz, '0', ' MHz'), Mode=OneWay}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="1" Text="Temperature" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind h:Format.Reading(ViewModel.Snapshot.Cpu.TemperatureCelsius, '0', ' °C'), Mode=OneWay}" Style="{StaticResource StormValueStyle}" ToolTipService.ToolTip="{x:Bind h:Format.ReadingReason(ViewModel.Snapshot.Cpu.TemperatureCelsius), Mode=OneWay}" />
+                            <TextBlock Grid.Row="2" Text="Package power" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind h:Format.Reading(ViewModel.Snapshot.Cpu.PackagePowerWatts, '0.0', ' W'), Mode=OneWay}" Style="{StaticResource StormValueStyle}" ToolTipService.ToolTip="{x:Bind h:Format.ReadingReason(ViewModel.Snapshot.Cpu.PackagePowerWatts), Mode=OneWay}" />
+                        </Grid>
+                        <ItemsRepeater ItemsSource="{x:Bind ViewModel.Cores, Mode=OneWay}" Height="36">
+                            <ItemsRepeater.Layout><StackLayout Orientation="Horizontal" Spacing="2" /></ItemsRepeater.Layout>
+                            <ItemsRepeater.ItemTemplate>
+                                <DataTemplate x:DataType="telemetry:CoreMetrics">
+                                    <Grid Width="6" Height="36" Background="{ThemeResource StormSubtleFillBrush}" CornerRadius="2" ToolTipService.ToolTip="{x:Bind h:Format.Number(UsagePercent, '0', ' %')}">
+                                        <Border VerticalAlignment="Bottom" Height="{x:Bind h:Format.Scale(UsagePercent, 36)}" Background="{ThemeResource StormAccentBrush}" CornerRadius="2" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsRepeater.ItemTemplate>
+                        </ItemsRepeater>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="GPU" Style="{StaticResource StormSectionTitleStyle}" />
+                        <TextBlock Text="{x:Bind ViewModel.GpuName, Mode=OneWay}" Style="{StaticResource StormLabelStyle}" />
+                        <TextBlock Text="{x:Bind h:Format.Reading(ViewModel.Gpu.Usage, '0', ' %'), Mode=OneWay}" Style="{StaticResource StormMetricValueStyle}" />
+                        <c:LineChart Height="70" Values="{x:Bind ViewModel.GpuHistory, Mode=OneWay}" Maximum="100" Unit=" %" />
+                        <Grid RowSpacing="6" ColumnSpacing="8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                            <TextBlock Text="Temperature" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Column="1" Text="{x:Bind h:Format.Reading(ViewModel.Gpu.TemperatureCelsius, '0', ' °C'), Mode=OneWay}" Style="{StaticResource StormValueStyle}" ToolTipService.ToolTip="{x:Bind h:Format.ReadingReason(ViewModel.Gpu.TemperatureCelsius), Mode=OneWay}" />
+                            <TextBlock Grid.Row="1" Text="Core clock" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind h:Format.Reading(ViewModel.Gpu.CoreClockMhz, '0', ' MHz'), Mode=OneWay}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="2" Text="Memory clock" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind h:Format.Reading(ViewModel.Gpu.MemoryClockMhz, '0', ' MHz'), Mode=OneWay}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="3" Text="VRAM" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Style="{StaticResource StormValueStyle}">
+                                <Run Text="{x:Bind h:Format.Bytes(ViewModel.Gpu.MemoryUsedBytes), Mode=OneWay}" /><Run Text=" / " /><Run Text="{x:Bind h:Format.Bytes(ViewModel.Gpu.MemoryTotalBytes), Mode=OneWay}" />
+                            </TextBlock>
+                            <TextBlock Grid.Row="4" Text="Power" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{x:Bind h:Format.Reading(ViewModel.Gpu.PowerWatts, '0', ' W'), Mode=OneWay}" Style="{StaticResource StormValueStyle}" ToolTipService.ToolTip="{x:Bind h:Format.ReadingReason(ViewModel.Gpu.PowerWatts), Mode=OneWay}" />
+                            <TextBlock Grid.Row="5" Text="Fan" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{x:Bind h:Format.Reading(ViewModel.Gpu.FanRpm, '0', ' RPM'), Mode=OneWay}" Style="{StaticResource StormValueStyle}" ToolTipService.ToolTip="{x:Bind h:Format.ReadingReason(ViewModel.Gpu.FanRpm), Mode=OneWay}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="FPS" Style="{StaticResource StormSectionTitleStyle}" />
+                        <TextBlock Text="{x:Bind ViewModel.Snapshot.Frames.ProcessName, Mode=OneWay, FallbackValue='No game captured'}" Style="{StaticResource StormLabelStyle}" />
+                        <TextBlock Text="{x:Bind h:Format.Number(ViewModel.Snapshot.Frames.Fps, '0', ''), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormLargeValueStyle}" />
+                        <c:LineChart Height="70" Values="{x:Bind ViewModel.FpsHistory, Mode=OneWay}" Unit=" fps" />
+                        <Grid RowSpacing="6" ColumnSpacing="8">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                            <TextBlock Text="AVG" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Column="1" Text="{x:Bind h:Format.Number(ViewModel.Snapshot.Frames.Window.AverageFps, '0', ''), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="1" Text="1% LOW" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind h:Format.Number(ViewModel.Snapshot.Frames.Window.OnePercentLowFps, '0', ''), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="2" Text="0.1% LOW" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind h:Format.Number(ViewModel.Snapshot.Frames.Window.PointOnePercentLowFps, '0', ''), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="3" Text="FRAME TIME" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{x:Bind h:Format.Number(ViewModel.Snapshot.Frames.FrameTimeMs, '0.00', ' ms'), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="4" Text="Source" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{x:Bind ViewModel.Snapshot.Frames.Source, Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                        </Grid>
+                        <TextBlock Visibility="{x:Bind h:Format.Hide(ViewModel.HasFrames), Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" Text="Frame timing appears automatically when a game is detected and the STORM OS service can capture it (PresentMon or ETW)." />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- RAM / Storage / Network -->
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="MEMORY" Style="{StaticResource StormSectionTitleStyle}" />
+                        <TextBlock Text="{x:Bind h:Format.Percent(ViewModel.Snapshot.Memory.UsagePercent), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormMetricValueStyle}" />
+                        <ProgressBar Value="{x:Bind h:Format.Clamp100(ViewModel.Snapshot.Memory.UsagePercent), Mode=OneWay, FallbackValue=0}" Maximum="100" />
+                        <Grid RowSpacing="6">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                            <TextBlock Text="Used" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Column="1" Text="{x:Bind h:Format.Bytes(ViewModel.Snapshot.Memory.UsedBytes), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="1" Text="Available" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind h:Format.Bytes(ViewModel.Snapshot.Memory.AvailableBytes), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="2" Text="Total" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind h:Format.Bytes(ViewModel.Snapshot.Memory.TotalBytes), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="3" Text="Committed" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{x:Bind h:Format.Bytes(ViewModel.Snapshot.Memory.CommittedBytes), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="STORAGE" Style="{StaticResource StormSectionTitleStyle}" />
+                        <TextBlock Text="{x:Bind ViewModel.SystemDrive.RootPath, Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormLabelStyle}" />
+                        <TextBlock Style="{StaticResource StormMetricValueStyle}">
+                            <Run Text="{x:Bind h:Format.Bytes(ViewModel.SystemDrive.FreeBytes), Mode=OneWay, FallbackValue='—'}" /><Run Text=" free" FontSize="16" />
+                        </TextBlock>
+                        <ProgressBar Value="{x:Bind h:Format.Clamp100(ViewModel.SystemDrive.UsedPercent), Mode=OneWay, FallbackValue=0}" Maximum="100" />
+                        <Grid RowSpacing="6">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                            <TextBlock Text="Disk activity" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Column="1" Text="{x:Bind ViewModel.DiskActivity, Mode=OneWay}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="1" Text="Capacity" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind h:Format.Bytes(ViewModel.SystemDrive.TotalBytes), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="2" Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="NETWORK" Style="{StaticResource StormSectionTitleStyle}" />
+                        <TextBlock Text="{x:Bind ViewModel.PrimaryNetwork.Name, Mode=OneWay, FallbackValue='No active interface'}" Style="{StaticResource StormLabelStyle}" />
+                        <TextBlock Text="{x:Bind h:Format.Reading(ViewModel.Snapshot.System.LatencyMs, '0', ' ms'), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormMetricValueStyle}" ToolTipService.ToolTip="Latency to the configured target (ICMP)" />
+                        <Grid RowSpacing="6">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                            <TextBlock Text="Download" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Column="1" Text="{x:Bind h:Format.BytesRate(ViewModel.PrimaryNetwork.ReceivedBytesPerSecond), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="1" Text="Upload" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind h:Format.BytesRate(ViewModel.PrimaryNetwork.SentBytesPerSecond), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="2" Text="Link speed" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind h:Format.BitRate(ViewModel.PrimaryNetwork.LinkSpeedBitsPerSecond), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormValueStyle}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <!-- System / Scores -->
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="2*" /></Grid.ColumnDefinitions>
+
+                <Border Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="8">
+                        <TextBlock Text="SYSTEM" Style="{StaticResource StormSectionTitleStyle}" />
+                        <Grid RowSpacing="6" ColumnSpacing="12">
+                            <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+                            <TextBlock Text="Windows" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Column="1" Style="{StaticResource StormValueStyle}"><Run Text="{x:Bind ViewModel.Os.ProductName, Mode=OneWay}" /><Run Text=" " /><Run Text="{x:Bind ViewModel.Os.DisplayVersion, Mode=OneWay}" /></TextBlock>
+                            <TextBlock Grid.Row="1" Text="Build" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="1" Grid.Column="1" Text="{x:Bind ViewModel.Os.VersionString, Mode=OneWay}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="2" Text="Host name" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{x:Bind ViewModel.Os.HostName, Mode=OneWay}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="3" Text="Boot time" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{x:Bind h:Format.DateTime(ViewModel.Os.BootTime), Mode=OneWay}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="4" Text="Uptime" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="4" Grid.Column="1" Text="{x:Bind ViewModel.Uptime, Mode=OneWay}" Style="{StaticResource StormValueStyle}" />
+                            <TextBlock Grid.Row="5" Text="Active game" Style="{StaticResource StormLabelStyle}" />
+                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{x:Bind ViewModel.Snapshot.System.ActiveGame, Mode=OneWay, TargetNullValue='None', FallbackValue='None'}" Style="{StaticResource StormValueStyle}" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Grid.Column="1" Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="STORM SCORES" Style="{StaticResource StormSectionTitleStyle}" />
+                        <TextBlock Style="{StaticResource StormCaptionStyle}" Text="Scores are computed only from measured inputs. Hover a score to see inputs and weights; missing inputs are excluded, never guessed." />
+                        <Grid ColumnSpacing="12">
+                            <Grid.ColumnDefinitions><ColumnDefinition /><ColumnDefinition /><ColumnDefinition /><ColumnDefinition /></Grid.ColumnDefinitions>
+                            <Border Style="{StaticResource StormSubtlePanelStyle}" ToolTipService.ToolTip="{x:Bind h:ScoreText.Describe(ViewModel.PerformanceScore), Mode=OneWay}">
+                                <StackPanel Spacing="4"><TextBlock Text="PERFORMANCE" Style="{StaticResource StormLabelStyle}" /><TextBlock Text="{x:Bind h:Format.Score(ViewModel.PerformanceScore.Score), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormMetricValueStyle}" Foreground="{x:Bind h:Format.ScoreBrush(ViewModel.PerformanceScore.Score), Mode=OneWay}" /><TextBlock Text="{x:Bind ViewModel.PerformanceScore.Rating, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" /></StackPanel>
+                            </Border>
+                            <Border Grid.Column="1" Style="{StaticResource StormSubtlePanelStyle}" ToolTipService.ToolTip="{x:Bind h:ScoreText.Describe(ViewModel.GamingScore), Mode=OneWay}">
+                                <StackPanel Spacing="4"><TextBlock Text="GAMING" Style="{StaticResource StormLabelStyle}" /><TextBlock Text="{x:Bind h:Format.Score(ViewModel.GamingScore.Score), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormMetricValueStyle}" Foreground="{x:Bind h:Format.ScoreBrush(ViewModel.GamingScore.Score), Mode=OneWay}" /><TextBlock Text="{x:Bind ViewModel.GamingScore.Rating, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" /></StackPanel>
+                            </Border>
+                            <Border Grid.Column="2" Style="{StaticResource StormSubtlePanelStyle}" ToolTipService.ToolTip="{x:Bind h:ScoreText.Describe(ViewModel.HealthScore), Mode=OneWay}">
+                                <StackPanel Spacing="4"><TextBlock Text="SYSTEM HEALTH" Style="{StaticResource StormLabelStyle}" /><TextBlock Text="{x:Bind h:Format.Score(ViewModel.HealthScore.Score), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormMetricValueStyle}" Foreground="{x:Bind h:Format.ScoreBrush(ViewModel.HealthScore.Score), Mode=OneWay}" /><TextBlock Text="{x:Bind ViewModel.HealthScore.Rating, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" /></StackPanel>
+                            </Border>
+                            <Border Grid.Column="3" Style="{StaticResource StormSubtlePanelStyle}" ToolTipService.ToolTip="{x:Bind h:ScoreText.Describe(ViewModel.NetworkScore), Mode=OneWay}">
+                                <StackPanel Spacing="4"><TextBlock Text="NETWORK" Style="{StaticResource StormLabelStyle}" /><TextBlock Text="{x:Bind h:Format.Score(ViewModel.NetworkScore.Score), Mode=OneWay, FallbackValue='—'}" Style="{StaticResource StormMetricValueStyle}" Foreground="{x:Bind h:Format.ScoreBrush(ViewModel.NetworkScore.Score), Mode=OneWay}" /><TextBlock Text="{x:Bind ViewModel.NetworkScore.Rating, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" /></StackPanel>
+                            </Border>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

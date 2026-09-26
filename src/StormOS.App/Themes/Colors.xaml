@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+    <!-- Storm accent (also drives the system accent used by WinUI controls). -->
+    <Color x:Key="SystemAccentColor">#FF40C4FF</Color>
+    <Color x:Key="SystemAccentColorLight1">#FF66D1FF</Color>
+    <Color x:Key="SystemAccentColorLight2">#FF8FDDFF</Color>
+    <Color x:Key="SystemAccentColorLight3">#FFB8EAFF</Color>
+    <Color x:Key="SystemAccentColorDark1">#FF1FA8E6</Color>
+    <Color x:Key="SystemAccentColorDark2">#FF168BC0</Color>
+    <Color x:Key="SystemAccentColorDark3">#FF0F6A93</Color>
+
+    <ResourceDictionary.ThemeDictionaries>
+        <ResourceDictionary x:Key="Default">
+            <SolidColorBrush x:Key="StormBackgroundBrush" Color="#FF0E1016" />
+            <SolidColorBrush x:Key="StormPanelBrush" Color="#CC161A22" />
+            <SolidColorBrush x:Key="StormPanelSolidBrush" Color="#FF161A22" />
+            <SolidColorBrush x:Key="StormPanelBorderBrush" Color="#FF242A36" />
+            <SolidColorBrush x:Key="StormSubtleFillBrush" Color="#FF1D222C" />
+            <SolidColorBrush x:Key="StormTextPrimaryBrush" Color="#FFF0F3F8" />
+            <SolidColorBrush x:Key="StormTextSecondaryBrush" Color="#FF969EAF" />
+            <SolidColorBrush x:Key="StormTextTertiaryBrush" Color="#FF6B7385" />
+            <SolidColorBrush x:Key="StormAccentBrush" Color="#FF40C4FF" />
+            <SolidColorBrush x:Key="StormAccentSubtleBrush" Color="#2640C4FF" />
+            <SolidColorBrush x:Key="StormSuccessBrush" Color="#FF3DDC97" />
+            <SolidColorBrush x:Key="StormWarningBrush" Color="#FFFFB84D" />
+            <SolidColorBrush x:Key="StormErrorBrush" Color="#FFFF5C6C" />
+            <SolidColorBrush x:Key="StormChartGridBrush" Color="#FF232936" />
+        </ResourceDictionary>
+        <ResourceDictionary x:Key="Light">
+            <SolidColorBrush x:Key="StormBackgroundBrush" Color="#FFF4F6FA" />
+            <SolidColorBrush x:Key="StormPanelBrush" Color="#E6FFFFFF" />
+            <SolidColorBrush x:Key="StormPanelSolidBrush" Color="#FFFFFFFF" />
+            <SolidColorBrush x:Key="StormPanelBorderBrush" Color="#FFE1E5EC" />
+            <SolidColorBrush x:Key="StormSubtleFillBrush" Color="#FFEEF1F6" />
+            <SolidColorBrush x:Key="StormTextPrimaryBrush" Color="#FF10141C" />
+            <SolidColorBrush x:Key="StormTextSecondaryBrush" Color="#FF5A6275" />
+            <SolidColorBrush x:Key="StormTextTertiaryBrush" Color="#FF8A92A5" />
+            <SolidColorBrush x:Key="StormAccentBrush" Color="#FF0A8FD0" />
+            <SolidColorBrush x:Key="StormAccentSubtleBrush" Color="#1F0A8FD0" />
+            <SolidColorBrush x:Key="StormSuccessBrush" Color="#FF16A36B" />
+            <SolidColorBrush x:Key="StormWarningBrush" Color="#FFCC7A00" />
+            <SolidColorBrush x:Key="StormErrorBrush" Color="#FFD42A3C" />
+            <SolidColorBrush x:Key="StormChartGridBrush" Color="#FFE3E7EE" />
+        </ResourceDictionary>
+    </ResourceDictionary.ThemeDictionaries>
+</ResourceDictionary>

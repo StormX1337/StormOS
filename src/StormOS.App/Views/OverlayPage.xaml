@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="StormOS.App.Views.OverlayPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:h="using:StormOS.App.Helpers"
+    xmlns:vm="using:StormOS.App.ViewModels">
+
+    <ScrollViewer>
+        <StackPanel Padding="28,16,28,28" Spacing="16" MaxWidth="1400">
+            <Grid>
+                <StackPanel>
+                    <TextBlock Text="Overlay" Style="{StaticResource StormPageTitleStyle}" />
+                    <TextBlock Text="A transparent, click-through, always-on-top window. No injection, no hooks, no game memory access. Works with games in borderless or windowed mode." Style="{StaticResource StormPageSubtitleStyle}" TextWrapping="Wrap" />
+                </StackPanel>
+                <Button HorizontalAlignment="Right" VerticalAlignment="Center" Style="{StaticResource AccentButtonStyle}" Command="{x:Bind ViewModel.ToggleCommand}">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <FontIcon Glyph="&#xE7F4;" FontSize="14" />
+                        <TextBlock Text="{x:Bind h:Format.Choose(ViewModel.IsRunning, 'STOP OVERLAY', 'START OVERLAY'), Mode=OneWay}" />
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="12">
+                        <TextBlock Text="BEHAVIOR" Style="{StaticResource StormSectionTitleStyle}" />
+                        <ToggleSwitch Header="Overlay enabled" IsOn="{x:Bind ViewModel.Enabled, Mode=TwoWay}" />
+                        <ToggleSwitch Header="Show automatically while a game is running" IsOn="{x:Bind ViewModel.ShowWithGames, Mode=TwoWay}" />
+                        <TextBox Header="Toggle hotkey" Text="{x:Bind ViewModel.Hotkey, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" MaxWidth="260" HorizontalAlignment="Left" />
+                        <TextBlock Text="{x:Bind ViewModel.HotkeyError, Mode=OneWay}" Foreground="{ThemeResource StormErrorBrush}" Style="{StaticResource StormCaptionStyle}" Visibility="{x:Bind h:Format.ShowText(ViewModel.HotkeyError), Mode=OneWay}" />
+                        <TextBlock Text="LAYOUT" Style="{StaticResource StormSectionTitleStyle}" Margin="0,8,0,0" />
+                        <ComboBox Header="Position" MinWidth="200" ItemsSource="{x:Bind ViewModel.Positions}" SelectedIndex="{x:Bind ViewModel.PositionIndex, Mode=TwoWay}" />
+                        <StackPanel Orientation="Horizontal" Spacing="12">
+                            <NumberBox Header="Offset X (px)" Minimum="0" Maximum="2000" SpinButtonPlacementMode="Compact" Value="{x:Bind ViewModel.OffsetX, Mode=TwoWay}" />
+                            <NumberBox Header="Offset Y (px)" Minimum="0" Maximum="2000" SpinButtonPlacementMode="Compact" Value="{x:Bind ViewModel.OffsetY, Mode=TwoWay}" />
+                            <NumberBox Header="Font size" Minimum="8" Maximum="32" SpinButtonPlacementMode="Compact" Value="{x:Bind ViewModel.FontSize, Mode=TwoWay}" />
+                        </StackPanel>
+                        <Slider Header="Background opacity" Minimum="20" Maximum="100" StepFrequency="5" Value="{x:Bind ViewModel.OpacityPercent, Mode=TwoWay}" MaxWidth="360" HorizontalAlignment="Left" Width="360" />
+                    </StackPanel>
+                </Border>
+                <StackPanel Grid.Column="1" Spacing="16">
+                    <Border Style="{StaticResource StormPanelStyle}">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="METRICS" Style="{StaticResource StormSectionTitleStyle}" />
+                            <ItemsControl ItemsSource="{x:Bind ViewModel.Metrics}">
+                                <ItemsControl.ItemsPanel>
+                                    <ItemsPanelTemplate><VariableSizedWrapGrid Orientation="Horizontal" ItemWidth="200" /></ItemsPanelTemplate>
+                                </ItemsControl.ItemsPanel>
+                                <ItemsControl.ItemTemplate>
+                                    <DataTemplate x:DataType="vm:OverlayMetricOption">
+                                        <CheckBox Content="{x:Bind Label}" IsChecked="{x:Bind IsSelected, Mode=TwoWay}" />
+                                    </DataTemplate>
+                                </ItemsControl.ItemTemplate>
+                            </ItemsControl>
+                        </StackPanel>
+                    </Border>
+                    <Border Style="{StaticResource StormPanelStyle}">
+                        <StackPanel Spacing="8">
+                            <TextBlock Text="LIVE PREVIEW" Style="{StaticResource StormSectionTitleStyle}" />
+                            <Border Background="#D9000000" CornerRadius="6" Padding="10,8" HorizontalAlignment="Left" MinWidth="180">
+                                <ItemsControl ItemsSource="{x:Bind ViewModel.Preview}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:OverlayPreviewLine">
+                                            <Grid ColumnSpacing="16">
+                                                <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                                <TextBlock Text="{x:Bind Label}" Foreground="#FFB0BEC5" FontFamily="{StaticResource StormMonoFont}" FontSize="12" />
+                                                <TextBlock Grid.Column="1" HorizontalAlignment="Right" Text="{x:Bind Value}" FontFamily="{StaticResource StormMonoFont}" FontSize="12" Foreground="{x:Bind h:Format.OverlayBrush(Accent)}" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </Border>
+                            <TextBlock Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" Text="FPS values appear while frame capture runs for a game. Exclusive fullscreen games draw over every window, including this overlay." />
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

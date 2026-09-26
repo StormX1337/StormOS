@@ -170,6 +170,13 @@ public interface IStormServiceClient
     /// <returns>Sessions.</returns>
     Task<Result<IReadOnlyList<GameSession>>> GetSessionsAsync(CancellationToken cancellationToken = default);
 
+    /// <summary>Reads metric history recorded by the service.</summary>
+    /// <param name="rangeStart">Range start.</param>
+    /// <param name="rangeEnd">Range end.</param>
+    /// <param name="cancellationToken">Cancellation token.</param>
+    /// <returns>Points.</returns>
+    Task<Result<IReadOnlyList<MetricHistoryPoint>>> GetMetricHistoryAsync(DateTimeOffset rangeStart, DateTimeOffset rangeEnd, CancellationToken cancellationToken = default);
+
     /// <summary>Runs a gaming benchmark in the service.</summary>
     /// <param name="request">Request.</param>
     /// <param name="cancellationToken">Cancellation token.</param>

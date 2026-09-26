@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="StormOS.App.Views.BenchmarkPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:h="using:StormOS.App.Helpers"
+    xmlns:c="using:StormOS.App.Controls"
+    xmlns:vm="using:StormOS.App.ViewModels"
+    xmlns:games="using:StormOS.Core.Games">
+
+    <ScrollViewer>
+        <StackPanel Padding="28,16,28,28" Spacing="16" MaxWidth="1600">
+            <StackPanel>
+                <TextBlock Text="Benchmark" Style="{StaticResource StormPageTitleStyle}" />
+                <TextBlock Text="Measured locally. Scores show every input and weight. Before/after differences are only shown when both runs were measured." Style="{StaticResource StormPageSubtitleStyle}" TextWrapping="Wrap" />
+            </StackPanel>
+
+            <Border Style="{StaticResource StormPanelStyle}">
+                <Grid ColumnSpacing="16" RowSpacing="12">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" /><ColumnDefinition Width="Auto" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <Grid.RowDefinitions><RowDefinition /><RowDefinition /><RowDefinition /></Grid.RowDefinitions>
+
+                    <ComboBox Header="Benchmark" MinWidth="220" ItemsSource="{x:Bind ViewModel.Types}" SelectedItem="{x:Bind ViewModel.SelectedType, Mode=TwoWay}">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate x:DataType="vm:BenchmarkTypeItem">
+                                <StackPanel>
+                                    <TextBlock Text="{x:Bind Name}" />
+                                    <TextBlock Text="{x:Bind Status}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" MaxWidth="320" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    <ComboBox Grid.Column="1" Header="Duration" MinWidth="140" ItemsSource="{x:Bind ViewModel.Durations}" SelectedIndex="{x:Bind ViewModel.SelectedDuration, Mode=TwoWay}" />
+                    <TextBox Grid.Column="2" Header="Label (e.g. before / after)" MaxLength="40" Text="{x:Bind ViewModel.Label, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                    <StackPanel Grid.Column="3" Orientation="Horizontal" Spacing="8" VerticalAlignment="Bottom">
+                        <Button Style="{StaticResource AccentButtonStyle}" Command="{x:Bind ViewModel.RunCommand}" IsEnabled="{x:Bind h:Format.Not(ViewModel.IsRunning), Mode=OneWay}">
+                            <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE768;" FontSize="14" /><TextBlock Text="RUN BENCHMARK" /></StackPanel>
+                        </Button>
+                        <Button Content="Cancel" Command="{x:Bind ViewModel.CancelCommand}" IsEnabled="{x:Bind ViewModel.IsRunning, Mode=OneWay}" />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="1" Grid.ColumnSpan="4" Orientation="Horizontal" Spacing="10" Visibility="{x:Bind h:Format.Show(ViewModel.IsGaming), Mode=OneWay}">
+                        <ComboBox Header="Running game" MinWidth="260" PlaceholderText="No game running" ItemsSource="{x:Bind ViewModel.RunningGames}" SelectedItem="{x:Bind ViewModel.SelectedGame, Mode=TwoWay}">
+                            <ComboBox.ItemTemplate>
+                                <DataTemplate x:DataType="games:RunningGame"><TextBlock Text="{x:Bind DisplayName}" /></DataTemplate>
+                            </ComboBox.ItemTemplate>
+                        </ComboBox>
+                        <Button Content="Refresh" VerticalAlignment="Bottom" Command="{x:Bind ViewModel.RefreshRunningGamesCommand}" />
+                        <TextBlock VerticalAlignment="Bottom" Margin="0,0,0,6" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" MaxWidth="560"
+                                   Text="Play a repeatable scene during the capture. Frames are captured with PresentMon or ETW by the service; nothing is injected into the game." />
+                    </StackPanel>
+
+                    <StackPanel Grid.Row="2" Grid.ColumnSpan="4" Spacing="6" Visibility="{x:Bind h:Format.Show(ViewModel.IsRunning), Mode=OneWay}">
+                        <ProgressBar Value="{x:Bind ViewModel.Progress, Mode=OneWay}" Maximum="100" IsIndeterminate="{x:Bind ViewModel.IsGaming, Mode=OneWay}" />
+                        <TextBlock Text="{x:Bind ViewModel.ProgressStage, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" />
+                    </StackPanel>
+                </Grid>
+            </Border>
+
+            <Grid ColumnSpacing="16">
+                <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                <Border Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="RESULT" Style="{StaticResource StormSectionTitleStyle}" />
+                        <TextBlock Text="{x:Bind ViewModel.LastSummary, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" />
+                        <ItemsControl ItemsSource="{x:Bind ViewModel.LastMetrics}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="vm:MetricRow">
+                                    <Grid Padding="0,3">
+                                        <TextBlock Text="{x:Bind Name}" Style="{StaticResource StormLabelStyle}" />
+                                        <TextBlock HorizontalAlignment="Right" Text="{x:Bind Value}" Style="{StaticResource StormValueStyle}" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
+                <Border Grid.Column="1" Style="{StaticResource StormPanelStyle}">
+                    <StackPanel Spacing="10">
+                        <TextBlock Text="SCORE" Style="{StaticResource StormSectionTitleStyle}" />
+                        <c:ScoreView Breakdown="{x:Bind ViewModel.LastScore, Mode=OneWay}" />
+                    </StackPanel>
+                </Border>
+            </Grid>
+
+            <Border Style="{StaticResource StormPanelStyle}">
+                <StackPanel Spacing="10">
+                    <TextBlock Text="COMPARE" Style="{StaticResource StormSectionTitleStyle}" />
+                    <StackPanel Orientation="Horizontal" Spacing="12">
+                        <ComboBox Header="Before" MinWidth="320" ItemsSource="{x:Bind ViewModel.Results}" SelectedItem="{x:Bind ViewModel.CompareBefore, Mode=TwoWay}" />
+                        <ComboBox Header="After" MinWidth="320" ItemsSource="{x:Bind ViewModel.Results}" SelectedItem="{x:Bind ViewModel.CompareAfter, Mode=TwoWay}" />
+                    </StackPanel>
+                    <TextBlock Text="{x:Bind ViewModel.ComparisonNote, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Deltas}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:DeltaRow">
+                                <Grid Padding="0,4" ColumnSpacing="12">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="100" /></Grid.ColumnDefinitions>
+                                    <TextBlock Text="{x:Bind Name}" Style="{StaticResource StormBodyStyle}" />
+                                    <TextBlock Grid.Column="1" Text="{x:Bind Before}" Style="{StaticResource StormValueStyle}" HorizontalAlignment="Right" />
+                                    <TextBlock Grid.Column="2" Text="{x:Bind After}" Style="{StaticResource StormValueStyle}" HorizontalAlignment="Right" />
+                                    <TextBlock Grid.Column="3" Text="{x:Bind Change}" FontWeight="SemiBold" HorizontalAlignment="Right" Foreground="{x:Bind h:Format.DeltaBrush(Improved)}" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource StormPanelStyle}">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="HISTORY" Style="{StaticResource StormSectionTitleStyle}" />
+                    <ListView ItemsSource="{x:Bind ViewModel.Results}" SelectionMode="None" IsItemClickEnabled="True" ItemClick="OnResultClick" MaxHeight="420">
+                        <ListView.ItemTemplate>
+                            <DataTemplate x:DataType="vm:BenchmarkRow">
+                                <Grid Padding="0,6" ColumnSpacing="16">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="2*" /><ColumnDefinition Width="*" /><ColumnDefinition Width="3*" /><ColumnDefinition Width="60" /></Grid.ColumnDefinitions>
+                                    <TextBlock Text="{x:Bind Title}" Style="{StaticResource StormBodyStyle}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Grid.Column="1" Text="{x:Bind When}" Style="{StaticResource StormCaptionStyle}" />
+                                    <TextBlock Grid.Column="2" Text="{x:Bind Summary}" Style="{StaticResource StormValueStyle}" TextTrimming="CharacterEllipsis" />
+                                    <TextBlock Grid.Column="3" Text="{x:Bind ScoreText}" FontWeight="SemiBold" HorizontalAlignment="Right" />
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

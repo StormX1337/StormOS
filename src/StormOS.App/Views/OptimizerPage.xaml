@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="StormOS.App.Views.OptimizerPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:h="using:StormOS.App.Helpers"
+    xmlns:vm="using:StormOS.App.ViewModels"
+    xmlns:scan="using:StormOS.Core.Scan">
+
+    <ScrollViewer>
+        <StackPanel Padding="28,16,28,28" Spacing="16" MaxWidth="1600">
+            <Grid>
+                <StackPanel>
+                    <TextBlock Text="Optimizer" Style="{StaticResource StormPageTitleStyle}" />
+                    <TextBlock Text="Every change is checked, backed up, applied, verified and logged. Nothing changes without your confirmation." Style="{StaticResource StormPageSubtitleStyle}" TextWrapping="Wrap" />
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Spacing="8">
+                    <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" Width="18" Height="18" />
+                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" VerticalAlignment="Center" />
+                    <Button Command="{x:Bind ViewModel.ScanCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE9D9;" FontSize="14" /><TextBlock Text="SYSTEM SCAN" /></StackPanel>
+                    </Button>
+                    <Button Style="{StaticResource AccentButtonStyle}" Command="{x:Bind ViewModel.QuickOptimizeCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE945;" FontSize="14" /><TextBlock Text="QUICK OPTIMIZE" /></StackPanel>
+                    </Button>
+                    <Button Command="{x:Bind ViewModel.RestoreAllCommand}">
+                        <StackPanel Orientation="Horizontal" Spacing="8"><FontIcon Glyph="&#xE777;" FontSize="14" /><TextBlock Text="RESTORE ALL" /></StackPanel>
+                    </Button>
+                </StackPanel>
+            </Grid>
+
+            <!-- System scan -->
+            <Border Style="{StaticResource StormPanelStyle}">
+                <StackPanel Spacing="10">
+                    <Grid>
+                        <TextBlock Text="STORM OS SYSTEM SCAN" Style="{StaticResource StormSectionTitleStyle}" />
+                        <Border HorizontalAlignment="Right" Style="{StaticResource StormBadgeStyle}" Visibility="{x:Bind h:Format.Show(ViewModel.HasScan), Mode=OneWay}">
+                            <TextBlock Text="{x:Bind h:Format.Caps(ViewModel.ScanOverall), Mode=OneWay}" FontSize="11" FontWeight="SemiBold" Foreground="{x:Bind h:Format.SeverityBrush(ViewModel.ScanOverall), Mode=OneWay}" />
+                        </Border>
+                    </Grid>
+                    <TextBlock Text="{x:Bind ViewModel.ScanSummary, Mode=OneWay}" Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Findings}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:FindingItem">
+                                <Border Style="{StaticResource StormSubtlePanelStyle}" Margin="0,4">
+                                    <Grid ColumnSpacing="16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="4" /><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                        <Border Background="{x:Bind h:Format.SeverityBrush(Severity)}" CornerRadius="2" />
+                                        <StackPanel Grid.Column="1" Spacing="4">
+                                            <TextBlock Style="{StaticResource StormLabelStyle}"><Run Text="{x:Bind SeverityText}" /><Run Text=" · " /><Run Text="{x:Bind Area}" /></TextBlock>
+                                            <TextBlock Text="{x:Bind Title}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                            <TextBlock Text="{x:Bind Description}" Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" />
+                                            <TextBlock Text="Evidence" Style="{StaticResource StormLabelStyle}" Margin="0,4,0,0" />
+                                            <TextBlock Text="{x:Bind Evidence}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                                            <TextBlock Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap"><Run Text="Impact: " FontWeight="SemiBold" /><Run Text="{x:Bind Impact}" /></TextBlock>
+                                            <TextBlock Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap"><Run Text="Suggested action: " FontWeight="SemiBold" /><Run Text="{x:Bind SuggestedAction}" /></TextBlock>
+                                            <TextBlock Text="{x:Bind RiskText}" Style="{StaticResource StormCaptionStyle}" />
+                                        </StackPanel>
+                                        <Button Grid.Column="2" VerticalAlignment="Top" Content="FIX…" Click="OnFixFinding" Visibility="{x:Bind h:Format.Show(HasAction)}" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                    <Expander Header="All checks" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Visibility="{x:Bind h:Format.Show(ViewModel.HasScan), Mode=OneWay}">
+                        <ItemsControl ItemsSource="{x:Bind ViewModel.Checks}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate x:DataType="scan:ScanCheck">
+                                    <Grid ColumnSpacing="10" Padding="0,3">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="220" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                        <FontIcon Glyph="{x:Bind h:Format.PassGlyph(Passed)}" FontSize="14" Foreground="{x:Bind h:Format.PassBrush(Passed)}" />
+                                        <TextBlock Grid.Column="1" Text="{x:Bind Name}" Style="{StaticResource StormBodyStyle}" />
+                                        <TextBlock Grid.Column="2" Text="{x:Bind Detail}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" />
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Expander>
+                </StackPanel>
+            </Border>
+
+            <!-- Recommendations -->
+            <Border Style="{StaticResource StormPanelStyle}">
+                <StackPanel Spacing="10">
+                    <Grid>
+                        <TextBlock Text="RECOMMENDATIONS" Style="{StaticResource StormSectionTitleStyle}" />
+                        <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="12">
+                            <CheckBox Content="Include AI analysis (cloud)" IsChecked="{x:Bind ViewModel.IncludeAi, Mode=TwoWay}" Visibility="{x:Bind h:Format.Show(ViewModel.AiAvailable)}" />
+                            <Button Content="Analyze" Command="{x:Bind ViewModel.AnalyzeCommand}" />
+                        </StackPanel>
+                    </Grid>
+                    <TextBlock Text="{x:Bind ViewModel.RecommendationSummary, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Recommendations}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:RecommendationItem">
+                                <Border Style="{StaticResource StormSubtlePanelStyle}" Margin="0,4">
+                                    <Grid ColumnSpacing="16">
+                                        <Grid.ColumnDefinitions><ColumnDefinition Width="*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                        <StackPanel Spacing="4">
+                                            <TextBlock Text="{x:Bind Title}" FontWeight="SemiBold" TextWrapping="Wrap" />
+                                            <TextBlock Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap"><Run Text="Why: " FontWeight="SemiBold" /><Run Text="{x:Bind Why}" /></TextBlock>
+                                            <TextBlock Text="Evidence" Style="{StaticResource StormLabelStyle}" />
+                                            <TextBlock Text="{x:Bind Evidence}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" />
+                                            <TextBlock Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap"><Run Text="Recommendation: " FontWeight="SemiBold" /><Run Text="{x:Bind Advice}" /></TextBlock>
+                                            <TextBlock Text="{x:Bind Meta}" Style="{StaticResource StormCaptionStyle}" Foreground="{x:Bind h:Format.RiskBrush(Risk)}" />
+                                        </StackPanel>
+                                        <Button Grid.Column="1" VerticalAlignment="Top" Content="{x:Bind ActionLabel}" Click="OnApplyRecommendation" Visibility="{x:Bind h:Format.Show(HasAction)}" />
+                                    </Grid>
+                                </Border>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <!-- Catalog -->
+            <Border Style="{StaticResource StormPanelStyle}">
+                <StackPanel Spacing="10">
+                    <Grid>
+                        <TextBlock Text="ALL OPTIMIZATIONS" Style="{StaticResource StormSectionTitleStyle}" />
+                        <Button HorizontalAlignment="Right" Content="Re-check" Command="{x:Bind ViewModel.RefreshCommand}" />
+                    </Grid>
+                    <InfoBar IsOpen="{x:Bind h:Format.IsNotEmpty(ViewModel.CatalogNote), Mode=OneWay}" IsClosable="False" Severity="Warning" Message="{x:Bind ViewModel.CatalogNote, Mode=OneWay}" />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Groups}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:RuleGroup">
+                                <StackPanel Spacing="4" Margin="0,8,0,0">
+                                    <TextBlock Text="{x:Bind Title}" Style="{StaticResource StormLabelStyle}" />
+                                    <ItemsControl ItemsSource="{x:Bind Rules}">
+                                        <ItemsControl.ItemTemplate>
+                                            <DataTemplate x:DataType="vm:RuleItem">
+                                                <Grid ColumnSpacing="16" Padding="0,8" BorderBrush="{ThemeResource StormPanelBorderBrush}" BorderThickness="0,0,0,1">
+                                                    <Grid.ColumnDefinitions><ColumnDefinition Width="3*" /><ColumnDefinition Width="2*" /><ColumnDefinition Width="Auto" /></Grid.ColumnDefinitions>
+                                                    <StackPanel Spacing="2">
+                                                        <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" />
+                                                        <TextBlock Text="{x:Bind Description}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" />
+                                                        <TextBlock Style="{StaticResource StormCaptionStyle}"><Run Text="{x:Bind RiskText}" Foreground="{x:Bind h:Format.RiskBrush(Risk)}" /><Run Text=" · " /><Run Text="{x:Bind Facts}" /></TextBlock>
+                                                    </StackPanel>
+                                                    <StackPanel Grid.Column="1" Spacing="2" VerticalAlignment="Center">
+                                                        <TextBlock Text="{x:Bind StateText, Mode=OneWay}" Style="{StaticResource StormValueStyle}" TextWrapping="Wrap" />
+                                                        <TextBlock Text="{x:Bind Explanation, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" MaxLines="3" />
+                                                    </StackPanel>
+                                                    <Button Grid.Column="2" VerticalAlignment="Center" Content="APPLY…" Click="OnApplyRule" IsEnabled="{x:Bind CanApply, Mode=OneWay}" />
+                                                </Grid>
+                                            </DataTemplate>
+                                        </ItemsControl.ItemTemplate>
+                                    </ItemsControl>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

@@ -160,6 +160,10 @@ public sealed class StormServiceClient : IStormServiceClient, IAsyncDisposable
         Cast<List<GameSession>, IReadOnlyList<GameSession>>(await _ipc.RequestAsync<List<GameSession>>(IpcOperations.SessionsList, cancellationToken: cancellationToken).ConfigureAwait(false));
 
     /// <inheritdoc />
+    public async Task<Result<IReadOnlyList<MetricHistoryPoint>>> GetMetricHistoryAsync(DateTimeOffset rangeStart, DateTimeOffset rangeEnd, CancellationToken cancellationToken = default) =>
+        Cast<List<MetricHistoryPoint>, IReadOnlyList<MetricHistoryPoint>>(await _ipc.RequestAsync<List<MetricHistoryPoint>>(IpcOperations.MetricHistory, new MetricHistoryRequest(rangeStart, rangeEnd), cancellationToken: cancellationToken).ConfigureAwait(false));
+
+    /// <inheritdoc />
     public Task<Result<BenchmarkResult>> RunGamingBenchmarkAsync(GamingBenchmarkRequest request, CancellationToken cancellationToken = default)
     {
         ArgumentNullException.ThrowIfNull(request);

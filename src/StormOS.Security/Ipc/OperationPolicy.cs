@@ -36,6 +36,7 @@ public static class OperationPolicies
         [IpcOperations.LogsTail] = new(ClientTrustLevel.TrustedClient, Cost: 5),
         [IpcOperations.SessionsList] = new(ClientTrustLevel.LocalUser, Cost: 2),
         [IpcOperations.BenchmarkGaming] = new(ClientTrustLevel.TrustedClient, Mutating: true, Cost: 10),
+        [IpcOperations.MetricHistory] = new(ClientTrustLevel.LocalUser, Cost: 5),
     };
 
     /// <summary>Gets all registered operation names.</summary>

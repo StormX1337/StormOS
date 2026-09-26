@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="StormOS.App.Views.DevicesPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:h="using:StormOS.App.Helpers"
+    xmlns:vm="using:StormOS.App.ViewModels">
+
+    <ScrollViewer>
+        <StackPanel Padding="28,16,28,28" Spacing="16" MaxWidth="1400">
+            <Grid>
+                <StackPanel>
+                    <TextBlock Text="Devices" Style="{StaticResource StormPageTitleStyle}" />
+                    <TextBlock Text="Read from Windows (WMI, DXGI, SetupAPI). Values Windows does not report are shown as unavailable." Style="{StaticResource StormPageSubtitleStyle}" />
+                </StackPanel>
+                <StackPanel HorizontalAlignment="Right" VerticalAlignment="Center" Orientation="Horizontal" Spacing="10">
+                    <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" Width="18" Height="18" />
+                    <TextBlock Text="{x:Bind ViewModel.StatusMessage, Mode=OneWay}" Style="{StaticResource StormCaptionStyle}" VerticalAlignment="Center" />
+                    <Button Content="Copy report" Command="{x:Bind ViewModel.CopyReportCommand}" />
+                    <Button Content="Refresh" Command="{x:Bind ViewModel.LoadCommand}" />
+                </StackPanel>
+            </Grid>
+
+            <ItemsControl ItemsSource="{x:Bind ViewModel.Sections}">
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate x:DataType="vm:DeviceSection">
+                        <Border Style="{StaticResource StormPanelStyle}" Margin="0,0,0,12">
+                            <StackPanel Spacing="6">
+                                <TextBlock Text="{x:Bind Title}" Style="{StaticResource StormSectionTitleStyle}" />
+                                <ItemsControl ItemsSource="{x:Bind Fields}">
+                                    <ItemsControl.ItemTemplate>
+                                        <DataTemplate x:DataType="vm:DeviceField">
+                                            <Grid ColumnSpacing="16" Padding="0,3">
+                                                <Grid.ColumnDefinitions><ColumnDefinition Width="220" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                                <TextBlock Text="{x:Bind Label}" Style="{StaticResource StormLabelStyle}" TextTrimming="CharacterEllipsis" />
+                                                <TextBlock Grid.Column="1" Text="{x:Bind Value}" Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" IsTextSelectionEnabled="True" />
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ItemsControl.ItemTemplate>
+                                </ItemsControl>
+                            </StackPanel>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+
+            <Border Style="{StaticResource StormPanelStyle}">
+                <StackPanel Spacing="8">
+                    <TextBlock Text="RGB LIGHTING" Style="{StaticResource StormSectionTitleStyle}" />
+                    <TextBlock Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" Visibility="{x:Bind h:Format.Hide(ViewModel.HasRgbProviders), Mode=OneWay}"
+                               Text="No RGB provider is installed. RGB support is plugin-based: providers use documented vendor SDKs or Windows Dynamic Lighting — never kernel drivers or direct hardware access." />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.RgbProviders}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="vm:RgbProviderRow">
+                                <Grid ColumnSpacing="16" Padding="0,4">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="220" /><ColumnDefinition Width="200" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                    <TextBlock Text="{x:Bind Name}" FontWeight="SemiBold" />
+                                    <TextBlock Grid.Column="1" Text="{x:Bind Status}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" />
+                                    <TextBlock Grid.Column="2" Text="{x:Bind Devices}" Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource StormSubtlePanelStyle}" Visibility="{x:Bind h:Format.ShowCount(ViewModel.Issues.Count), Mode=OneWay}">
+                <StackPanel Spacing="4">
+                    <TextBlock Text="NOT AVAILABLE" Style="{StaticResource StormLabelStyle}" />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Issues}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="x:String"><TextBlock Text="{x:Bind}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" /></DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+            </Border>
+        </StackPanel>
+    </ScrollViewer>
+</Page>

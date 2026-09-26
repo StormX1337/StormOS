@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Page
+    x:Class="StormOS.App.Views.OnboardingPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:h="using:StormOS.App.Helpers"
+    xmlns:onboarding="using:StormOS.Services.Onboarding">
+
+    <Grid Padding="40,24" MaxWidth="900" RowSpacing="18">
+        <Grid.RowDefinitions><RowDefinition Height="Auto" /><RowDefinition Height="*" /><RowDefinition Height="Auto" /></Grid.RowDefinitions>
+
+        <StackPanel Spacing="8">
+            <TextBlock Text="{x:Bind ViewModel.StepText, Mode=OneWay}" Style="{StaticResource StormLabelStyle}" />
+            <ProgressBar Maximum="100" Value="{x:Bind ViewModel.Progress, Mode=OneWay}" />
+            <TextBlock Text="{x:Bind ViewModel.Title, Mode=OneWay}" Style="{StaticResource StormPageTitleStyle}" />
+        </StackPanel>
+
+        <ScrollViewer Grid.Row="1">
+            <Grid>
+                <!-- 1 Welcome -->
+                <StackPanel Spacing="12" Visibility="{x:Bind h:Format.StepVisible(ViewModel.Step, 0), Mode=OneWay}">
+                    <Image Source="ms-appx:///Assets/StormOS.png" Width="96" Height="96" HorizontalAlignment="Left" />
+                    <TextBlock Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" FontSize="15"
+                               Text="STORM OS measures your PC while you play, explains what limits performance and applies only changes you approve. Every change is backed up, verified and can be restored." />
+                    <TextBlock Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap"
+                               Text="What STORM OS never does: disable Windows security, touch anti-cheat, inject into games, or change anything without asking. Values it cannot measure are shown as unavailable — never estimated." />
+                </StackPanel>
+
+                <!-- 2 System check -->
+                <StackPanel Spacing="8" Visibility="{x:Bind h:Format.StepVisible(ViewModel.Step, 1), Mode=OneWay}">
+                    <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" HorizontalAlignment="Left" />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Checks}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="onboarding:SystemCheckItem">
+                                <Grid ColumnSpacing="12" Padding="0,5">
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="Auto" /><ColumnDefinition Width="220" /><ColumnDefinition Width="*" /></Grid.ColumnDefinitions>
+                                    <FontIcon Glyph="{x:Bind h:Format.PassGlyph(Passed)}" FontSize="15" Foreground="{x:Bind h:Format.PassBrush(Passed)}" />
+                                    <TextBlock Grid.Column="1" Text="{x:Bind Name}" FontWeight="SemiBold" />
+                                    <TextBlock Grid.Column="2" Text="{x:Bind Detail}" Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap" />
+                                </Grid>
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!-- 3 Hardware -->
+                <StackPanel Spacing="8" Visibility="{x:Bind h:Format.StepVisible(ViewModel.Step, 2), Mode=OneWay}">
+                    <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" HorizontalAlignment="Left" />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Hardware}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="x:String"><TextBlock Text="{x:Bind}" Style="{StaticResource StormBodyStyle}" Margin="0,3" TextWrapping="Wrap" /></DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!-- 4 Games -->
+                <StackPanel Spacing="8" Visibility="{x:Bind h:Format.StepVisible(ViewModel.Step, 3), Mode=OneWay}">
+                    <ProgressRing IsActive="{x:Bind ViewModel.IsBusy, Mode=OneWay}" HorizontalAlignment="Left" />
+                    <TextBlock Text="{x:Bind ViewModel.GamesSummary, Mode=OneWay}" Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" />
+                    <ToggleSwitch Header="Detect running games automatically" IsOn="{x:Bind ViewModel.DetectGames, Mode=TwoWay}" />
+                    <ItemsControl ItemsSource="{x:Bind ViewModel.Games}">
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate x:DataType="x:String"><TextBlock Text="{x:Bind}" Style="{StaticResource StormCaptionStyle}" Margin="0,2" /></DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </StackPanel>
+
+                <!-- 5 Service -->
+                <StackPanel Spacing="12" Visibility="{x:Bind h:Format.StepVisible(ViewModel.Step, 4), Mode=OneWay}">
+                    <StackPanel Orientation="Horizontal" Spacing="10">
+                        <FontIcon Glyph="{x:Bind h:Format.PassGlyph(ViewModel.ServiceConnected), Mode=OneWay}" Foreground="{x:Bind h:Format.PassBrush(ViewModel.ServiceConnected), Mode=OneWay}" />
+                        <TextBlock Text="{x:Bind h:Format.Choose(ViewModel.ServiceConnected, 'Service connected', 'Service not running'), Mode=OneWay}" FontWeight="SemiBold" />
+                    </StackPanel>
+                    <TextBlock Text="{x:Bind ViewModel.ServiceText, Mode=OneWay}" Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" />
+                    <TextBlock Style="{StaticResource StormCaptionStyle}" TextWrapping="Wrap"
+                               Text="The app runs with your normal rights. Only the signed STORM OS service performs administrator changes, and only for requests from the installed STORM OS app." />
+                </StackPanel>
+
+                <!-- 6 Privacy -->
+                <StackPanel Spacing="8" Visibility="{x:Bind h:Format.StepVisible(ViewModel.Step, 5), Mode=OneWay}">
+                    <TextBlock Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" Text="Everything stays on this PC unless you turn it on. You can change this at any time in Settings." />
+                    <ToggleSwitch Header="Store performance history on this PC (for charts and session reports)" IsOn="{x:Bind ViewModel.PerformanceHistory, Mode=TwoWay}" />
+                    <ToggleSwitch Header="Sync benchmarks and sessions to STORM Cloud (requires an account)" IsOn="{x:Bind ViewModel.CloudSync, Mode=TwoWay}" />
+                    <ToggleSwitch Header="Send crash reports" IsOn="{x:Bind ViewModel.CrashReports, Mode=TwoWay}" />
+                </StackPanel>
+
+                <!-- 7 Overlay -->
+                <StackPanel Spacing="8" Visibility="{x:Bind h:Format.StepVisible(ViewModel.Step, 6), Mode=OneWay}">
+                    <TextBlock Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap"
+                               Text="The in-game overlay shows FPS, frame time, CPU/GPU load and temperatures in a click-through window. It does not inject into games and is safe with anti-cheat. Toggle it with Ctrl+Shift+F10." />
+                    <ToggleSwitch Header="Show the overlay while playing" IsOn="{x:Bind ViewModel.OverlayEnabled, Mode=TwoWay}" />
+                </StackPanel>
+
+                <!-- 8 Ready -->
+                <StackPanel Spacing="12" Visibility="{x:Bind h:Format.StepVisible(ViewModel.Step, 7), Mode=OneWay}">
+                    <TextBlock Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" FontSize="15"
+                               Text="Setup is complete. The System Scan checks Windows, drivers, storage, power, startup and network and explains every finding with evidence. It changes nothing." />
+                    <CheckBox Content="Run the System Scan now" IsChecked="{x:Bind ViewModel.RunScanAfterSetup, Mode=TwoWay}" />
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+
+        <Grid Grid.Row="2">
+            <Button Content="Skip setup" Command="{x:Bind ViewModel.SkipCommand}" />
+            <StackPanel HorizontalAlignment="Right" Orientation="Horizontal" Spacing="8">
+                <Button Content="BACK" Command="{x:Bind ViewModel.BackCommand}" IsEnabled="{x:Bind ViewModel.CanGoBack, Mode=OneWay}" />
+                <Button Content="{x:Bind ViewModel.NextLabel, Mode=OneWay}" Style="{StaticResource AccentButtonStyle}" MinWidth="120" Command="{x:Bind ViewModel.NextCommand}" />
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>
