@@ -1,0 +1,54 @@
+name: CI
+
+on:
+  push:
+    branches: [main, "claude/**"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  CI: true
+
+jobs:
+  dotnet-portable:
+    name: .NET (Linux, portable projects)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - run: dotnet restore StormOS.Portable.slnf
+      - run: dotnet build StormOS.Portable.slnf --no-restore -c Release
+      - run: dotnet test StormOS.Portable.slnf --no-build -c Release --logger "trx;LogFilePrefix=portable" --results-directory TestResults
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-linux
+          path: TestResults
+
+  dotnet-windows:
+    name: .NET (Windows, full solution incl. WinUI)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - run: dotnet restore StormOS.slnx
+      - run: dotnet build StormOS.slnx --no-restore -c Release
+      - run: dotnet test StormOS.slnx --no-build -c Release --logger "trx;LogFilePrefix=windows" --results-directory TestResults
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: test-results-windows
+          path: TestResults
