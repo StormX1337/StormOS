@@ -32,7 +32,7 @@ public sealed record GameItem
 
     public string Version => string.IsNullOrWhiteSpace(Game.Version) ? "—" : Game.Version!;
 
-    public string Executable => Game.Executables.FirstOrDefault() is { } exe ? Path.GetFileName(exe) : Profile?.Detection.Executables.FirstOrDefault()?.Name ?? "—";
+    public string Executable => Game.Executables.Count > 0 ? Path.GetFileName(Game.Executables[0]) : Profile?.Detection.Executables is { Count: > 0 } names ? names[0].Name : "—";
 
     public string LastPlayed => Game.LastPlayed is { } played ? played.ToLocalTime().ToString("g", System.Globalization.CultureInfo.CurrentCulture) : "—";
 

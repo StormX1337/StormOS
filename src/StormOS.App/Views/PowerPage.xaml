@@ -43,7 +43,7 @@
                                         <Border Style="{StaticResource StormBadgeStyle}" Visibility="{x:Bind h:Format.Show(IsActive)}"><TextBlock Text="{x:Bind Status}" FontSize="11" FontWeight="SemiBold" Foreground="{ThemeResource StormAccentBrush}" /></Border>
                                     </StackPanel>
                                     <TextBlock Text="{x:Bind Description}" Style="{StaticResource StormBodyStyle}" TextWrapping="Wrap" />
-                                    <TextBlock Text="{x:Bind Guid}" Style="{StaticResource StormCaptionStyle}" IsTextSelectionEnabled="True" />
+                                    <TextBlock Text="{x:Bind PlanId}" Style="{StaticResource StormCaptionStyle}" IsTextSelectionEnabled="True" />
                                 </StackPanel>
                                 <Button Grid.Column="1" VerticalAlignment="Center" Content="ACTIVATE…" Click="OnActivate" IsEnabled="{x:Bind h:Format.Not(IsActive)}" />
                             </Grid>

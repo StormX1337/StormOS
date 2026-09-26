@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using StormOS.App.Services;
 using StormOS.Core.Common;
-using StormOS.Core.Hardware;
 using StormOS.Core.History;
 using StormOS.Core.Network;
 using StormOS.Core.Optimization;
@@ -215,9 +214,10 @@ public sealed partial class NetworkViewModel(
     private async Task LoadLastAsync()
     {
         HasDnsChange = (await historyService.ListChangesAsync()).Any(c => c.RuleId == "network.dns" && c.Rollback == RollbackStatus.Available);
-        if (Report is null && (await history.ListNetworkReportsAsync(1)).FirstOrDefault() is { } last)
+        var reports = await history.ListNetworkReportsAsync(1);
+        if (Report is null && reports.Count > 0)
         {
-            Show(last);
+            Show(reports[0]);
         }
     }
 

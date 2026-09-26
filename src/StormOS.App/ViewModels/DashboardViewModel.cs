@@ -240,7 +240,8 @@ public sealed partial class DashboardViewModel : PageViewModel
         PerformanceScore = StormScores.Performance(Latest(BenchmarkType.Cpu), Latest(BenchmarkType.Memory), Latest(BenchmarkType.Disk), Latest(BenchmarkType.Gpu));
         var refresh = Inventory?.Monitors.FirstOrDefault(m => m.IsPrimary)?.RefreshRateHz;
         GamingScore = StormScores.Gaming(Latest(BenchmarkType.Gaming)?.Frames, refresh);
-        var network = (await _history.ListNetworkReportsAsync(1)).FirstOrDefault();
+        var reports = await _history.ListNetworkReportsAsync(1);
+        var network = reports.Count > 0 ? reports[0] : null;
         NetworkScore = network?.Score ?? StormScores.Network(null, null);
 
         var startup = await _startup.ListAsync();

@@ -19,7 +19,7 @@ public sealed record PowerPlanRow(PowerPlan Plan)
 
     public string Status => Plan.IsActive ? "ACTIVE" : string.Empty;
 
-    public string Guid => Plan.Id.ToString("D", CultureInfo.InvariantCulture);
+    public string PlanId => Plan.Id.ToString("D", CultureInfo.InvariantCulture);
 
     private static string KnownDescription(Guid id) =>
         id == KnownPowerSchemes.Balanced ? "Windows default. Boosts clocks on demand and saves power when idle; the right choice for most gaming PCs."
@@ -84,7 +84,7 @@ public sealed partial class PowerViewModel(IPowerPlanService power, ChangeServic
         }
 
         var reason = $"Switches from \"{ActivePlan}\" to \"{row.Name}\". {row.Description}";
-        if (await changes.ApplyWithConsentAsync("power.plan", new Dictionary<string, string> { ["plan"] = row.Guid }, reason) is { Outcome: OptimizationOutcome.Applied })
+        if (await changes.ApplyWithConsentAsync("power.plan", new Dictionary<string, string> { ["plan"] = row.PlanId }, reason) is { Outcome: OptimizationOutcome.Applied })
         {
             Refresh();
         }

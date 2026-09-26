@@ -5,7 +5,6 @@ using CommunityToolkit.Mvvm.Input;
 using Microsoft.Extensions.Logging;
 using StormOS.App.Services;
 using StormOS.Core.History;
-using StormOS.Core.Licensing;
 using StormOS.Core.Settings;
 using StormOS.Infrastructure.Configuration;
 using StormOS.Infrastructure.Paths;

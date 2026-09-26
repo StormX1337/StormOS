@@ -334,7 +334,7 @@ public sealed partial class BenchmarkViewModel(
             Results.Add(new BenchmarkRow(result));
         }
 
-        if (LastResult is null && results.FirstOrDefault() is { } latest)
+        if (LastResult is null && results.Count > 0 && results[0] is { } latest)
         {
             Show(latest);
         }

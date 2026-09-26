@@ -17,7 +17,9 @@
     <WindowsAppSDKSelfContained>true</WindowsAppSDKSelfContained>
     <EnableMsixTooling>true</EnableMsixTooling>
     <DefaultLanguage>en-US</DefaultLanguage>
-    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <!-- CA1822: x:Bind binds through the view model instance. CA1001: page view models own short-lived
+         CancellationTokenSources that are disposed when the operation or page ends. -->
+    <NoWarn>$(NoWarn);CS1591;CA1822;CA1001</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\StormOS.Core\StormOS.Core.csproj" />
