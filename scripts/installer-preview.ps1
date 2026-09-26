@@ -247,7 +247,12 @@ finally {
   Get-Process -Name StormOS -ErrorAction SilentlyContinue | Stop-Process -Force
 }
 
-Invoke-Element (Find-Element $window @('Close'))
+# "Launch" closes the setup window; close it here only if it is still open.
+try {
+  $close = Find-Element $window @('Close') 3 -Optional
+  if ($null -ne $close) { Invoke-Element $close }
+}
+catch [System.Windows.Automation.ElementNotAvailableException] { }
 $process.WaitForExit(30000) | Out-Null
 
 # Diagnostics next to the screenshots: raw service data and the (redacted) service and app logs.
