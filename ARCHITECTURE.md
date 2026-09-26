@@ -63,3 +63,16 @@ Failed apply/verify triggers an automatic rollback. Records (with snapshots) are
 `GameRegistry`; `RunningGameDetector` matches processes against profiles and install directories every 5 s.
 
 See the `docs/` folder for per-subsystem details.
+
+## Cloud
+
+`cloud/` is a pnpm monorepo: `apps/api` (NestJS REST + socket.io, Prisma/PostgreSQL, optional Redis, Stripe),
+`apps/web` (portal) and `apps/admin` (Storm Admin), sharing `packages/types`, `validation` (Zod), `database`
+(Prisma schema, migrations, generated client) and `ui`. Entitlements are decided server-side and delivered to the
+desktop app as device-bound ES256 tokens that are verified offline. See [docs/CLOUD.md](docs/CLOUD.md).
+
+## Packaging
+
+`scripts/publish.ps1` publishes app, service and CLI self-contained into one folder (the service trusts clients by
+install location) and builds the WiX MSI in `installer/`, which registers `StormOSService`, a Start menu shortcut and
+the CLI on `PATH`. See [docs/BUILD.md](docs/BUILD.md) and [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
