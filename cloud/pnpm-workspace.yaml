@@ -1,0 +1,14 @@
+packages:
+  - apps/*
+  - packages/*
+
+# pnpm 10 blocks dependency install scripts by default; allow only the ones that need them.
+onlyBuiltDependencies:
+  - "@prisma/client"
+  - "@prisma/engines"
+  - prisma
+  - "@swc/core"
+  - "@tailwindcss/oxide"
+  - esbuild
+  - sharp
+  - unrs-resolver

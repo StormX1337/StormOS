@@ -1,0 +1,22 @@
+{
+  "name": "@storm/validation",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Zod schemas for every STORM Cloud input that crosses a trust boundary",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist"],
+  "scripts": {
+    "build": "tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@storm/types": "workspace:*",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "typescript": "5.9.3",
+    "vitest": "^3.2.4"
+  }
+}

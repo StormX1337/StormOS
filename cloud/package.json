@@ -1,0 +1,21 @@
+{
+  "name": "storm-cloud",
+  "version": "1.0.0",
+  "private": true,
+  "description": "STORM OS cloud: API, web portal and admin panel",
+  "packageManager": "pnpm@10.33.0",
+  "engines": {
+    "node": ">=22.12"
+  },
+  "scripts": {
+    "build": "pnpm -r build",
+    "test": "pnpm -r test",
+    "typecheck": "pnpm -r typecheck",
+    "db:generate": "pnpm --filter @storm/database generate",
+    "db:migrate": "pnpm --filter @storm/database migrate:deploy",
+    "db:seed": "pnpm --filter @storm/database seed",
+    "dev:api": "pnpm --filter @storm/api dev",
+    "dev:web": "pnpm --filter @storm/web dev",
+    "dev:admin": "pnpm --filter @storm/admin dev"
+  }
+}

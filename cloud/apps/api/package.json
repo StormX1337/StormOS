@@ -1,0 +1,47 @@
+{
+  "name": "@storm/api",
+  "version": "1.0.0",
+  "private": true,
+  "description": "STORM Cloud REST + WebSocket API (NestJS)",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -p tsconfig.build.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit && tsc -p tsconfig.test.json",
+    "start": "node dist/main.js",
+    "dev": "nest start --watch",
+    "test": "vitest run"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.128.0",
+    "@nestjs/common": "^11.1.6",
+    "@nestjs/core": "^11.1.6",
+    "@nestjs/jwt": "^11.0.0",
+    "@nestjs/platform-express": "^11.1.6",
+    "@nestjs/platform-socket.io": "^11.1.6",
+    "@nestjs/throttler": "^6.4.0",
+    "@nestjs/websockets": "^11.1.6",
+    "@storm/database": "workspace:*",
+    "@storm/types": "workspace:*",
+    "@storm/validation": "workspace:*",
+    "helmet": "^8.1.0",
+    "ioredis": "^5.8.0",
+    "reflect-metadata": "^0.2.2",
+    "rxjs": "^7.8.2",
+    "socket.io": "^4.8.1",
+    "stripe": "^18.5.0",
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.10",
+    "@nestjs/testing": "^11.1.6",
+    "@swc/core": "^1.13.5",
+    "@types/express": "^5.0.3",
+    "@types/node": "^22.18.0",
+    "@types/supertest": "^6.0.3",
+    "socket.io-client": "^4.8.1",
+    "supertest": "^7.1.4",
+    "typescript": "5.9.3",
+    "unplugin-swc": "^1.5.7",
+    "vitest": "^3.2.4"
+  }
+}

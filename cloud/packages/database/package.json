@@ -1,0 +1,26 @@
+{
+  "name": "@storm/database",
+  "version": "1.0.0",
+  "private": true,
+  "description": "PostgreSQL schema, migrations and Prisma client for STORM Cloud",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "files": ["dist", "prisma"],
+  "scripts": {
+    "generate": "prisma generate",
+    "build": "prisma generate && tsc -p tsconfig.json",
+    "typecheck": "prisma generate && tsc -p tsconfig.json --noEmit",
+    "migrate:deploy": "prisma migrate deploy",
+    "migrate:dev": "prisma migrate dev",
+    "seed": "node dist/seed.js"
+  },
+  "dependencies": {
+    "@prisma/client": "6.19.3",
+    "@storm/validation": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "^22.18.0",
+    "prisma": "6.19.3",
+    "typescript": "5.9.3"
+  }
+}

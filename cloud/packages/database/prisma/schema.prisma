@@ -1,0 +1,219 @@
+// STORM Cloud data model. Sensitive values are never stored in plain text:
+// passwords are scrypt hashes, refresh tokens are SHA-256 hashes, payment data stays with Stripe.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum Role {
+  USER
+  SUPPORT
+  ADMIN
+}
+
+enum Tier {
+  FREE
+  PRO
+  ULTIMATE
+}
+
+enum SubscriptionStatus {
+  ACTIVE
+  TRIALING
+  PAST_DUE
+  CANCELED
+  INCOMPLETE
+  UNPAID
+}
+
+enum ReleaseChannel {
+  STABLE
+  BETA
+}
+
+enum AnnouncementSeverity {
+  INFO
+  WARNING
+  CRITICAL
+}
+
+model User {
+  id               String    @id @default(uuid()) @db.Uuid
+  email            String    @unique
+  passwordHash     String
+  role             Role      @default(USER)
+  disabled         Boolean   @default(false)
+  stripeCustomerId String?   @unique
+  compTier         Tier?
+  compExpiresAt    DateTime?
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  lastLoginAt      DateTime?
+
+  devices       Device[]
+  refreshTokens RefreshToken[]
+  subscriptions Subscription[]
+  benchmarks    BenchmarkRun[]
+  sessions      GameSession[]
+  aiUsage       AiUsage[]
+}
+
+/// Rotating refresh tokens. A reused (already rotated) token revokes its whole family.
+model RefreshToken {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @db.Uuid
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash  String    @unique
+  familyId   String    @db.Uuid
+  expiresAt  DateTime
+  revokedAt  DateTime?
+  replacedBy String?   @db.Uuid
+  userAgent  String?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId])
+  @@index([familyId])
+}
+
+model Device {
+  id         String    @id @default(uuid()) @db.Uuid
+  userId     String    @db.Uuid
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  name       String
+  hardware   String    @default("")
+  platform   String    @default("windows")
+  createdAt  DateTime  @default(now())
+  lastSeenAt DateTime  @default(now())
+  revokedAt  DateTime?
+
+  @@index([userId])
+}
+
+model Subscription {
+  id                   String             @id @default(uuid()) @db.Uuid
+  userId               String             @db.Uuid
+  user                 User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeSubscriptionId String             @unique
+  stripePriceId        String
+  tier                 Tier
+  status               SubscriptionStatus
+  currentPeriodEnd     DateTime
+  cancelAtPeriodEnd    Boolean            @default(false)
+  createdAt            DateTime           @default(now())
+  updatedAt            DateTime           @updatedAt
+
+  @@index([userId])
+}
+
+/// Stripe webhook idempotency: one row per event id; processedAt set once handled.
+model StripeEvent {
+  id          String    @id
+  type        String
+  receivedAt  DateTime  @default(now())
+  processedAt DateTime?
+  attempts    Int       @default(0)
+  error       String?
+}
+
+model BenchmarkRun {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientId  String   @db.Uuid
+  type      String
+  startedAt DateTime
+  hardware  String   @default("")
+  gameId    String?
+  gameName  String?
+  label     String?
+  completed Boolean
+  score     Float?
+  data      Json
+  createdAt DateTime @default(now())
+
+  @@unique([userId, clientId])
+  @@index([userId, type, startedAt])
+}
+
+model GameSession {
+  id               String    @id @default(uuid()) @db.Uuid
+  userId           String    @db.Uuid
+  user             User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  clientId         String    @db.Uuid
+  gameId           String?
+  gameName         String
+  startedAt        DateTime
+  endedAt          DateTime?
+  averageFps       Float?
+  onePercentLowFps Float?
+  data             Json
+  createdAt        DateTime  @default(now())
+
+  @@unique([userId, clientId])
+  @@index([userId, startedAt])
+}
+
+model GameProfile {
+  id          String   @id
+  version     String
+  name        String
+  data        Json
+  published   Boolean  @default(false)
+  updatedAt   DateTime @updatedAt
+  updatedById String?  @db.Uuid
+}
+
+model Release {
+  id          String         @id @default(uuid()) @db.Uuid
+  version     String
+  channel     ReleaseChannel
+  arch        String
+  url         String
+  sha256      String
+  notes       String?
+  sizeBytes   BigInt
+  publishedAt DateTime
+  createdAt   DateTime       @default(now())
+
+  @@unique([version, channel, arch])
+  @@index([channel, arch, publishedAt])
+}
+
+model Announcement {
+  id        String               @id @default(uuid()) @db.Uuid
+  title     String
+  body      String
+  severity  AnnouncementSeverity
+  active    Boolean              @default(true)
+  startsAt  DateTime?
+  endsAt    DateTime?
+  createdAt DateTime             @default(now())
+}
+
+model AuditLog {
+  id        String   @id @default(uuid()) @db.Uuid
+  actorId   String?  @db.Uuid
+  action    String
+  target    String?
+  details   Json?
+  ip        String?
+  createdAt DateTime @default(now())
+
+  @@index([createdAt])
+  @@index([actorId])
+}
+
+model AiUsage {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  provider  String
+  createdAt DateTime @default(now())
+
+  @@index([userId, createdAt])
+}
