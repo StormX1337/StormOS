@@ -211,7 +211,12 @@ $status = & (Join-Path $installDir 'storm.exe') status 2>&1 | Out-String
 $ErrorActionPreference = 'Stop'
 $status | Set-Content (Join-Path $Out 'storm-status.txt')
 Write-Host $status
-if ($status -notmatch 'Service\s+Running') { throw 'storm status could not reach the installed service.' }
+if ($status -notmatch 'Service\s+Running') {
+  # Service logs are redacted JSON; keep them next to the screenshots for diagnosis.
+  Get-ChildItem (Join-Path $env:ProgramData 'StormOS\logs') -Filter *.log -ErrorAction SilentlyContinue |
+    ForEach-Object { Copy-Item $_.FullName (Join-Path $Out ('service-log-' + $_.BaseName + '.txt')) }
+  throw 'storm status could not reach the installed service.'
+}
 
 # ---- First app screens (best effort: rendering on a GPU-less CI desktop is not part of the pass criteria) ---------
 try {

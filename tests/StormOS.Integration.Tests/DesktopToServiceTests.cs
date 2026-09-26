@@ -106,6 +106,17 @@ public sealed class DesktopToServiceTests
         Assert.Equal(StormErrorCodes.ServiceUnavailable, result.Error.Code);
     }
 
+    [Fact]
+    public async Task ClientCanBeDisposedTwice()
+    {
+        var ipc = new IpcClient(new IpcClientOptions { PipeName = "storm-absent-" + Guid.NewGuid().ToString("N")[..8], ConnectTimeout = TimeSpan.FromMilliseconds(200) }, null, NullLogger<IpcClient>.Instance);
+        var client = new StormServiceClient(ipc, NullLogger<StormServiceClient>.Instance, "integration-tests");
+        await client.ConnectAsync(TestContext.Current.CancellationToken);
+
+        await client.DisposeAsync();
+        await client.DisposeAsync();
+    }
+
     private sealed class Harness : IAsyncDisposable
     {
         private readonly IpcServer _server;

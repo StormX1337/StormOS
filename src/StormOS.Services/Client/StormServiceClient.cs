@@ -27,6 +27,7 @@ public sealed class StormServiceClient : IStormServiceClient, IAsyncDisposable
     private int? _telemetryInterval;
     private Task? _reconnectLoop;
     private ServiceConnectionState _state;
+    private int _disposed;
 
     /// <summary>Initializes a new instance of the <see cref="StormServiceClient"/> class.</summary>
     /// <param name="ipc">IPC client.</param>
@@ -173,6 +174,12 @@ public sealed class StormServiceClient : IStormServiceClient, IAsyncDisposable
     /// <inheritdoc />
     public async ValueTask DisposeAsync()
     {
+        // The client is registered as itself and as IStormServiceClient, so the container disposes it twice.
+        if (Interlocked.Exchange(ref _disposed, 1) != 0)
+        {
+            return;
+        }
+
         await _lifetime.CancelAsync().ConfigureAwait(false);
         if (_reconnectLoop is not null)
         {
