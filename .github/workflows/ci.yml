@@ -117,6 +117,8 @@ jobs:
     name: Installer smoke test + screenshots (x64)
     runs-on: windows-latest
     needs: installer
+    permissions:
+      contents: write # only to publish the screenshots to refs/ci/installer-preview (not a branch)
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
@@ -133,3 +135,20 @@ jobs:
         with:
           name: installer-preview-x64
           path: artifacts/preview
+      - name: Publish screenshots to refs/ci/installer-preview
+        if: always() && github.event_name == 'push'
+        shell: pwsh
+        env:
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          if (-not (Get-ChildItem artifacts/preview -Filter *.png -ErrorAction SilentlyContinue)) { Write-Host 'No screenshots captured.'; exit 0 }
+          # Orphan commit built from a separate index: the screenshots never touch a branch.
+          $env:GIT_INDEX_FILE = Join-Path $env:RUNNER_TEMP 'preview.index'
+          git add -f -- 'artifacts/preview/*.png' 'artifacts/preview/*.txt'
+          $tree = git write-tree
+          $commit = git commit-tree $tree -m "Installer preview for ${{ github.sha }} (run ${{ github.run_number }})"
+          git push -f origin "${commit}:refs/ci/installer-preview"
+          if ($LASTEXITCODE -ne 0) { throw 'Could not publish the screenshots.' }
