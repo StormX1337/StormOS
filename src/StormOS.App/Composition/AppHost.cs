@@ -110,7 +110,7 @@ internal static class AppHost
     }
 
     /// <summary>Background cloud tasks: license refresh and update check. Failures never affect the app.</summary>
-    private static async Task ConnectCloudAsync(IServiceProvider services, StormSettings settings, ILogger logger)
+    private static async Task ConnectCloudAsync(IServiceProvider services, StormSettings settings, Microsoft.Extensions.Logging.ILogger logger)
     {
         if (!settings.Cloud.Enabled)
         {
