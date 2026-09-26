@@ -184,7 +184,7 @@ export const gameProfileSchema = z
     name: shortText(128).min(1),
     publisher: shortText(128).optional(),
     detection: z.object({
-      executables: z.array(z.object({ name: z.string().regex(/^[A-Za-z0-9 ._()+-]{1,128}$/) }).passthrough()).max(16).default([]),
+      executables: z.array(z.object({ name: z.string().regex(/^[A-Za-z0-9 ._()+*?-]{1,128}$/) }).passthrough()).max(16).default([]),
       launchers: z.array(z.object({ launcher: shortText(32), gameId: shortText(128) })).max(16).default([]),
     }),
   })

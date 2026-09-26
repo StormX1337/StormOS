@@ -1,3 +1,5 @@
+import { readdirSync, readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
 import { aiRecommendationSchema, analysisWindowSchema, benchmarkUploadSchema, gameProfileSchema, registerSchema, releaseSchema } from './index';
 
@@ -45,5 +47,15 @@ describe('validation', () => {
     expect(analysisWindowSchema.safeParse({ sampleCount: 120, averageCpuUsage: 50, gameName: 'CS2' }).success).toBe(true);
     expect(gameProfileSchema.safeParse({ schemaVersion: 1, id: 'cs2', version: '1.0.0', name: 'Counter-Strike 2', detection: { executables: [{ name: 'cs2.exe' }] } }).success).toBe(true);
     expect(gameProfileSchema.safeParse({ schemaVersion: 1, id: '../etc', version: '1.0.0', name: 'x', detection: {} }).success).toBe(false);
+  });
+
+  it('accepts every bundled game profile in profiles/', () => {
+    const directory = join(__dirname, '../../../../profiles');
+    const files = readdirSync(directory).filter((name) => name.endsWith('.json'));
+    expect(files.length).toBeGreaterThan(0);
+    for (const file of files) {
+      const result = gameProfileSchema.safeParse(JSON.parse(readFileSync(join(directory, file), 'utf8')));
+      expect(result.success, `${file}: ${result.success ? '' : JSON.stringify(result.error.issues[0])}`).toBe(true);
+    }
   });
 });

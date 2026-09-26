@@ -40,10 +40,20 @@ See [DEVELOPMENT.md](DEVELOPMENT.md) for the service/app development loop and [B
 
 ## Documentation
 
-- [ARCHITECTURE.md](ARCHITECTURE.md) — layers, processes, data flow
-- [SECURITY.md](SECURITY.md) — threat model, IPC hardening, what STORM OS will never do
-- [DEVELOPMENT.md](DEVELOPMENT.md), [DEPLOYMENT.md](DEPLOYMENT.md), [CONTRIBUTING.md](CONTRIBUTING.md)
-- `docs/`: IPC, PERFORMANCE, OPTIMIZATION, PROFILES, BENCHMARK, OVERLAY, CLOUD, API, BUILD, TROUBLESHOOTING
+| Topic | Document |
+|---|---|
+| Architecture | [ARCHITECTURE.md](ARCHITECTURE.md) |
+| Security model | [SECURITY.md](SECURITY.md) |
+| Development / contributing | [DEVELOPMENT.md](DEVELOPMENT.md), [CONTRIBUTING.md](CONTRIBUTING.md) |
+| IPC protocol | [docs/IPC.md](docs/IPC.md) |
+| Telemetry and frame capture | [docs/PERFORMANCE.md](docs/PERFORMANCE.md) |
+| Optimization engine and rules | [docs/OPTIMIZATION.md](docs/OPTIMIZATION.md) |
+| Game profiles | [docs/PROFILES.md](docs/PROFILES.md), [schema](docs/schemas/game-profile.schema.json) |
+| Benchmarks and scores | [docs/BENCHMARK.md](docs/BENCHMARK.md) |
+| Overlay | [docs/OVERLAY.md](docs/OVERLAY.md) |
+| Cloud, licensing, AI | [docs/CLOUD.md](docs/CLOUD.md), [docs/API.md](docs/API.md) |
+| Build, deployment | [docs/BUILD.md](docs/BUILD.md), [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
+| Troubleshooting | [docs/TROUBLESHOOTING.md](docs/TROUBLESHOOTING.md) |
 
 ## Principles
 
@@ -52,3 +62,4 @@ See [DEVELOPMENT.md](DEVELOPMENT.md) for the service/app development loop and [B
 - **Reversible.** Every change is detected, snapshotted, applied, verified, logged and can be restored.
 - **Conservative.** No security feature is ever disabled; nothing touches anti-cheat, drivers or game memory.
 - **Private by default.** Telemetry, crash reports and cloud sync are off until you turn them on.
+

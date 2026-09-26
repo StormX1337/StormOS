@@ -7,6 +7,7 @@ using StormOS.Core.Optimization;
 using StormOS.Core.Power;
 using StormOS.Core.Processes;
 using StormOS.Core.Scan;
+using StormOS.Core.Settings;
 using StormOS.Services.Analysis;
 using StormOS.Services.Optimization;
 using StormOS.Services.Scan;
@@ -125,6 +126,7 @@ public sealed partial class OptimizerViewModel(
     TelemetryFeed feed,
     IPowerPlanService power,
     IProcessInspector processes,
+    ISettingsStore settings,
     NotificationService notifications,
     DialogService dialogs) : PageViewModel
 {
@@ -358,9 +360,13 @@ public sealed partial class OptimizerViewModel(
     private async Task LoadCatalogAsync(bool refresh)
     {
         var (items, note) = await changes.CatalogAsync(refresh);
-        CatalogNote = note;
+        var showAdvanced = settings.Current.Optimization.ShowAdvancedRules;
+        var hidden = showAdvanced ? 0 : items.Count(i => i.Descriptor.RiskLevel > RiskLevel.Low);
+        CatalogNote = hidden > 0
+            ? $"{hidden} medium- or high-risk optimization(s) are hidden. Enable them in Settings › Optimization.{(note is null ? string.Empty : " " + note)}"
+            : note;
         Groups.Clear();
-        foreach (var group in items.GroupBy(i => i.Descriptor.Category).OrderBy(g => g.Key))
+        foreach (var group in items.Where(i => showAdvanced || i.Descriptor.RiskLevel <= RiskLevel.Low).GroupBy(i => i.Descriptor.Category).OrderBy(g => g.Key))
         {
             Groups.Add(new RuleGroup(CategoryTitle(group.Key), group.Select(i => new RuleItem(i)).OrderBy(r => r.NeedsParameters).ThenBy(r => r.Name, StringComparer.CurrentCulture).ToList()));
         }

@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://stormos.app/schemas/game-profile.schema.json",
+  "title": "STORM OS game profile",
+  "type": "object",
+  "required": ["schemaVersion", "id", "version", "name", "detection"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": { "type": "string" },
+    "schemaVersion": { "const": 1 },
+    "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9-]{1,63}$" },
+    "version": { "type": "string", "pattern": "^\\d+\\.\\d+\\.\\d+(?:-[0-9A-Za-z.-]+)?$" },
+    "name": { "type": "string", "minLength": 1, "maxLength": 128 },
+    "publisher": { "type": "string", "maxLength": 128 },
+    "antiCheat": { "type": "string", "maxLength": 64 },
+    "minWindowsBuild": { "type": "integer", "minimum": 19041 },
+    "supportedGameVersions": { "type": "string", "maxLength": 64 },
+    "detection": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "executables": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "required": ["name"],
+            "additionalProperties": false,
+            "properties": {
+              "name": { "type": "string", "pattern": "^[A-Za-z0-9 ._()+*?-]{1,128}$", "description": "File name; * and ? wildcards are allowed." },
+              "pathContains": { "type": "string", "maxLength": 260 },
+              "commandLineContains": { "type": "string", "maxLength": 128 }
+            }
+          }
+        },
+        "launchers": {
+          "type": "array",
+          "maxItems": 16,
+          "items": {
+            "type": "object",
+            "required": ["launcher", "gameId"],
+            "additionalProperties": false,
+            "properties": {
+              "launcher": { "enum": ["steam", "epic", "xbox", "battleNet", "riot", "ubisoft", "ea", "gog"] },
+              "gameId": { "type": "string", "minLength": 1, "maxLength": 128 }
+            }
+          }
+        }
+      },
+      "anyOf": [
+        { "required": ["executables"], "properties": { "executables": { "minItems": 1 } } },
+        { "required": ["launchers"], "properties": { "launchers": { "minItems": 1 } } }
+      ]
+    },
+    "launch": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "uri": { "type": "string", "pattern": "^(steam|com\\.epicgames\\.launcher|uplay|goggalaxy|battlenet|origin2|link2ea):" },
+        "recommendedArguments": { "$ref": "#/$defs/guidanceList" }
+      }
+    },
+    "process": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "priority": { "enum": ["idle", "belowNormal", "normal", "aboveNormal", "high"] },
+        "reason": { "type": "string", "maxLength": 500 }
+      }
+    },
+    "systemRecommendations": { "$ref": "#/$defs/ruleList" },
+    "optimizationRules": { "$ref": "#/$defs/ruleList" },
+    "graphicsGuidance": { "$ref": "#/$defs/guidanceList" },
+    "networkGuidance": { "$ref": "#/$defs/guidanceList" },
+    "rollback": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": { "restoreOnExit": { "type": "boolean" } }
+    },
+    "benchmark": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "durationSeconds": { "type": "integer", "minimum": 10, "maximum": 600 },
+        "warmupSeconds": { "type": "integer", "minimum": 0, "maximum": 120 },
+        "scenario": { "type": "string", "maxLength": 1000 }
+      }
+    }
+  },
+  "$defs": {
+    "guidanceList": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "required": ["title", "detail"],
+        "additionalProperties": false,
+        "properties": {
+          "title": { "type": "string", "minLength": 1, "maxLength": 120 },
+          "detail": { "type": "string", "minLength": 1, "maxLength": 1000 }
+        }
+      }
+    },
+    "ruleList": {
+      "type": "array",
+      "maxItems": 32,
+      "items": {
+        "type": "object",
+        "required": ["ruleId"],
+        "additionalProperties": false,
+        "properties": {
+          "ruleId": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._:-]{1,127}$" },
+          "parameters": {
+            "type": "object",
+            "maxProperties": 16,
+            "propertyNames": { "pattern": "^[a-zA-Z][a-zA-Z0-9_-]{0,63}$" },
+            "additionalProperties": { "type": "string", "maxLength": 512 }
+          },
+          "reason": { "type": "string", "maxLength": 500 },
+          "optional": { "type": "boolean" },
+          "sessionScoped": { "type": "boolean" }
+        }
+      }
+    }
+  }
+}
