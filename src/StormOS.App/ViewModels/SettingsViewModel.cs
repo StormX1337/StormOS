@@ -20,6 +20,7 @@ public sealed partial class SettingsViewModel(
     ISettingsStore settings,
     ThemeService theme,
     CloudClient cloud,
+    CloudAccountService account,
     EntitlementService entitlements,
     UpdateService updates,
     IHistoryStore history,
@@ -240,13 +241,9 @@ public sealed partial class SettingsViewModel(
             await settings.SaveAsync(s with { Cloud = s.Cloud with { AccountEmail = Email.Trim() } });
             IsSignedIn = true;
             AccountText = $"Signed in as {Email.Trim()}";
-            var license = await entitlements.RefreshAsync(cloud);
-            if (license.IsSuccess)
-            {
-                LicenseText = $"{license.Value!.Tier} · {license.Value.Source}";
-            }
-
-            notifications.Success("Signed in to STORM Cloud.");
+            var license = await account.SyncAsync();
+            LicenseText = license.IsSuccess ? $"{license.Value!.Tier} · {license.Value.Source}" : $"{entitlements.Current.Tier} · {license.Error.Message}";
+            notifications.Success("Signed in to STORM Cloud. This PC is registered to your account.");
         }
         finally
         {

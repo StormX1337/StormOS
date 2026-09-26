@@ -105,6 +105,33 @@ internal static class AppHost
         }
 
         services.GetRequiredService<OverlayController>().Initialize(settings.Overlay);
+        _ = Task.Run(() => ConnectCloudAsync(services, settings, logger));
         logger.LogInformation("STORM OS started (mock mode compiled in: {Mock})", MockModeGuard.IsCompiledIn);
+    }
+
+    /// <summary>Background cloud tasks: license refresh and update check. Failures never affect the app.</summary>
+    private static async Task ConnectCloudAsync(IServiceProvider services, StormSettings settings, ILogger logger)
+    {
+        if (!settings.Cloud.Enabled)
+        {
+            return;
+        }
+
+        try
+        {
+            await services.GetRequiredService<StormOS.Services.Cloud.CloudAccountService>().SyncAsync();
+            if (settings.Updates.CheckAutomatically && settings.Notifications.Updates)
+            {
+                var update = await services.GetRequiredService<StormOS.Services.Updates.UpdateService>().CheckAsync();
+                if (update is { IsSuccess: true, Value.Release: { } release })
+                {
+                    services.GetRequiredService<NotificationService>().Info($"STORM OS {release.Version} is available. Install it from Settings › Updates.", "Update available");
+                }
+            }
+        }
+        catch (Exception ex) when (ex is HttpRequestException or TaskCanceledException or InvalidOperationException)
+        {
+            logger.LogInformation(ex, "Background cloud sync skipped");
+        }
     }
 }

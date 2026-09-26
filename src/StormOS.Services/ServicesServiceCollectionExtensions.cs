@@ -53,6 +53,7 @@ public static class ServicesServiceCollectionExtensions
         services.TryAddSingleton<EntitlementService>();
         services.TryAddSingleton<IEntitlementService>(sp => sp.GetRequiredService<EntitlementService>());
         services.TryAddSingleton<UpdateService>();
+        services.TryAddSingleton<CloudAccountService>();
         return services;
     }
 }
