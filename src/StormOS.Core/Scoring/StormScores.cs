@@ -110,6 +110,37 @@ public static class StormScores
         return WeightedScore.Compute("Performance Score", list);
     }
 
+    /// <summary>Computes the score of one benchmark component (CPU, memory, storage or GPU) from its own metrics.</summary>
+    /// <param name="result">A completed CPU, memory, disk or GPU benchmark.</param>
+    /// <returns>The component score, or <see langword="null"/> for types without a component model.</returns>
+    public static ScoreBreakdown? Component(BenchmarkResult result)
+    {
+        ArgumentNullException.ThrowIfNull(result);
+        return result.Type switch
+        {
+            BenchmarkType.Cpu => WeightedScore.Compute("CPU Score",
+            [
+                Ratio("Single-thread", result.Metric("cpu.single.mops")?.Value, "MOPS", CpuSingleReference, 0.45),
+                Ratio("Multi-thread", result.Metric("cpu.multi.mops")?.Value, "MOPS", CpuMultiReference, 0.55),
+            ]),
+            BenchmarkType.Memory => WeightedScore.Compute("Memory Score",
+            [
+                Ratio("Copy bandwidth", result.Metric("memory.copy.gbps")?.Value, "GB/s", MemoryBandwidthReference, 0.65),
+                Input("Random access latency", result.Metric("memory.latency.ns")?.Value, "ns", v => Math.Clamp(100.0 * MemoryLatencyReference / Math.Max(v, 1), 0, 100), 0.35, string.Create(CultureInfo.InvariantCulture, $"{MemoryLatencyReference} ns = 100, scaled inversely")),
+            ]),
+            BenchmarkType.Disk => WeightedScore.Compute("Storage Score",
+            [
+                Ratio("Sequential read", result.Metric("disk.seqread.mbps")?.Value, "MB/s", DiskSequentialReference, 0.5),
+                Ratio("4K random read", result.Metric("disk.rand4k.iops")?.Value, "IOPS", DiskRandomReference, 0.5),
+            ]),
+            BenchmarkType.Gpu => WeightedScore.Compute("GPU Score",
+            [
+                Ratio("FP32 compute", result.Metric("gpu.compute.gflops")?.Value, "GFLOPS", GpuComputeReference, 1.0),
+            ]),
+            _ => null,
+        };
+    }
+
     /// <summary>Computes the gaming score from frame statistics.</summary>
     /// <param name="frames">Frame statistics of a gaming benchmark or session.</param>
     /// <param name="refreshRateHz">Refresh rate of the display the game ran on.</param>

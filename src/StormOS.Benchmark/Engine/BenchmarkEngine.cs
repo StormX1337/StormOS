@@ -132,14 +132,7 @@ public sealed class BenchmarkEngine : IDisposable
     public static ScoreBreakdown? Score(BenchmarkResult result)
     {
         ArgumentNullException.ThrowIfNull(result);
-        return result.Type switch
-        {
-            BenchmarkType.Cpu => StormScores.Performance(result, null, null, null),
-            BenchmarkType.Memory => StormScores.Performance(null, result, null, null),
-            BenchmarkType.Disk => StormScores.Performance(null, null, result, null),
-            BenchmarkType.Gpu => StormScores.Performance(null, null, null, result),
-            _ => null,
-        };
+        return result.Completed ? StormScores.Component(result) : null;
     }
 
     /// <inheritdoc />
