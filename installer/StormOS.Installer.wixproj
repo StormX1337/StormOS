@@ -12,12 +12,9 @@
     <!-- ICE03/ICE60: some redistributed native binaries (Windows App SDK) carry multi-language or invalid
          language ids in their version resources, which ICE reports for the File.Language column. -->
     <SuppressIces>ICE03;ICE60</SuppressIces>
+    <!-- The setup executable is a separate project (bundle/StormOS.Bundle.wixproj); keep its sources out of the MSI. -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);bundle/**</DefaultItemExcludes>
   </PropertyGroup>
-  <ItemGroup>
-    <!-- The setup executable is a separate project (bundle/StormOS.Bundle.wixproj). -->
-    <Compile Remove="bundle\**" />
-    <None Remove="bundle\**" />
-  </ItemGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Util.wixext" Version="5.0.2" />
     <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
