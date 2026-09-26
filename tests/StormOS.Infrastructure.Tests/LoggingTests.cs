@@ -41,4 +41,31 @@ public sealed class LoggingTests
             Directory.Delete(directory, recursive: true);
         }
     }
+
+    [Fact]
+    public void Logger_AppliesSerilogConfigurationOverrides()
+    {
+        var directory = Path.Combine(Path.GetTempPath(), "storm-logs-" + Guid.NewGuid().ToString("N"));
+        var configuration = new ConfigurationBuilder().AddInMemoryCollection(new Dictionary<string, string?>
+        {
+            ["Serilog:MinimumLevel:Override:StormOS.Noisy"] = "Error",
+            ["Serilog:Properties:Deployment"] = "ci",
+        }).Build();
+        try
+        {
+            using (var logger = StormLogging.Create(configuration, directory, LogCategories.Application, developerLogging: false))
+            {
+                logger.ForContext("SourceContext", "StormOS.Noisy.Component").Information("suppressed");
+                logger.ForContext("SourceContext", "StormOS.App.Shell").Information("kept");
+            }
+
+            var line = Assert.Single(StormLogging.Tail(directory, LogCategories.Application, 10).Lines);
+            Assert.Contains("kept", line, StringComparison.Ordinal);
+            Assert.Contains("\"Deployment\":\"ci\"", line, StringComparison.Ordinal);
+        }
+        finally
+        {
+            Directory.Delete(directory, recursive: true);
+        }
+    }
 }

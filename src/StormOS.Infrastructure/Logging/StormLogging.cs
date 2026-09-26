@@ -2,6 +2,7 @@ using Microsoft.Extensions.Configuration;
 using Serilog;
 using Serilog.Events;
 using Serilog.Formatting.Compact;
+using Serilog.Settings.Configuration;
 
 namespace StormOS.Infrastructure.Logging;
 
@@ -34,7 +35,9 @@ public static class StormLogging
             .Enrich.With(new CategoryEnricher(mainCategory))
             .Enrich.With<RedactionEnricher>()
             .Enrich.WithProperty("ProcessId", Environment.ProcessId)
-            .ReadFrom.Configuration(configuration)
+            // Explicit sink assemblies: app, service and CLI are installed into one folder, and assembly discovery could
+            // otherwise try to load Serilog packages that only one of the other executables references.
+            .ReadFrom.Configuration(configuration, new ConfigurationReaderOptions(typeof(FileLoggerConfigurationExtensions).Assembly, typeof(CompactJsonFormatter).Assembly))
             .WriteTo.File(
                 new CompactJsonFormatter(),
                 Path.Combine(logDirectory, fileStem + "-.log"),

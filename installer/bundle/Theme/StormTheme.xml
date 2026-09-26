@@ -11,7 +11,7 @@
     <Font Id="2" Height="-12" Weight="400" Foreground="80766b" Background="ffffff">Segoe UI</Font>
     <Font Id="3" Height="-12" Weight="400" Foreground="30251f" Background="ffffff">Segoe UI</Font>
 
-    <Window Width="520" Height="440" HexStyle="100a0000" FontId="0" Caption="#(loc.Caption)">
+    <Window Width="520" Height="440" HexStyle="100a0000" FontId="0" Caption="#(loc.Caption)" IconFile="StormOS.ico">
         <ImageControl X="0" Y="0" Width="520" Height="96" ImageFile="banner.png" Visible="yes" />
 
         <Page Name="Help">
