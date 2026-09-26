@@ -14,6 +14,11 @@
     <SuppressIces>ICE03;ICE60</SuppressIces>
   </PropertyGroup>
   <ItemGroup>
+    <!-- The setup executable is a separate project (bundle/StormOS.Bundle.wixproj). -->
+    <Compile Remove="bundle\**" />
+    <None Remove="bundle\**" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="WixToolset.Util.wixext" Version="5.0.2" />
     <PackageReference Include="WixToolset.UI.wixext" Version="5.0.2" />
   </ItemGroup>
