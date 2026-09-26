@@ -250,6 +250,15 @@ finally {
 Invoke-Element (Find-Element $window @('Close'))
 $process.WaitForExit(30000) | Out-Null
 
+# Diagnostics next to the screenshots: raw service data and the (redacted) service and app logs.
+$ErrorActionPreference = 'Continue'
+& (Join-Path $installDir 'storm.exe') status --json 2>&1 | Out-String | Set-Content (Join-Path $Out 'storm-status-json.txt')
+$ErrorActionPreference = 'Stop'
+foreach ($logs in @(@{ Dir = (Join-Path $env:ProgramData 'StormOS\logs'); Prefix = 'service-log-' }, @{ Dir = (Join-Path $env:LOCALAPPDATA 'StormOS\logs'); Prefix = 'app-log-' })) {
+  Get-ChildItem $logs.Dir -Filter *.log -ErrorAction SilentlyContinue |
+    ForEach-Object { Copy-Item $_.FullName (Join-Path $Out ($logs.Prefix + $_.BaseName + '.txt')) -Force }
+}
+
 # ---- Silent uninstall --------------------------------------------------------------------------------------------
 $uninstall = Start-Process -FilePath $Setup -ArgumentList '/uninstall', '/quiet', '/log', ('"' + (Join-Path $Out 'uninstall.log') + '"') -Wait -PassThru
 Write-Host "Uninstall exit code: $($uninstall.ExitCode)"
