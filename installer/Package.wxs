@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  STORM OS installer (per-machine MSI).
+  Installs the desktop app, the StormOSService Windows service and the storm CLI into one folder under
+  Program Files. The service only trusts clients that run from this folder, so the files must stay together.
+  Nothing is hidden: the service is visible in services.msc, the CLI folder is added to PATH, and uninstall
+  stops and removes the service, the shortcut and the PATH entry. User data in %LOCALAPPDATA%\StormOS and
+  %ProgramData%\StormOS is kept on uninstall so history and restore points are not lost.
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:ui="http://wixtoolset.org/schemas/v4/wxs/ui"
+     xmlns:util="http://wixtoolset.org/schemas/v4/wxs/util">
+  <Package Name="STORM OS"
+           Manufacturer="STORM OS"
+           Version="$(var.ProductVersion)"
+           UpgradeCode="7C3B5E1A-4D2F-4B8E-9A61-5F0C2D8E9B34"
+           Scope="perMachine"
+           Compressed="yes"
+           InstallerVersion="500">
+    <SummaryInformation Description="STORM OS - Windows gaming performance command center" />
+    <MajorUpgrade DowngradeErrorMessage="A newer version of [ProductName] is already installed." Schedule="afterInstallInitialize" />
+    <MediaTemplate EmbedCab="yes" CompressionLevel="high" />
+
+    <Property Id="WINDOWSBUILD">
+      <RegistrySearch Id="WindowsBuildSearch" Root="HKLM" Key="SOFTWARE\Microsoft\Windows NT\CurrentVersion" Name="CurrentBuildNumber" Type="raw" />
+    </Property>
+    <Launch Condition="Installed OR (WINDOWSBUILD &gt;= &quot;19045&quot;)" Message="STORM OS requires Windows 10 22H2 (build 19045) or Windows 11." />
+
+    <Icon Id="StormOS.ico" SourceFile="$(sys.SOURCEFILEDIR)..\src\StormOS.App\Assets\StormOS.ico" />
+    <Property Id="ARPPRODUCTICON" Value="StormOS.ico" />
+    <Property Id="ARPURLINFOABOUT" Value="https://stormos.app" />
+    <Property Id="ARPHELPLINK" Value="https://stormos.app/support" />
+    <Property Id="ARPNOMODIFY" Value="1" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="STORM OS" />
+    </StandardDirectory>
+
+    <Feature Id="Main" Title="STORM OS" Level="1" AllowAbsent="no">
+      <ComponentGroupRef Id="ProductFiles" />
+      <ComponentGroupRef Id="ServiceComponents" />
+      <ComponentRef Id="StartMenuShortcut" />
+      <ComponentRef Id="CliOnPath" />
+    </Feature>
+
+    <ui:WixUI Id="WixUI_InstallDir" InstallDirectory="INSTALLFOLDER" />
+    <WixVariable Id="WixUILicenseRtf" Value="$(sys.SOURCEFILEDIR)License.rtf" />
+  </Package>
+
+  <Fragment>
+    <ComponentGroup Id="ProductFiles" Directory="INSTALLFOLDER">
+      <Files Include="$(var.PublishDir)**">
+        <Exclude Files="$(var.PublishDir)StormOS.Service.exe" />
+      </Files>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <ComponentGroup Id="ServiceComponents" Directory="INSTALLFOLDER">
+      <Component Id="ServiceExecutable">
+        <File Id="StormOSServiceExe" Source="$(var.PublishDir)StormOS.Service.exe" KeyPath="yes" />
+        <ServiceInstall Id="StormOSServiceInstall"
+                        Name="StormOSService"
+                        DisplayName="STORM OS Service"
+                        Description="Telemetry, frame capture and reversible system optimizations for STORM OS. Performs only allow-listed actions requested by the installed STORM OS app."
+                        Type="ownProcess"
+                        Start="auto"
+                        ErrorControl="normal"
+                        Account="LocalSystem"
+                        Vital="yes">
+          <util:ServiceConfig FirstFailureActionType="restart"
+                              SecondFailureActionType="restart"
+                              ThirdFailureActionType="none"
+                              RestartServiceDelayInSeconds="10"
+                              ResetPeriodInDays="1" />
+        </ServiceInstall>
+        <ServiceControl Id="StormOSServiceControl" Name="StormOSService" Start="install" Stop="both" Remove="uninstall" Wait="yes" />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+
+  <Fragment>
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Component Id="StartMenuShortcut" Guid="4E0B8F7C-2A1D-4C3E-8B5F-6D9A0E1C2B47">
+        <Shortcut Id="StormOSShortcut" Name="STORM OS" Description="Windows gaming performance command center" Target="[INSTALLFOLDER]StormOS.exe" WorkingDirectory="INSTALLFOLDER" Icon="StormOS.ico" />
+        <RegistryValue Root="HKLM" Key="Software\STORM OS" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
+  </Fragment>
+
+  <Fragment>
+    <Component Id="CliOnPath" Directory="INSTALLFOLDER" Guid="9D2C4A6E-7B1F-4E83-A5C0-3F8E1B7D6A92">
+      <Environment Id="StormOSPath" Name="PATH" Value="[INSTALLFOLDER]" Permanent="no" Part="last" Action="set" System="yes" />
+      <RegistryValue Root="HKLM" Key="Software\STORM OS" Name="InstallDir" Type="string" Value="[INSTALLFOLDER]" KeyPath="yes" />
+    </Component>
+  </Fragment>
+</Wix>

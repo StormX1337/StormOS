@@ -92,3 +92,22 @@ jobs:
         env:
           DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
       - run: pnpm test
+
+  installer:
+    name: Installer (MSI, x64)
+    runs-on: windows-latest
+    needs: dotnet-windows
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          global-json-file: global.json
+      - name: Publish app, service and CLI, then build the MSI
+        shell: pwsh
+        run: ./scripts/publish.ps1 -Runtime win-x64 -Version "0.1.0-ci.${{ github.run_number }}"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: stormos-msi-x64
+          path: |
+            artifacts/installer/*.msi
+            artifacts/installer/*.sha256

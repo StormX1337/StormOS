@@ -1,0 +1,3 @@
+<Project>
+  <!-- The installer is a WiX project; it does not inherit the .NET analyzer and TFM settings of the repository. -->
+</Project>
