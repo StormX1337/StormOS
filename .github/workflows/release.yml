@@ -58,6 +58,7 @@ jobs:
           name: installer-${{ matrix.runtime }}
           path: |
             artifacts/installer/*.msi
+            artifacts/installer/*.exe
             artifacts/installer/*.sha256
 
   publish:

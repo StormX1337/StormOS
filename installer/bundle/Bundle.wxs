@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  STORM OS setup (StormOS-Setup-<version>-<platform>.exe).
+  Shows the license and the install location, then installs the embedded STORM OS MSI per machine.
+  The MSI registers no separate Apps & Features entry (Burn hides it); the bundle entry repairs and uninstalls.
+  "Launch" starts the app from the setup process, which runs without elevation, so STORM OS starts non-elevated.
+-->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs"
+     xmlns:bal="http://wixtoolset.org/schemas/v4/wxs/bal">
+  <Bundle Name="STORM OS"
+          Manufacturer="STORM OS"
+          Version="$(var.ProductVersion)"
+          UpgradeCode="50AD8293-360B-41D7-8D8B-F08AC053CF7B"
+          IconSourceFile="$(sys.SOURCEFILEDIR)..\..\src\StormOS.App\Assets\StormOS.ico"
+          AboutUrl="https://stormos.app"
+          HelpUrl="https://stormos.app/support"
+          UpdateUrl="https://stormos.app/download">
+    <BootstrapperApplication>
+      <bal:WixStandardBootstrapperApplication Theme="rtfLargeLicense"
+                                              ThemeFile="$(sys.SOURCEFILEDIR)Theme\StormTheme.xml"
+                                              LicenseFile="$(sys.SOURCEFILEDIR)..\License.rtf"
+                                              LogoFile="$(sys.SOURCEFILEDIR)..\..\src\StormOS.App\Assets\StormOS.png"
+                                              ShowVersion="yes"
+                                              LaunchTarget="[InstallFolder]\StormOS.exe"
+                                              LaunchWorkingFolder="[InstallFolder]" />
+      <Payload SourceFile="$(sys.SOURCEFILEDIR)Theme\banner.png" Name="banner.png" />
+    </BootstrapperApplication>
+
+    <bal:Condition Message="STORM OS requires Windows 10 22H2 (build 19045) or Windows 11."
+                   Condition="WindowsBuildNumber &gt;= 19045" />
+
+    <!-- Edited on the Options page; passed to the MSI as its install directory. -->
+    <Variable Name="InstallFolder" Type="formatted" Value="[ProgramFiles64Folder]STORM OS" bal:Overridable="yes" />
+
+    <Chain>
+      <MsiPackage Id="StormOS" SourceFile="$(var.MsiPath)" Vital="yes">
+        <MsiProperty Name="INSTALLFOLDER" Value="[InstallFolder]" />
+      </MsiPackage>
+    </Chain>
+  </Bundle>
+</Wix>

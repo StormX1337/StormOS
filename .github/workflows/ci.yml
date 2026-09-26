@@ -94,7 +94,7 @@ jobs:
       - run: pnpm test
 
   installer:
-    name: Installer (MSI, x64)
+    name: Installer (MSI + setup exe, x64)
     runs-on: windows-latest
     needs: dotnet-windows
     steps:
@@ -102,12 +102,34 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           global-json-file: global.json
-      - name: Publish app, service and CLI, then build the MSI
+      - name: Publish app, service and CLI, then build the MSI and the setup exe
         shell: pwsh
         run: ./scripts/publish.ps1 -Runtime win-x64 -Version "0.1.0-ci.${{ github.run_number }}"
       - uses: actions/upload-artifact@v4
         with:
-          name: stormos-msi-x64
+          name: stormos-installer-x64
           path: |
             artifacts/installer/*.msi
+            artifacts/installer/*.exe
             artifacts/installer/*.sha256
+
+  installer-preview:
+    name: Installer smoke test + screenshots (x64)
+    runs-on: windows-latest
+    needs: installer
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: stormos-installer-x64
+          path: artifacts/installer
+      - name: Install through the setup UI, check service and CLI, capture screens, uninstall
+        shell: powershell
+        run: |
+          $setup = Get-ChildItem artifacts/installer -Filter 'StormOS-Setup-*.exe' | Select-Object -First 1
+          ./scripts/installer-preview.ps1 -Setup $setup.FullName -Out artifacts/preview
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: installer-preview-x64
+          path: artifacts/preview

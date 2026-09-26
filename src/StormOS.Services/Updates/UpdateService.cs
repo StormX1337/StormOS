@@ -28,6 +28,23 @@ public sealed class UpdateService(CloudClient cloud, ISettingsStore settings, IH
     public static string CurrentVersion =>
         (Assembly.GetEntryAssembly() ?? typeof(UpdateService).Assembly).GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion.Split('+')[0] ?? "0.0.0";
 
+    /// <summary>
+    /// Local file name for a downloaded installer: the setup executable when the release points to an <c>.exe</c>,
+    /// otherwise the MSI. Only letters, digits, dots and dashes of the version are kept.
+    /// </summary>
+    /// <param name="version">Release version.</param>
+    /// <param name="url">Download URL.</param>
+    /// <returns>The file name.</returns>
+    public static string InstallerFileName(string version, Uri url)
+    {
+        ArgumentNullException.ThrowIfNull(version);
+        ArgumentNullException.ThrowIfNull(url);
+        var safeVersion = string.Concat(version.Where(c => char.IsAsciiLetterOrDigit(c) || c is '.' or '-'));
+        return url.AbsolutePath.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
+            ? $"StormOS-Setup-{safeVersion}.exe"
+            : $"StormOS-{safeVersion}.msi";
+    }
+
     /// <summary>Compares semantic versions (pre-release versions sort before releases).</summary>
     /// <param name="left">Left.</param>
     /// <param name="right">Right.</param>
@@ -89,7 +106,7 @@ public sealed class UpdateService(CloudClient cloud, ISettingsStore settings, IH
 
         var directory = Path.Combine(Path.GetTempPath(), "StormOS", "updates");
         Directory.CreateDirectory(directory);
-        var target = Path.Combine(directory, $"StormOS-{string.Concat(release.Version.Where(c => char.IsLetterOrDigit(c) || c is '.' or '-'))}.msi");
+        var target = Path.Combine(directory, InstallerFileName(release.Version, url));
         try
         {
             using var client = httpFactory.CreateClient(CloudClient.HttpClientName);

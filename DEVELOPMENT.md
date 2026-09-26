@@ -8,7 +8,7 @@ src/            .NET: Core, Security, Infrastructure, Services, Windows, Hardwar
 tests/          xUnit v3 test projects (unit + integration)
 profiles/       bundled game profiles (JSON)
 cloud/          pnpm monorepo: apps/api, apps/web, apps/admin, packages/*
-installer/      WiX MSI
+installer/      WiX MSI (+ bundle/: setup exe)
 scripts/        publish/release helpers
 docs/           subsystem documentation
 ```

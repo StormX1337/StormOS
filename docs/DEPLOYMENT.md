@@ -3,14 +3,18 @@
 ## Desktop
 
 Release builds are produced by `.github/workflows/release.yml` (tag `vX.Y.Z` or manual dispatch):
-tests → publish app, service and CLI (self-contained, `win-x64` and `win-arm64`) → optional code signing → WiX MSI →
-SHA-256 files → draft GitHub release. Publish the MSI URL, SHA-256 and size in Storm Admin › Releases so that
-installed clients see the update. Code signing: add `SIGNING_PFX_BASE64` and `SIGNING_PFX_PASSWORD` repository
+tests → publish app, service and CLI (self-contained, `win-x64` and `win-arm64`) → optional code signing → WiX MSI and
+setup executable (`StormOS-Setup-X.Y.Z-<arch>.exe`) → SHA-256 files → draft GitHub release. Publish the **setup exe**
+URL, SHA-256 and size in Storm Admin › Releases so that installed clients see the update; the app runs an `.exe`
+update with `/passive` and an `.msi` update through `msiexec /i … /passive`. Use one format consistently: the setup
+exe registers itself in Apps & Features and hides the MSI entry. Code signing: add `SIGNING_PFX_BASE64` and `SIGNING_PFX_PASSWORD` repository
 secrets (or adapt `scripts/publish.ps1` to Azure Trusted Signing). Sign every release — the service's trust check
 additionally binds clients to the service's signer when the service is signed.
 
-Enterprise deployment: `msiexec /i StormOS-1.2.0-x64.msi /qn` (per-machine). Uninstall: `msiexec /x {ProductCode} /qn`
-or *Settings › Apps*. User data in `%LOCALAPPDATA%\StormOS` and `%ProgramData%\StormOS` is kept on uninstall.
+Interactive install: `StormOS-Setup-1.2.0-x64.exe` (license, optional install folder, progress, launch). Silent:
+`StormOS-Setup-1.2.0-x64.exe /quiet InstallFolder="D:\Apps\STORM OS"`, uninstall with `/uninstall /quiet`.
+Enterprise deployment with the MSI: `msiexec /i StormOS-1.2.0-x64.msi /qn` (per-machine). Uninstall:
+`msiexec /x {ProductCode} /qn` or *Settings › Apps*. User data in `%LOCALAPPDATA%\StormOS` and `%ProgramData%\StormOS` is kept on uninstall.
 
 ## Cloud (Docker Compose)
 

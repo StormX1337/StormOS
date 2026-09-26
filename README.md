@@ -19,7 +19,7 @@ measurement. When a metric is not available on a system, STORM OS shows *Unavail
 | Core libraries | `src/StormOS.*` | Core, Security, Infrastructure, Services, Windows, Hardware, Performance, Network, Games, Optimization, Benchmark, Overlay |
 | Game profiles | `profiles/*.json` | Versioned, validated JSON profiles (no code) |
 | Cloud | `cloud/` | NestJS API, Next.js web + admin, Prisma/PostgreSQL, Redis, Stripe (optional) |
-| Installer | `installer/` | WiX MSI: app, service, CLI, shortcuts, clean uninstall |
+| Installer | `installer/` | Setup exe (WiX Burn, branded) + MSI: app, service, CLI, shortcuts, clean uninstall |
 
 ## Quick start
 

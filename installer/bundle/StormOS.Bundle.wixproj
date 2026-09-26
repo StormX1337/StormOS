@@ -1,0 +1,16 @@
+<Project Sdk="WixToolset.Sdk/5.0.2">
+  <!--
+    STORM OS setup executable: a WiX Burn bundle that shows the branded setup UI and installs the MSI.
+    Build the MSI first (scripts/publish.ps1 does both) and pass its path as MsiPath.
+  -->
+  <PropertyGroup>
+    <OutputType>Bundle</OutputType>
+    <ProductVersion Condition="'$(ProductVersion)' == ''">1.0.0</ProductVersion>
+    <OutputName>StormOS-Setup-$(ProductVersion)-$(Platform)</OutputName>
+    <DefineConstants>ProductVersion=$(ProductVersion);MsiPath=$(MsiPath)</DefineConstants>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageReference Include="WixToolset.Bal.wixext" Version="5.0.2" />
+  </ItemGroup>
+</Project>

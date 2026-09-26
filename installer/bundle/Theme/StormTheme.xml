@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  STORM OS setup theme for the WiX standard bootstrapper application.
+  Layout and control names follow the stock rtfLargeLicense theme (the BA looks controls up by name);
+  the header is a branded banner image and pages start below it.
+  Colors are Win32 COLORREF values written as BBGGRR hex.
+-->
+<Theme xmlns="http://wixtoolset.org/schemas/v4/thmutil">
+    <Font Id="0" Height="-12" Weight="400" Foreground="30251f" Background="ffffff">Segoe UI</Font>
+    <Font Id="1" Height="-20" Weight="600" Foreground="1d1812" Background="ffffff">Segoe UI Semibold</Font>
+    <Font Id="2" Height="-12" Weight="400" Foreground="80766b" Background="ffffff">Segoe UI</Font>
+    <Font Id="3" Height="-12" Weight="400" Foreground="30251f" Background="ffffff">Segoe UI</Font>
+
+    <Window Width="520" Height="440" HexStyle="100a0000" FontId="0" Caption="#(loc.Caption)">
+        <ImageControl X="0" Y="0" Width="520" Height="96" ImageFile="banner.png" Visible="yes" />
+
+        <Page Name="Help">
+            <Label X="20" Y="112" Width="-20" Height="28" FontId="1" DisablePrefix="yes">#(loc.HelpHeader)</Label>
+            <Label X="20" Y="146" Width="-20" Height="-50" FontId="3" DisablePrefix="yes">#(loc.HelpText)</Label>
+            <Button Name="HelpCloseButton" X="-20" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0">
+                <Text>#(loc.HelpCloseButton)</Text>
+                <CloseWindowAction />
+            </Button>
+        </Page>
+        <Page Name="Loading">
+            <Label X="20" Y="112" Width="-20" Height="28" FontId="1" DisablePrefix="yes" Visible="no" Name="CheckingForUpdatesLabel" />
+        </Page>
+        <Page Name="Install">
+            <Label X="20" Y="110" Width="-20" Height="24" FontId="1" DisablePrefix="yes">Welcome to STORM OS</Label>
+            <Label X="20" Y="136" Width="-20" Height="36" FontId="2" DisablePrefix="yes">Installs the STORM OS app, the STORM OS Service and the storm command-line tool. Nothing is changed on your system until you confirm it in the app.</Label>
+            <Label X="20" Y="180" Width="-20" Height="-84" TabStop="no" FontId="2" HexStyle="800000" DisablePrefix="yes" />
+            <Richedit Name="EulaRichedit" X="21" Y="181" Width="-21" Height="-85" TabStop="yes" FontId="0" />
+            <Label Name="InstallVersion" X="20" Y="-54" Width="200" Height="18" FontId="2" DisablePrefix="yes" VisibleCondition="WixStdBAShowVersion">#(loc.InstallVersion)</Label>
+            <Checkbox Name="EulaAcceptCheckbox" X="-20" Y="-54" Width="270" Height="18" TabStop="yes" FontId="3" HideWhenDisabled="yes">#(loc.InstallAcceptCheckbox)</Checkbox>
+            <Button Name="InstallUpdateButton" X="20" Y="-14" Width="200" Height="28" TabStop="yes" FontId="0" EnableCondition="WixStdBAUpdateAvailable" HideWhenDisabled="yes">#(loc.UpdateButton)</Button>
+            <Button Name="OptionsButton" X="-212" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0" VisibleCondition="NOT WixStdBASuppressOptionsUI">
+                <Text>#(loc.InstallOptionsButton)</Text>
+                <ChangePageAction Page="Options" />
+            </Button>
+            <Button Name="InstallButton" X="-116" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0">#(loc.InstallInstallButton)</Button>
+            <Button Name="InstallCancelButton" X="-20" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0">
+                <Text>#(loc.InstallCancelButton)</Text>
+                <CloseWindowAction />
+            </Button>
+        </Page>
+        <Page Name="Options">
+            <Label X="20" Y="112" Width="-20" Height="28" FontId="1" DisablePrefix="yes">#(loc.OptionsHeader)</Label>
+            <Label X="20" Y="156" Width="-20" Height="18" FontId="3" DisablePrefix="yes">#(loc.OptionsLocationLabel)</Label>
+            <Editbox Name="InstallFolder" X="20" Y="178" Width="-116" Height="24" TabStop="yes" FontId="3" FileSystemAutoComplete="yes" />
+            <Button Name="BrowseButton" X="-20" Y="176" Width="88" Height="28" TabStop="yes" FontId="3">
+                <Text>#(loc.OptionsBrowseButton)</Text>
+                <BrowseDirectoryAction VariableName="InstallFolder" />
+            </Button>
+            <Label X="20" Y="214" Width="-20" Height="36" FontId="2" DisablePrefix="yes">The app, the service and the CLI are installed together; the service only accepts requests from programs in this folder.</Label>
+            <Button Name="OptionsOkButton" X="-116" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0">
+                <Text>#(loc.OptionsOkButton)</Text>
+                <ChangePageAction Page="Install" />
+            </Button>
+            <Button Name="OptionsCancelButton" X="-20" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0">
+                <Text>#(loc.OptionsCancelButton)</Text>
+                <ChangePageAction Page="Install" Cancel="yes" />
+            </Button>
+        </Page>
+        <Page Name="Progress">
+            <Label X="20" Y="112" Width="-20" Height="28" FontId="1" DisablePrefix="yes">#(loc.ProgressHeader)</Label>
+            <Label X="20" Y="156" Width="80" Height="18" FontId="2" DisablePrefix="yes">#(loc.ProgressLabel)</Label>
+            <Label Name="OverallProgressPackageText" X="100" Y="156" Width="-20" Height="18" FontId="3" DisablePrefix="yes">#(loc.OverallProgressPackageText)</Label>
+            <Progressbar Name="OverallCalculatedProgressbar" X="20" Y="182" Width="-20" Height="18" />
+            <Button Name="ProgressCancelButton" X="-20" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0">#(loc.ProgressCancelButton)</Button>
+        </Page>
+        <Page Name="Modify">
+            <Label X="20" Y="112" Width="-20" Height="28" FontId="1" DisablePrefix="yes">#(loc.ModifyHeader)</Label>
+            <Label X="20" Y="146" Width="-20" Height="54" FontId="2" DisablePrefix="yes">Repair restores missing program files and the service registration. Uninstall removes the app, the service, the shortcut and the PATH entry; your history and restore points in %LOCALAPPDATA%\StormOS are kept.</Label>
+            <Button Name="ModifyUpdateButton" X="20" Y="-14" Width="200" Height="28" TabStop="yes" FontId="0" EnableCondition="WixStdBAUpdateAvailable" HideWhenDisabled="yes">#(loc.UpdateButton)</Button>
+            <Button Name="RepairButton" X="-212" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0" HideWhenDisabled="yes">#(loc.ModifyRepairButton)</Button>
+            <Button Name="UninstallButton" X="-116" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0">#(loc.ModifyUninstallButton)</Button>
+            <Button Name="ModifyCancelButton" X="-20" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0">
+                <Text>#(loc.ModifyCancelButton)</Text>
+                <CloseWindowAction />
+            </Button>
+        </Page>
+        <Page Name="Success">
+            <Label X="20" Y="112" Width="-20" Height="28" FontId="1" DisablePrefix="yes">
+                <Text>#(loc.SuccessHeader)</Text>
+                <Text Condition="WixBundleAction = 2">#(loc.SuccessLayoutHeader)</Text>
+                <Text Condition="WixBundleAction = 3">#(loc.SuccessUnsafeUninstallHeader)</Text>
+                <Text Condition="WixBundleAction = 4">#(loc.SuccessUninstallHeader)</Text>
+                <Text Condition="WixBundleAction = 5">#(loc.SuccessCacheHeader)</Text>
+                <Text Condition="WixBundleAction = 6">#(loc.SuccessInstallHeader)</Text>
+                <Text Condition="WixBundleAction = 7">#(loc.SuccessModifyHeader)</Text>
+                <Text Condition="WixBundleAction = 8">#(loc.SuccessRepairHeader)</Text>
+            </Label>
+            <Label X="20" Y="146" Width="-20" Height="54" FontId="2" DisablePrefix="yes" VisibleCondition="WixBundleAction = 6">STORM OS is ready. Launch it to run the System Check; optimizations are only applied after you review and confirm them, and every change can be restored.</Label>
+            <Button Name="LaunchButton" X="-116" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0" HideWhenDisabled="yes">#(loc.SuccessLaunchButton)</Button>
+            <Label X="-20" Y="-54" Width="440" Height="34" FontId="3" DisablePrefix="yes" VisibleCondition="WixStdBARestartRequired">
+                <Text>#(loc.SuccessRestartText)</Text>
+                <Text Condition="WixBundleAction = 3">#(loc.SuccessUninstallRestartText)</Text>
+            </Label>
+            <Button Name="SuccessRestartButton" X="-116" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0" HideWhenDisabled="yes">#(loc.SuccessRestartButton)</Button>
+            <Button Name="SuccessCloseButton" X="-20" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0">
+                <Text>#(loc.SuccessCloseButton)</Text>
+                <CloseWindowAction />
+            </Button>
+        </Page>
+        <Page Name="Failure">
+            <Label X="20" Y="112" Width="-20" Height="28" FontId="1" DisablePrefix="yes">
+                <Text>#(loc.FailureHeader)</Text>
+                <Text Condition="WixBundleAction = 2">#(loc.FailureLayoutHeader)</Text>
+                <Text Condition="WixBundleAction = 3">#(loc.FailureUnsafeUninstallHeader)</Text>
+                <Text Condition="WixBundleAction = 4">#(loc.FailureUninstallHeader)</Text>
+                <Text Condition="WixBundleAction = 5">#(loc.FailureCacheHeader)</Text>
+                <Text Condition="WixBundleAction = 6">#(loc.FailureInstallHeader)</Text>
+                <Text Condition="WixBundleAction = 7">#(loc.FailureModifyHeader)</Text>
+                <Text Condition="WixBundleAction = 8">#(loc.FailureRepairHeader)</Text>
+            </Label>
+            <Hypertext Name="FailureLogFileLink" X="20" Y="150" Width="-20" Height="42" FontId="3" TabStop="yes" HideWhenDisabled="yes">#(loc.FailureHyperlinkLogText)</Hypertext>
+            <Hypertext Name="FailureMessageText" X="30" Y="196" Width="-20" Height="60" FontId="3" TabStop="yes" HideWhenDisabled="yes" />
+            <Label Name="FailureRestartText" X="-20" Y="-54" Width="440" Height="34" FontId="3" HideWhenDisabled="yes" DisablePrefix="yes">#(loc.FailureRestartText)</Label>
+            <Button Name="FailureRestartButton" X="-116" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0" HideWhenDisabled="yes">#(loc.FailureRestartButton)</Button>
+            <Button Name="FailureCloseButton" X="-20" Y="-14" Width="88" Height="28" TabStop="yes" FontId="0">
+                <Text>#(loc.FailureCloseButton)</Text>
+                <CloseWindowAction />
+            </Button>
+        </Page>
+    </Window>
+</Theme>

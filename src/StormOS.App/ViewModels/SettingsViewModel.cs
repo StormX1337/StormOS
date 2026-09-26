@@ -299,7 +299,11 @@ public sealed partial class SettingsViewModel(
                 return;
             }
 
-            Process.Start(new ProcessStartInfo("msiexec.exe") { ArgumentList = { "/i", result.Value!, "/passive" }, UseShellExecute = false });
+            // The setup executable and the MSI both show progress only (/passive) and elevate themselves.
+            var installer = result.Value!.EndsWith(".exe", StringComparison.OrdinalIgnoreCase)
+                ? new ProcessStartInfo(result.Value!) { ArgumentList = { "/passive" }, UseShellExecute = false }
+                : new ProcessStartInfo("msiexec.exe") { ArgumentList = { "/i", result.Value!, "/passive" }, UseShellExecute = false };
+            Process.Start(installer);
             Microsoft.UI.Xaml.Application.Current.Exit();
         }
         catch (System.ComponentModel.Win32Exception ex)

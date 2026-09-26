@@ -129,4 +129,11 @@ public class UpdateVersionTests
     [InlineData("garbage", "0.0.1", -1)]
     public void ComparesSemanticVersions(string left, string right, int expected) =>
         Assert.Equal(expected, Math.Sign(UpdateService.CompareVersions(left, right)));
+
+    [Theory]
+    [InlineData("1.2.0", "https://downloads.stormos.app/StormOS-Setup-1.2.0-x64.exe", "StormOS-Setup-1.2.0.exe")]
+    [InlineData("1.2.0-beta.1", "https://downloads.stormos.app/StormOS-1.2.0-x64.MSI", "StormOS-1.2.0-beta.1.msi")]
+    [InlineData("1.2.0/../../x", "https://downloads.stormos.app/setup.exe?sig=abc", "StormOS-Setup-1.2.0....x.exe")]
+    public void InstallerFileNameFollowsTheDownloadType(string version, string url, string expected) =>
+        Assert.Equal(expected, UpdateService.InstallerFileName(version, new Uri(url)));
 }

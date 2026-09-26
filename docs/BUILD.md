@@ -29,14 +29,21 @@ contain mock data.
 ## Installer
 
 ```powershell
-./scripts/publish.ps1 -Runtime win-x64 -Version 1.2.0            # artifacts/installer/StormOS-1.2.0-x64.msi (+ .sha256)
+./scripts/publish.ps1 -Runtime win-x64 -Version 1.2.0            # StormOS-1.2.0-x64.msi + StormOS-Setup-1.2.0-x64.exe (+ .sha256)
 ./scripts/publish.ps1 -Runtime win-arm64 -Version 1.2.0
 ./scripts/publish.ps1 -Runtime win-x64 -Version 1.2.0 -SkipInstaller   # publish folder only
 ```
 
 The script publishes the app, service and CLI self-contained into one folder, applies the shared
-`installer/appsettings.json`, removes PDBs, optionally signs (`SIGN_CERT_THUMBPRINT`), builds the MSI and writes
-its SHA-256.
+`installer/appsettings.json`, removes PDBs, optionally signs (`SIGN_CERT_THUMBPRINT`), builds the MSI
+(`installer/`) and the setup executable (`installer/bundle/`, a WiX Burn bundle with the STORM OS theme that embeds
+the MSI) and writes their SHA-256 files. When signing, the bundle engine is detached, signed and reattached before the
+bundle itself is signed.
+
+`scripts/installer-preview.ps1 -Setup <exe>` is the installer smoke test used by CI on a disposable Windows runner: it
+installs through the setup UI (UI Automation), checks the running service, the files, the single Apps & Features
+entry and `storm status` over the named pipe, captures screenshots of the setup pages and the first app screens, and
+uninstalls silently. Do not run it on a machine where you want to keep STORM OS installed.
 
 ## Cloud
 

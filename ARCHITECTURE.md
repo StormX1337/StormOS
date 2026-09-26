@@ -75,4 +75,4 @@ desktop app as device-bound ES256 tokens that are verified offline. See [docs/CL
 
 `scripts/publish.ps1` publishes app, service and CLI self-contained into one folder (the service trusts clients by
 install location) and builds the WiX MSI in `installer/`, which registers `StormOSService`, a Start menu shortcut and
-the CLI on `PATH`. See [docs/BUILD.md](docs/BUILD.md) and [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).
+the CLI on `PATH`, plus the branded setup executable in `installer/bundle/` that embeds the MSI. See [docs/BUILD.md](docs/BUILD.md) and [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md).

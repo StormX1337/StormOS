@@ -1,12 +1,13 @@
 <#
 .SYNOPSIS
-  Publishes STORM OS (app, service, CLI) for one architecture and builds the MSI.
+  Publishes STORM OS (app, service, CLI) for one architecture and builds the MSI and the setup executable.
 
 .EXAMPLE
   ./scripts/publish.ps1 -Runtime win-x64 -Version 1.2.0
   ./scripts/publish.ps1 -Runtime win-arm64 -Version 1.3.0-beta.1
 
 .NOTES
+  Output: artifacts/installer/StormOS-<version>-<platform>.msi and StormOS-Setup-<version>-<platform>.exe (+ .sha256).
   Code signing is optional and uses signtool with a certificate from the machine store:
   set SIGN_CERT_THUMBPRINT (and optionally SIGN_TIMESTAMP_URL) before running.
   Unsigned builds are fine for development; release builds should be signed because the
@@ -67,9 +68,37 @@ try {
     if ($LASTEXITCODE -ne 0) { throw 'MSI signing failed.' }
   }
 
-  $hash = (Get-FileHash $msi.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
-  Set-Content -Path "$($msi.FullName).sha256" -Value "$hash  $($msi.Name)" -NoNewline
-  Write-Host "Built $($msi.Name) ($([math]::Round($msi.Length / 1MB, 1)) MB) SHA-256 $hash" -ForegroundColor Green
+  dotnet build (Join-Path $root 'installer/bundle/StormOS.Bundle.wixproj') -c $Configuration "-p:Platform=$($platform.ToLowerInvariant())" "-p:ProductVersion=$msiVersion" "-p:MsiPath=$($msi.FullName)" -o $installerOut
+  if ($LASTEXITCODE -ne 0) { throw 'Setup executable build failed.' }
+  $setup = Get-ChildItem $installerOut -Filter "StormOS-Setup-$msiVersion-*.exe" | Select-Object -First 1
+
+  if ($env:SIGN_CERT_THUMBPRINT) {
+    # A Burn bundle is signed in two steps: first the engine inside it, then the bundle itself.
+    $tools = Join-Path $root "$Output/tools"
+    $wix = Join-Path $tools 'wix.exe'
+    if (-not (Test-Path $wix)) {
+      dotnet tool install wix --version 5.0.2 --tool-path $tools
+      if ($LASTEXITCODE -ne 0) { throw 'Could not install the WiX command-line tool.' }
+    }
+    $engine = Join-Path $installerOut 'engine.exe'
+    $signed = Join-Path $installerOut 'setup-signed.exe'
+    & $wix burn detach $setup.FullName -engine $engine
+    if ($LASTEXITCODE -ne 0) { throw 'Could not detach the setup engine.' }
+    & signtool sign /sha1 $env:SIGN_CERT_THUMBPRINT /fd sha256 /tr $timestamp /td sha256 $engine
+    if ($LASTEXITCODE -ne 0) { throw 'Setup engine signing failed.' }
+    & $wix burn reattach $setup.FullName -engine $engine -o $signed
+    if ($LASTEXITCODE -ne 0) { throw 'Could not reattach the signed setup engine.' }
+    Move-Item $signed $setup.FullName -Force
+    Remove-Item $engine
+    & signtool sign /sha1 $env:SIGN_CERT_THUMBPRINT /fd sha256 /tr $timestamp /td sha256 $setup.FullName
+    if ($LASTEXITCODE -ne 0) { throw 'Setup signing failed.' }
+  }
+
+  foreach ($file in @($msi, (Get-Item $setup.FullName))) {
+    $hash = (Get-FileHash $file.FullName -Algorithm SHA256).Hash.ToLowerInvariant()
+    Set-Content -Path "$($file.FullName).sha256" -Value "$hash  $($file.Name)" -NoNewline
+    Write-Host "Built $($file.Name) ($([math]::Round($file.Length / 1MB, 1)) MB) SHA-256 $hash" -ForegroundColor Green
+  }
 }
 finally {
   Pop-Location
