@@ -188,3 +188,33 @@ public class MetricHistoryAggregateTests
         Assert.Equal(stats.AverageFps, histogram.AverageFps!.Value, 6);
     }
 }
+
+public class FrameCaptureCoordinatorTests
+{
+    [Fact]
+    public async Task ProviderThatCannotLoadIsReportedUnavailable()
+    {
+        await using var coordinator = new FrameCaptureCoordinator(
+            [new BrokenProvider()],
+            Microsoft.Extensions.Options.Options.Create(new FrameCaptureOptions()),
+            Microsoft.Extensions.Logging.Abstractions.NullLogger<FrameCaptureCoordinator>.Instance);
+
+        var status = coordinator.GetStatus();
+
+        var provider = Assert.Single(status.Providers);
+        Assert.False(provider.Available);
+        Assert.Contains("could not be loaded", provider.Reason, StringComparison.Ordinal);
+    }
+
+    private sealed class BrokenProvider : IFrameCaptureProvider
+    {
+        public string Name => "Broken";
+
+        public int Priority => 1;
+
+        public FrameCaptureAvailability CheckAvailability() => throw new FileNotFoundException("Missing component", "Component.dll");
+
+        public Task<IFrameCaptureSession> StartAsync(int processId, CancellationToken cancellationToken = default) =>
+            throw new InvalidOperationException("Not started.");
+    }
+}

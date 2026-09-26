@@ -61,7 +61,7 @@ public sealed class FrameCaptureCoordinator : IAsyncDisposable
             LastError = _lastError,
             Providers = _providers.Select(p =>
             {
-                var availability = p.CheckAvailability();
+                var availability = CheckAvailability(p);
                 return new ProviderAvailability(p.Name, availability.IsAvailable, availability.Reason);
             }).ToList(),
         };
@@ -100,7 +100,7 @@ public sealed class FrameCaptureCoordinator : IAsyncDisposable
                     continue;
                 }
 
-                var availability = provider.CheckAvailability();
+                var availability = CheckAvailability(provider);
                 if (!availability.IsAvailable)
                 {
                     continue;
@@ -253,6 +253,20 @@ public sealed class FrameCaptureCoordinator : IAsyncDisposable
         }
 
         return samples[start..];
+    }
+
+    /// <summary>A provider that cannot even be loaded (e.g. a missing component) is reported as unavailable, never as a failed request.</summary>
+    private FrameCaptureAvailability CheckAvailability(IFrameCaptureProvider provider)
+    {
+        try
+        {
+            return provider.CheckAvailability();
+        }
+        catch (Exception ex) when (ex is FileNotFoundException or FileLoadException or TypeLoadException or BadImageFormatException or InvalidOperationException or UnauthorizedAccessException or System.ComponentModel.Win32Exception or System.Runtime.InteropServices.COMException)
+        {
+            _logger.LogWarning(ex, "Frame capture provider {Provider} could not be checked", provider.Name);
+            return new FrameCaptureAvailability(false, $"{provider.Name} could not be loaded ({ex.GetType().Name}).");
+        }
     }
 
     private async Task PumpAsync(IFrameCaptureSession session, CancellationToken cancellationToken)

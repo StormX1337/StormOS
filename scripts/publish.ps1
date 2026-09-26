@@ -63,6 +63,22 @@ try {
   if ($LASTEXITCODE -ne 0) { throw 'Installer build failed.' }
 
   $msi = Get-ChildItem $installerOut -Filter "StormOS-$msiVersion-*.msi" | Select-Object -First 1
+
+  # Every published file must be in the MSI: a missing runtime file only shows up once the app or service loads it.
+  $windowsInstaller = New-Object -ComObject WindowsInstaller.Installer
+  $database = $windowsInstaller.GetType().InvokeMember('OpenDatabase', 'InvokeMethod', $null, $windowsInstaller, @($msi.FullName, 0))
+  $view = $database.GetType().InvokeMember('OpenView', 'InvokeMethod', $null, $database, @('SELECT `FileName` FROM `File`'))
+  $view.GetType().InvokeMember('Execute', 'InvokeMethod', $null, $view, $null) | Out-Null
+  $packaged = @{}
+  while ($null -ne ($record = $view.GetType().InvokeMember('Fetch', 'InvokeMethod', $null, $view, $null))) {
+    $fileName = ($record.GetType().InvokeMember('StringData', 'GetProperty', $null, $record, @(1)) -split '\|')[-1].ToLowerInvariant()
+    $packaged[$fileName] = 1 + [int]$packaged[$fileName]
+  }
+  $view.GetType().InvokeMember('Close', 'InvokeMethod', $null, $view, $null) | Out-Null
+  $missing = Get-ChildItem $publish -Recurse -File | Group-Object { $_.Name.ToLowerInvariant() } |
+    Where-Object { [int]$packaged[$_.Name] -lt $_.Count } | ForEach-Object { $_.Group.FullName.Substring($publish.Length + 1) }
+  if ($missing) { throw "The MSI is missing published files:`n  $($missing -join "`n  ")" }
+  Write-Host "MSI contains all $((Get-ChildItem $publish -Recurse -File).Count) published files." -ForegroundColor Green
   if ($env:SIGN_CERT_THUMBPRINT) {
     & signtool sign /sha1 $env:SIGN_CERT_THUMBPRINT /fd sha256 /tr $timestamp /td sha256 $msi.FullName
     if ($LASTEXITCODE -ne 0) { throw 'MSI signing failed.' }
