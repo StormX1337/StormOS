@@ -60,4 +60,16 @@ public sealed class InputValidatorTests
         Assert.False(InputValidator.IsSafeParameterValue("a\nb"));
         Assert.False(InputValidator.IsSafeParameterValue(new string('x', 600)));
     }
+
+    [Theory]
+    [InlineData("1.1.1.1,1.0.0.1", true)]
+    [InlineData("RegistryUserRun|Discord", true)]
+    [InlineData("8c5e7fda-e8bf-4a96-9a85-a6e23a8c635c", true)]
+    [InlineData("x & del C:\\Windows", false)]
+    [InlineData("a;b", false)]
+    [InlineData("<script>", false)]
+    [InlineData("line\nbreak", false)]
+    [InlineData(null, false)]
+    public void ParameterValuesRejectMetacharacters(string? value, bool expected) =>
+        Assert.Equal(expected, InputValidator.IsSafeParameterValue(value));
 }

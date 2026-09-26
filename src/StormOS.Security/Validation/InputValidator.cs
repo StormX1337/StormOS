@@ -7,6 +7,8 @@ namespace StormOS.Security.Validation;
 /// <summary>Strict validators for values that cross a trust boundary (IPC payloads, profiles, CLI input).</summary>
 public static partial class InputValidator
 {
+    private const string ForbiddenValueCharacters = "&;<>`\"^";
+
     /// <summary>Maximum length of free-form identifiers.</summary>
     public const int MaxIdentifierLength = 128;
 
@@ -22,11 +24,15 @@ public static partial class InputValidator
     public static bool IsParameterName(string? value) =>
         !string.IsNullOrEmpty(value) && value.Length <= 64 && ParameterNameRegex().IsMatch(value);
 
-    /// <summary>Validates a parameter value: printable, bounded length, no control characters.</summary>
+    /// <summary>
+    /// Validates a parameter value: printable, bounded length, no control characters and no shell or markup
+    /// metacharacters. Parameters are never executed, but rejecting these characters keeps malformed or hostile
+    /// input out of logs, the journal and any tool that later displays it.
+    /// </summary>
     /// <param name="value">The value.</param>
     /// <returns><see langword="true"/> when valid.</returns>
     public static bool IsSafeParameterValue(string? value) =>
-        value is not null && value.Length <= 512 && !value.Any(char.IsControl);
+        value is not null && value.Length <= 512 && !value.Any(c => char.IsControl(c) || ForbiddenValueCharacters.Contains(c, StringComparison.Ordinal));
 
     /// <summary>Validates a process id.</summary>
     /// <param name="processId">The process id.</param>

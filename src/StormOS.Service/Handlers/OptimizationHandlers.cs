@@ -25,6 +25,18 @@ internal static class RuleRequestValidation
             ? "Invalid rule parameters."
             : null;
     }
+
+    /// <summary>Rejects rule ids the service does not execute before any work is done.</summary>
+    /// <param name="engine">The engine.</param>
+    /// <param name="ruleId">Rule id.</param>
+    /// <exception cref="IpcOperationException">The rule is not available in the service.</exception>
+    public static void EnsureKnown(IOptimizationEngine engine, string ruleId)
+    {
+        if (!engine.Rules.Any(r => string.Equals(r.Id, ruleId, StringComparison.Ordinal)))
+        {
+            throw new IpcOperationException(StormErrorCodes.NotFound, "This optimization is not available in the STORM OS service.");
+        }
+    }
 }
 
 /// <summary>optimization.rules: lists service-side rules with their current detection.</summary>
@@ -57,8 +69,11 @@ public sealed class OptimizationDetectHandler(IOptimizationEngine engine) : IpcH
     protected override string? Validate(RuleRequest payload) => RuleRequestValidation.Validate(payload);
 
     /// <inheritdoc />
-    protected override async Task<object?> HandleAsync(RuleRequest payload, IIpcSession session, CancellationToken cancellationToken) =>
-        await engine.DetectAsync(payload.RuleId, payload.Parameters, cancellationToken).ConfigureAwait(false);
+    protected override async Task<object?> HandleAsync(RuleRequest payload, IIpcSession session, CancellationToken cancellationToken)
+    {
+        RuleRequestValidation.EnsureKnown(engine, payload.RuleId);
+        return await engine.DetectAsync(payload.RuleId, payload.Parameters, cancellationToken).ConfigureAwait(false);
+    }
 }
 
 /// <summary>optimization.apply: runs the full rule lifecycle on behalf of the verified client user.</summary>
@@ -73,6 +88,7 @@ public sealed class OptimizationApplyHandler(IOptimizationEngine engine) : IpcHa
     /// <inheritdoc />
     protected override async Task<object?> HandleAsync(RuleRequest payload, IIpcSession session, CancellationToken cancellationToken)
     {
+        RuleRequestValidation.EnsureKnown(engine, payload.RuleId);
         var record = await engine.ApplyAsync(payload.RuleId, payload.Parameters, session.Client.UserName ?? "unknown", cancellationToken).ConfigureAwait(false);
         await session.SendEventAsync(IpcTopics.OptimizationChanged, record).ConfigureAwait(false);
         return record;
