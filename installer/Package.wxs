@@ -82,7 +82,8 @@
     <StandardDirectory Id="ProgramMenuFolder">
       <Component Id="StartMenuShortcut" Guid="4E0B8F7C-2A1D-4C3E-8B5F-6D9A0E1C2B47">
         <Shortcut Id="StormOSShortcut" Name="STORM OS" Description="Windows gaming performance command center" Target="[INSTALLFOLDER]StormOS.exe" WorkingDirectory="INSTALLFOLDER" Icon="StormOS.ico" />
-        <RegistryValue Root="HKLM" Key="Software\STORM OS" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+        <!-- Shortcut components need a per-user key path (ICE38/ICE43); the value only marks the component as installed. -->
+        <RegistryValue Root="HKCU" Key="Software\STORM OS" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
       </Component>
     </StandardDirectory>
   </Fragment>

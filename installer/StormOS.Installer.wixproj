@@ -9,6 +9,9 @@
     <OutputName>StormOS-$(ProductVersion)-$(Platform)</OutputName>
     <DefineConstants>ProductVersion=$(ProductVersion);PublishDir=$(PublishDir)</DefineConstants>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <!-- ICE03/ICE60: some redistributed native binaries (Windows App SDK) carry multi-language or invalid
+         language ids in their version resources, which ICE reports for the File.Language column. -->
+    <SuppressIces>ICE03;ICE60</SuppressIces>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="WixToolset.Util.wixext" Version="5.0.2" />
