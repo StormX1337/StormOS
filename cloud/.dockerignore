@@ -1,0 +1,8 @@
+**/node_modules
+**/dist
+**/.next
+**/generated
+**/coverage
+.env
+.env.*
+!.env.example

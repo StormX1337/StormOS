@@ -52,3 +52,43 @@ jobs:
         with:
           name: test-results-windows
           path: TestResults
+
+  cloud:
+    name: Cloud (API, web, admin)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cloud
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_DB: storm_test
+          POSTGRES_USER: storm
+          POSTGRES_PASSWORD: storm-ci-only
+        ports: ["5432:5432"]
+        options: >-
+          --health-cmd "pg_isready -U storm -d storm_test"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 20
+    env:
+      TEST_DATABASE_URL: postgresql://storm:storm-ci-only@localhost:5432/storm_test
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          package_json_file: cloud/package.json
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+          cache-dependency-path: cloud/pnpm-lock.yaml
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm build
+      - run: pnpm typecheck
+      - name: Apply migrations to the test database
+        run: pnpm --filter @storm/database exec prisma migrate deploy
+        env:
+          DATABASE_URL: ${{ env.TEST_DATABASE_URL }}
+      - run: pnpm test

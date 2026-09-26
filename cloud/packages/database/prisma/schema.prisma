@@ -2,7 +2,10 @@
 // passwords are scrypt hashes, refresh tokens are SHA-256 hashes, payment data stays with Stripe.
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // Generated inside the package so deployments ship it with the code (no generate step at runtime).
+  output        = "../generated/client"
+  binaryTargets = ["native", "debian-openssl-3.0.x"]
 }
 
 datasource db {

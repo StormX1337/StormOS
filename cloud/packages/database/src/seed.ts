@@ -1,7 +1,7 @@
 import { existsSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { scryptSync, randomBytes } from 'node:crypto';
-import { PrismaClient } from '@prisma/client';
+import { PrismaClient } from '../generated/client';
 import { emailSchema, passwordSchema } from '@storm/validation';
 import { importProfiles } from './profiles';
 

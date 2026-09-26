@@ -1,0 +1,25 @@
+/* Shared STORM design tokens (Tailwind v4). Import after "tailwindcss". */
+@theme {
+  --color-storm-bg: #0a0e14;
+  --color-storm-surface: #111822;
+  --color-storm-surface-2: #182230;
+  --color-storm-border: #243244;
+  --color-storm-text: #e6edf5;
+  --color-storm-muted: #8b9bb0;
+  --color-storm-accent: #40c4ff;
+  --color-storm-success: #3ddc97;
+  --color-storm-warning: #ffb547;
+  --color-storm-danger: #ff5c7a;
+  --font-sans: "Segoe UI Variable", "Segoe UI", system-ui, -apple-system, sans-serif;
+  --font-mono: "Cascadia Mono", Consolas, ui-monospace, monospace;
+}
+
+@layer base {
+  html {
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-storm-bg text-storm-text antialiased;
+  }
+}

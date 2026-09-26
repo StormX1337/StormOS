@@ -5,7 +5,11 @@
   "description": "PostgreSQL schema, migrations and Prisma client for STORM Cloud",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
-  "files": ["dist", "prisma"],
+  "files": [
+    "dist",
+    "prisma",
+    "generated"
+  ],
   "scripts": {
     "generate": "prisma generate",
     "build": "prisma generate && tsc -p tsconfig.json",
@@ -16,11 +20,11 @@
   },
   "dependencies": {
     "@prisma/client": "6.19.3",
-    "@storm/validation": "workspace:*"
+    "@storm/validation": "workspace:*",
+    "prisma": "6.19.3"
   },
   "devDependencies": {
     "@types/node": "^22.18.0",
-    "prisma": "6.19.3",
     "typescript": "5.9.3"
   }
 }

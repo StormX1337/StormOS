@@ -1,6 +1,6 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import type { Prisma, PrismaClient } from '@prisma/client';
+import type { Prisma, PrismaClient } from '../generated/client';
 import { gameProfileSchema, describeZodError } from '@storm/validation';
 
 /** Imports (and publishes) every valid profile JSON in a directory. Invalid files are reported, not imported. */
