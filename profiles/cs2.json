@@ -1,0 +1,40 @@
+{
+  "schemaVersion": 1,
+  "id": "cs2",
+  "version": "1.0.0",
+  "name": "Counter-Strike 2",
+  "publisher": "Valve",
+  "antiCheat": "VAC",
+  "detection": {
+    "executables": [{ "name": "cs2.exe", "pathContains": "game\\bin\\win64" }],
+    "launchers": [{ "launcher": "steam", "gameId": "730" }]
+  },
+  "launch": {
+    "uri": "steam://rungameid/730",
+    "recommendedArguments": [
+      { "title": "-fullscreen", "detail": "Starts in exclusive fullscreen, which gives the lowest presentation latency on most systems." },
+      { "title": "+fps_max 0", "detail": "Removes the frame rate cap. Use a cap slightly below your refresh rate instead if you run G-SYNC/FreeSync." }
+    ]
+  },
+  "process": { "priority": "aboveNormal", "reason": "Slightly favours the game over background applications while it runs. Restored when the game exits." },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Game Mode reduces background activity from Windows Update and notifications while playing." },
+    { "ruleId": "windows.game-dvr", "reason": "Background recording costs GPU encoder time and disk writes." },
+    { "ruleId": "input.mouse-precision", "reason": "Raw, unaccelerated mouse input is expected in competitive shooters. CS2 uses raw input in-game, this mainly affects menus and the desktop." }
+  ],
+  "optimizationRules": [
+    { "ruleId": "power.plan", "parameters": { "plan": "high-performance" }, "reason": "Keeps CPU clocks high during rounds.", "sessionScoped": true }
+  ],
+  "graphicsGuidance": [
+    { "title": "Boost Player Contrast: Enabled", "detail": "Improves player visibility with negligible cost." },
+    { "title": "NVIDIA Reflex / AMD Anti-Lag", "detail": "Enable Reflex (On + Boost if GPU-bound) to reduce system latency." },
+    { "title": "Multisampling (MSAA)", "detail": "Most expensive setting on mid-range GPUs; use 2x or 4x if the 1% lows drop below your refresh rate." }
+  ],
+  "networkGuidance": [
+    { "title": "Wired connection", "detail": "Wi-Fi adds jitter that sub-tick movement is sensitive to. Check the STORM network score for jitter." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "benchmark": { "durationSeconds": 60, "warmupSeconds": 5, "scenario": "Workshop map 'CS2 FPS Benchmark' or an offline Dust II walk-through using the same route each run." },
+  "minWindowsBuild": 19041,
+  "supportedGameVersions": "*"
+}

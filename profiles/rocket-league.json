@@ -1,0 +1,20 @@
+{
+  "schemaVersion": 1,
+  "id": "rocket-league",
+  "version": "1.0.0",
+  "name": "Rocket League",
+  "publisher": "Psyonix",
+  "antiCheat": "Easy Anti-Cheat",
+  "detection": {
+    "executables": [{ "name": "RocketLeague.exe" }],
+    "launchers": [{ "launcher": "epic", "gameId": "Sugar" }, { "launcher": "steam", "gameId": "252950" }]
+  },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." }
+  ],
+  "graphicsGuidance": [
+    { "title": "Frame rate: uncapped or 250", "detail": "Physics tick at 120 Hz; frame rates above your refresh rate still reduce input latency." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "minWindowsBuild": 19041
+}

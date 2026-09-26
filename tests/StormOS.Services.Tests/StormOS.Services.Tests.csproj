@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(StormPortableTfm)</TargetFramework>
+    <RootNamespace>StormOS.Services.Tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\StormOS.Core\StormOS.Core.csproj" />
+    <ProjectReference Include="..\..\src\StormOS.Services\StormOS.Services.csproj" />
+    <ProjectReference Include="..\..\src\StormOS.Infrastructure\StormOS.Infrastructure.csproj" />
+  </ItemGroup>
+</Project>

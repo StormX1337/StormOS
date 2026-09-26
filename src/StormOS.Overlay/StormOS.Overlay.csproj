@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(StormWindowsTfm)</TargetFramework>
+    <RootNamespace>StormOS.Overlay</RootNamespace>
+    <Description>Low-overhead Win32 layered in-game overlay.</Description>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StormOS.Core\StormOS.Core.csproj" />
+    <ProjectReference Include="..\StormOS.Windows\StormOS.Windows.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
+  </ItemGroup>
+</Project>

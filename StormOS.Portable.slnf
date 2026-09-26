@@ -1,0 +1,32 @@
+{
+  "solution": {
+    "path": "StormOS.slnx",
+    "projects": [
+      "src/StormOS.Benchmark/StormOS.Benchmark.csproj",
+      "src/StormOS.Cli/StormOS.Cli.csproj",
+      "src/StormOS.Core/StormOS.Core.csproj",
+      "src/StormOS.Games/StormOS.Games.csproj",
+      "src/StormOS.Hardware/StormOS.Hardware.csproj",
+      "src/StormOS.Infrastructure/StormOS.Infrastructure.csproj",
+      "src/StormOS.Network/StormOS.Network.csproj",
+      "src/StormOS.Optimization/StormOS.Optimization.csproj",
+      "src/StormOS.Overlay/StormOS.Overlay.csproj",
+      "src/StormOS.Performance/StormOS.Performance.csproj",
+      "src/StormOS.Security/StormOS.Security.csproj",
+      "src/StormOS.Service/StormOS.Service.csproj",
+      "src/StormOS.Services/StormOS.Services.csproj",
+      "src/StormOS.Windows/StormOS.Windows.csproj",
+      "tests/StormOS.Benchmark.Tests/StormOS.Benchmark.Tests.csproj",
+      "tests/StormOS.Core.Tests/StormOS.Core.Tests.csproj",
+      "tests/StormOS.Games.Tests/StormOS.Games.Tests.csproj",
+      "tests/StormOS.Hardware.Tests/StormOS.Hardware.Tests.csproj",
+      "tests/StormOS.Infrastructure.Tests/StormOS.Infrastructure.Tests.csproj",
+      "tests/StormOS.Integration.Tests/StormOS.Integration.Tests.csproj",
+      "tests/StormOS.Network.Tests/StormOS.Network.Tests.csproj",
+      "tests/StormOS.Optimization.Tests/StormOS.Optimization.Tests.csproj",
+      "tests/StormOS.Performance.Tests/StormOS.Performance.Tests.csproj",
+      "tests/StormOS.Security.Tests/StormOS.Security.Tests.csproj",
+      "tests/StormOS.Services.Tests/StormOS.Services.Tests.csproj"
+    ]
+  }
+}

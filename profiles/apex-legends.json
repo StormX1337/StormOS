@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "apex-legends",
+  "version": "1.0.0",
+  "name": "Apex Legends",
+  "publisher": "Electronic Arts",
+  "antiCheat": "Easy Anti-Cheat",
+  "detection": {
+    "executables": [{ "name": "r5apex.exe" }, { "name": "r5apex_dx12.exe" }],
+    "launchers": [{ "launcher": "steam", "gameId": "1172470" }]
+  },
+  "launch": { "uri": "steam://rungameid/1172470" },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." },
+    { "ruleId": "windows.game-dvr", "reason": "Background recording costs GPU encoder time." }
+  ],
+  "optimizationRules": [
+    { "ruleId": "power.plan", "parameters": { "plan": "high-performance" }, "reason": "Avoids CPU clock ramp-up delays.", "sessionScoped": true }
+  ],
+  "graphicsGuidance": [
+    { "title": "Texture Streaming Budget", "detail": "Match it to your VRAM (see the Devices page); exceeding VRAM causes stutter." },
+    { "title": "Adaptive resolution FPS target: 0", "detail": "Disables dynamic resolution for consistent image quality." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "minWindowsBuild": 19041
+}

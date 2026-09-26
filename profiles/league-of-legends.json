@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "league-of-legends",
+  "version": "1.0.0",
+  "name": "League of Legends",
+  "publisher": "Riot Games",
+  "antiCheat": "Riot Vanguard",
+  "detection": {
+    "executables": [{ "name": "League of Legends.exe" }],
+    "launchers": [{ "launcher": "riot", "gameId": "league_of_legends" }]
+  },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." }
+  ],
+  "graphicsGuidance": [
+    { "title": "Frame rate cap", "detail": "Cap slightly below your refresh rate for consistent frame pacing." },
+    { "title": "Client: close during game", "detail": "Setting the client to close during games frees memory on 8 GB systems." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "minWindowsBuild": 19041
+}

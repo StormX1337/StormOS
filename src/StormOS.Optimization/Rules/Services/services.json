@@ -1,0 +1,21 @@
+{
+  "services": [
+    { "name": "DiagTrack", "assessment": "Sends diagnostic and usage data to Microsoft.", "recommendation": "Not needed for gaming. Setting it to Manual reduces background activity.", "risk": "low", "allowedStartTypes": ["manual", "disabled"] },
+    { "name": "dmwappushservice", "assessment": "Routes WAP push messages for device management and telemetry.", "recommendation": "Can be set to Manual on PCs that are not managed by an organisation.", "risk": "low", "allowedStartTypes": ["manual"] },
+    { "name": "SysMain", "assessment": "Preloads frequently used applications into memory.", "recommendation": "Helpful on hard disks. On SSD-only systems with high disk activity it can be set to Manual; otherwise leave it.", "risk": "medium", "allowedStartTypes": ["manual"] },
+    { "name": "WSearch", "assessment": "Indexes files for Start menu and Explorer search.", "recommendation": "Set to Manual only if you rarely use Windows search; searches will be slower.", "risk": "medium", "allowedStartTypes": ["manual"] },
+    { "name": "Spooler", "assessment": "Print Spooler, required for printing.", "recommendation": "If you never print, Disabled also reduces attack surface. Re-enable before printing.", "risk": "low", "allowedStartTypes": ["manual", "disabled"] },
+    { "name": "Fax", "assessment": "Fax service.", "recommendation": "Rarely used; can be disabled.", "risk": "low", "allowedStartTypes": ["manual", "disabled"] },
+    { "name": "MapsBroker", "assessment": "Downloaded Maps Manager for the Maps app.", "recommendation": "Can be set to Manual if you do not use offline maps.", "risk": "low", "allowedStartTypes": ["manual"] },
+    { "name": "RetailDemo", "assessment": "Retail demo mode for store display PCs.", "recommendation": "Not needed on personal PCs.", "risk": "low", "allowedStartTypes": ["disabled"] },
+    { "name": "XblAuthManager", "assessment": "Xbox Live authentication.", "recommendation": "Required for Xbox app and Game Pass games. Keep it.", "risk": "high", "allowedStartTypes": [] },
+    { "name": "XblGameSave", "assessment": "Xbox cloud saves.", "recommendation": "Required for Game Pass cloud saves. Keep it.", "risk": "high", "allowedStartTypes": [] },
+    { "name": "XboxNetApiSvc", "assessment": "Xbox networking.", "recommendation": "Required for Xbox multiplayer features. Keep it.", "risk": "high", "allowedStartTypes": [] },
+    { "name": "XboxGipSvc", "assessment": "Xbox accessory (controller) management.", "recommendation": "Required for Xbox controllers. Keep it.", "risk": "high", "allowedStartTypes": [] },
+    { "name": "GamingServices", "assessment": "Xbox Gaming Services.", "recommendation": "Required for PC Game Pass games. Keep it.", "risk": "high", "allowedStartTypes": [] },
+    { "name": "wuauserv", "assessment": "Windows Update.", "recommendation": "Security critical. STORM OS never changes it; Game Mode already defers updates while you play.", "risk": "high", "allowedStartTypes": [] },
+    { "name": "WinDefend", "assessment": "Microsoft Defender Antivirus.", "recommendation": "Security critical. STORM OS never changes it.", "risk": "high", "allowedStartTypes": [] },
+    { "name": "mpssvc", "assessment": "Windows Defender Firewall.", "recommendation": "Security critical. STORM OS never changes it.", "risk": "high", "allowedStartTypes": [] },
+    { "name": "BFE", "assessment": "Base Filtering Engine (firewall and IPsec).", "recommendation": "Security critical. STORM OS never changes it.", "risk": "high", "allowedStartTypes": [] }
+  ]
+}

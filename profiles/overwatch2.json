@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "overwatch2",
+  "version": "1.0.0",
+  "name": "Overwatch 2",
+  "publisher": "Blizzard Entertainment",
+  "antiCheat": "Blizzard Warden",
+  "detection": {
+    "executables": [{ "name": "Overwatch.exe" }],
+    "launchers": [{ "launcher": "steam", "gameId": "2357570" }]
+  },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." },
+    { "ruleId": "input.mouse-precision", "reason": "Raw, unaccelerated mouse input is expected in competitive shooters." }
+  ],
+  "graphicsGuidance": [
+    { "title": "Reduce Buffering: On", "detail": "Lowers input latency when the GPU can hold the frame rate." },
+    { "title": "NVIDIA Reflex", "detail": "Enabled + Boost when GPU-bound." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "minWindowsBuild": 19041
+}

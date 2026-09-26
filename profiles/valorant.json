@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 1,
+  "id": "valorant",
+  "version": "1.0.0",
+  "name": "VALORANT",
+  "publisher": "Riot Games",
+  "antiCheat": "Riot Vanguard",
+  "detection": {
+    "executables": [{ "name": "VALORANT-Win64-Shipping.exe" }],
+    "launchers": [{ "launcher": "riot", "gameId": "valorant" }]
+  },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." },
+    { "ruleId": "windows.game-dvr", "reason": "Background recording costs GPU encoder time." },
+    { "ruleId": "input.mouse-precision", "reason": "Raw, unaccelerated mouse input is expected in competitive shooters." }
+  ],
+  "optimizationRules": [
+    { "ruleId": "power.plan", "parameters": { "plan": "high-performance" }, "reason": "Keeps CPU clocks high; VALORANT is usually CPU-bound.", "sessionScoped": true }
+  ],
+  "graphicsGuidance": [
+    { "title": "Multithreaded Rendering: On", "detail": "Improves frame rates on CPUs with four or more cores." },
+    { "title": "NVIDIA Reflex Low Latency", "detail": "On + Boost reduces latency when GPU-bound." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "benchmark": { "durationSeconds": 60, "warmupSeconds": 5, "scenario": "Range: the same walking route each run." },
+  "minWindowsBuild": 19041
+}

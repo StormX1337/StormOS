@@ -1,0 +1,78 @@
+root = true
+
+[*]
+charset = utf-8
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+indent_style = space
+indent_size = 4
+
+[*.{json,yml,yaml,ts,tsx,js,jsx,mjs,cjs,css,md,prisma}]
+indent_size = 2
+
+[*.{csproj,props,targets,slnx,xml,xaml,wxs,wixproj,manifest,appxmanifest}]
+indent_size = 2
+
+[*.cs]
+csharp_style_namespace_declarations = file_scoped:warning
+csharp_style_var_for_built_in_types = true:suggestion
+csharp_style_var_when_type_is_apparent = true:suggestion
+csharp_style_expression_bodied_methods = when_on_single_line:suggestion
+csharp_prefer_braces = when_multiline:suggestion
+csharp_using_directive_placement = outside_namespace:warning
+dotnet_sort_system_directives_first = true
+dotnet_style_readonly_field = true:warning
+dotnet_style_qualification_for_field = false:suggestion
+
+dotnet_naming_rule.private_fields_underscore.symbols = private_fields
+dotnet_naming_rule.private_fields_underscore.style = underscore_camel
+dotnet_naming_rule.private_fields_underscore.severity = warning
+dotnet_naming_symbols.private_fields.applicable_kinds = field
+dotnet_naming_symbols.private_fields.applicable_accessibilities = private
+dotnet_naming_style.underscore_camel.required_prefix = _
+dotnet_naming_style.underscore_camel.capitalization = camel_case
+
+dotnet_naming_rule.private_const_pascal.symbols = private_consts
+dotnet_naming_rule.private_const_pascal.style = pascal
+dotnet_naming_rule.private_const_pascal.severity = warning
+dotnet_naming_symbols.private_consts.applicable_kinds = field
+dotnet_naming_symbols.private_consts.applicable_accessibilities = private
+dotnet_naming_symbols.private_consts.required_modifiers = const
+dotnet_naming_style.pascal.capitalization = pascal_case
+
+dotnet_naming_rule.private_static_readonly_pascal.symbols = private_static_readonly
+dotnet_naming_rule.private_static_readonly_pascal.style = pascal
+dotnet_naming_rule.private_static_readonly_pascal.severity = warning
+dotnet_naming_symbols.private_static_readonly.applicable_kinds = field
+dotnet_naming_symbols.private_static_readonly.applicable_accessibilities = private
+dotnet_naming_symbols.private_static_readonly.required_modifiers = static, readonly
+
+# Unused usings are errors so files stay clean.
+dotnet_diagnostic.IDE0005.severity = warning
+dotnet_diagnostic.IDE0161.severity = warning
+dotnet_diagnostic.IDE0065.severity = warning
+
+# Libraries are consumed by our own hosts only; ConfigureAwait noise adds no value in app code.
+dotnet_diagnostic.CA2007.severity = none
+# Logging is structured through Serilog/MEL templates; source-generated loggers are used on hot paths only.
+dotnet_diagnostic.CA1848.severity = none
+dotnet_diagnostic.CA1873.severity = none
+# Public types in exe/library projects are intentional.
+dotnet_diagnostic.CA1515.severity = none
+# Interop structs mirror native layouts.
+dotnet_diagnostic.CA1051.severity = none
+# Result<T>.Ok / Fail factories are idiomatic.
+dotnet_diagnostic.CA1000.severity = none
+# Interface-typed fields are intentional for immutability of published snapshots.
+dotnet_diagnostic.CA1859.severity = none
+dotnet_diagnostic.CA1815.severity = none
+# Culture-insensitive formatting is explicit where it matters.
+dotnet_diagnostic.CA1305.severity = warning
+dotnet_diagnostic.CA1307.severity = warning
+dotnet_diagnostic.CA1309.severity = warning
+dotnet_diagnostic.CA1310.severity = warning
+dotnet_diagnostic.CA1311.severity = warning
+
+[**/obj/**.cs]
+generated_code = true

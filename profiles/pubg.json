@@ -1,0 +1,21 @@
+{
+  "schemaVersion": 1,
+  "id": "pubg",
+  "version": "1.0.0",
+  "name": "PUBG: BATTLEGROUNDS",
+  "publisher": "KRAFTON",
+  "antiCheat": "BattlEye / Wellbia",
+  "detection": {
+    "executables": [{ "name": "TslGame.exe" }],
+    "launchers": [{ "launcher": "steam", "gameId": "578080" }]
+  },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." },
+    { "ruleId": "windows.game-dvr", "reason": "Background recording costs GPU encoder time." }
+  ],
+  "graphicsGuidance": [
+    { "title": "View Distance", "detail": "CPU and VRAM heavy; lower it first for better 1% lows." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "minWindowsBuild": 19041
+}

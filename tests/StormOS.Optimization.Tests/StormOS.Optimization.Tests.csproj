@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(StormWindowsTfm)</TargetFramework>
+    <RootNamespace>StormOS.Optimization.Tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\StormOS.Core\StormOS.Core.csproj" />
+    <ProjectReference Include="..\..\src\StormOS.Windows\StormOS.Windows.csproj" />
+    <ProjectReference Include="..\..\src\StormOS.Optimization\StormOS.Optimization.csproj" />
+  </ItemGroup>
+</Project>

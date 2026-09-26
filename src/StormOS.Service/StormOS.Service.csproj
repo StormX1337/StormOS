@@ -1,0 +1,39 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+  <PropertyGroup>
+    <TargetFramework>$(StormWindowsTfm)</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>StormOS.Service</RootNamespace>
+    <AssemblyName>StormOS.Service</AssemblyName>
+    <Description>StormOSService: privileged Windows service for telemetry, optimization and rollback.</Description>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <UserSecretsId>stormos-service</UserSecretsId>
+    <ApplicationManifest>app.manifest</ApplicationManifest>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <ServerGarbageCollection>false</ServerGarbageCollection>
+    <ConcurrentGarbageCollection>false</ConcurrentGarbageCollection>
+    <TieredPGO>true</TieredPGO>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StormOS.Core\StormOS.Core.csproj" />
+    <ProjectReference Include="..\StormOS.Security\StormOS.Security.csproj" />
+    <ProjectReference Include="..\StormOS.Infrastructure\StormOS.Infrastructure.csproj" />
+    <ProjectReference Include="..\StormOS.Services\StormOS.Services.csproj" />
+    <ProjectReference Include="..\StormOS.Windows\StormOS.Windows.csproj" />
+    <ProjectReference Include="..\StormOS.Hardware\StormOS.Hardware.csproj" />
+    <ProjectReference Include="..\StormOS.Performance\StormOS.Performance.csproj" />
+    <ProjectReference Include="..\StormOS.Network\StormOS.Network.csproj" />
+    <ProjectReference Include="..\StormOS.Games\StormOS.Games.csproj" />
+    <ProjectReference Include="..\StormOS.Optimization\StormOS.Optimization.csproj" />
+    <ProjectReference Include="..\StormOS.Benchmark\StormOS.Benchmark.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.WindowsServices" />
+    <PackageReference Include="Microsoft.Extensions.Logging.EventLog" />
+    <PackageReference Include="Serilog.Extensions.Hosting" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="appsettings*.json" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="..\..\profiles\*.json" Link="profiles\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

@@ -1,0 +1,7 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(StormPortableTfm)</TargetFramework>
+    <RootNamespace>StormOS.Core</RootNamespace>
+    <Description>Domain models, contracts and abstractions shared by every STORM OS component.</Description>
+  </PropertyGroup>
+</Project>

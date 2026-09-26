@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(StormWindowsTfm)</TargetFramework>
+    <OutputType>Exe</OutputType>
+    <RootNamespace>StormOS.Cli</RootNamespace>
+    <AssemblyName>storm</AssemblyName>
+    <Description>STORM OS command line interface.</Description>
+    <RuntimeIdentifiers>win-x64;win-arm64</RuntimeIdentifiers>
+    <NoWarn>$(NoWarn);CS1591</NoWarn>
+    <InvariantGlobalization>true</InvariantGlobalization>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\StormOS.Core\StormOS.Core.csproj" />
+    <ProjectReference Include="..\StormOS.Infrastructure\StormOS.Infrastructure.csproj" />
+    <ProjectReference Include="..\StormOS.Services\StormOS.Services.csproj" />
+    <ProjectReference Include="..\StormOS.Windows\StormOS.Windows.csproj" />
+    <ProjectReference Include="..\StormOS.Hardware\StormOS.Hardware.csproj" />
+    <ProjectReference Include="..\StormOS.Network\StormOS.Network.csproj" />
+    <ProjectReference Include="..\StormOS.Games\StormOS.Games.csproj" />
+    <ProjectReference Include="..\StormOS.Optimization\StormOS.Optimization.csproj" />
+    <ProjectReference Include="..\StormOS.Performance\StormOS.Performance.csproj" />
+    <ProjectReference Include="..\StormOS.Benchmark\StormOS.Benchmark.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="System.CommandLine" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" />
+    <PackageReference Include="Serilog.Extensions.Logging" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\profiles\*.json" Link="profiles\%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

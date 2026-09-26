@@ -1,0 +1,47 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.rsuser
+TestResults/
+artifacts/
+publish/
+*.binlog
+*.msi
+*.msix
+*.appx
+*.pfx
+*.snk
+
+# Node / cloud
+node_modules/
+.pnpm-store/
+.next/
+dist/
+out/
+coverage/
+*.tsbuildinfo
+.turbo/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.local.json
+secrets/
+
+# OS / IDE
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+
+# Local runtime data
+*.db
+*.db-shm
+*.db-wal
+logs/
+tools/presentmon/*.exe

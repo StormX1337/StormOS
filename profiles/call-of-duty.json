@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "call-of-duty",
+  "version": "1.0.0",
+  "name": "Call of Duty",
+  "publisher": "Activision",
+  "antiCheat": "RICOCHET",
+  "detection": {
+    "executables": [{ "name": "cod.exe" }, { "name": "cod24*.exe" }],
+    "launchers": [{ "launcher": "steam", "gameId": "1938090" }]
+  },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." },
+    { "ruleId": "windows.hags", "reason": "Hardware-accelerated GPU scheduling is required for DLSS Frame Generation." }
+  ],
+  "graphicsGuidance": [
+    { "title": "VRAM Scale Target", "detail": "Keep it below 90 % to avoid stutter from texture streaming." },
+    { "title": "On-Demand Texture Streaming", "detail": "Disable on slow or metered connections; it streams textures during matches." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "minWindowsBuild": 19041
+}

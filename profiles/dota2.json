@@ -1,0 +1,22 @@
+{
+  "schemaVersion": 1,
+  "id": "dota2",
+  "version": "1.0.0",
+  "name": "Dota 2",
+  "publisher": "Valve",
+  "antiCheat": "VAC",
+  "detection": {
+    "executables": [{ "name": "dota2.exe", "pathContains": "game\\bin\\win64" }],
+    "launchers": [{ "launcher": "steam", "gameId": "570" }]
+  },
+  "launch": { "uri": "steam://rungameid/570" },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." }
+  ],
+  "graphicsGuidance": [
+    { "title": "Rendering API", "detail": "Vulkan and DirectX 11 perform differently per GPU; benchmark both with the same replay." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "benchmark": { "durationSeconds": 60, "warmupSeconds": 5, "scenario": "The same replay segment (Watch → Replays) each run." },
+  "minWindowsBuild": 19041
+}

@@ -1,0 +1,11 @@
+<Project>
+  <!-- Mock mode must never reach a Release build. -->
+  <Target Name="StormGuardMockMode" BeforeTargets="CoreCompile" Condition="'$(StormMockMode)' == 'true' And '$(Configuration)' == 'Release'">
+    <Error Text="STORM_MOCK_MODE cannot be enabled for Release builds." />
+  </Target>
+
+  <ItemGroup Condition="'$(IsTestProject)' != 'true'">
+    <InternalsVisibleTo Include="$(MSBuildProjectName).Tests" />
+    <InternalsVisibleTo Include="StormOS.Integration.Tests" />
+  </ItemGroup>
+</Project>

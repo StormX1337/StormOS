@@ -1,0 +1,26 @@
+{
+  "schemaVersion": 1,
+  "id": "fivem",
+  "version": "1.0.0",
+  "name": "FiveM",
+  "publisher": "Cfx.re",
+  "antiCheat": "Cfx.re Adhesive",
+  "detection": {
+    "executables": [{ "name": "FiveM_*GTAProcess.exe" }, { "name": "FiveM_GTAProcess.exe" }]
+  },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." }
+  ],
+  "optimizationRules": [
+    { "ruleId": "power.plan", "parameters": { "plan": "high-performance" }, "reason": "Heavily scripted servers are CPU-bound; stable clocks help the 1% lows.", "sessionScoped": true }
+  ],
+  "graphicsGuidance": [
+    { "title": "Server content dominates", "detail": "Frame rate depends mostly on the server's streamed assets and scripts; compare benchmarks on the same server and location." },
+    { "title": "Extended Texture Budget", "detail": "Raise it if you see texture pop-in and have spare VRAM; watch VRAM usage in the STORM overlay." }
+  ],
+  "networkGuidance": [
+    { "title": "Server region", "detail": "Latency to the game server matters more than internet speed; pick servers close to you." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "minWindowsBuild": 19041
+}

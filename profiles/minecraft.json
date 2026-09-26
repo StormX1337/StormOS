@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "minecraft",
+  "version": "1.0.0",
+  "name": "Minecraft",
+  "publisher": "Mojang Studios",
+  "detection": {
+    "executables": [
+      { "name": "javaw.exe", "commandLineContains": "net.minecraft" },
+      { "name": "java.exe", "commandLineContains": "net.minecraft" },
+      { "name": "Minecraft.Windows.exe" }
+    ]
+  },
+  "process": { "priority": "aboveNormal", "reason": "Helps chunk generation keep up while background apps run. Restored when the game exits." },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." }
+  ],
+  "optimizationRules": [
+    { "ruleId": "power.plan", "parameters": { "plan": "high-performance" }, "reason": "Chunk generation is CPU-bound.", "sessionScoped": true }
+  ],
+  "graphicsGuidance": [
+    { "title": "Render / simulation distance", "detail": "The biggest performance lever in Java Edition; 12–16 chunks is a good balance." },
+    { "title": "Memory allocation (Java)", "detail": "In the launcher's JVM arguments, 4–6 GB (-Xmx4G … -Xmx6G) is enough for vanilla; more can increase garbage-collection pauses." },
+    { "title": "Performance mods (Java)", "detail": "Optimisation mods such as Sodium (Fabric) greatly improve frame rates; install them only from their official sources." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "minWindowsBuild": 19041
+}

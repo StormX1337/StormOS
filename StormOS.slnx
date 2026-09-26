@@ -1,0 +1,34 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="src/StormOS.App/StormOS.App.csproj">
+      <Platform Project="x64" />
+    </Project>
+    <Project Path="src/StormOS.Benchmark/StormOS.Benchmark.csproj" />
+    <Project Path="src/StormOS.Cli/StormOS.Cli.csproj" />
+    <Project Path="src/StormOS.Core/StormOS.Core.csproj" />
+    <Project Path="src/StormOS.Games/StormOS.Games.csproj" />
+    <Project Path="src/StormOS.Hardware/StormOS.Hardware.csproj" />
+    <Project Path="src/StormOS.Infrastructure/StormOS.Infrastructure.csproj" />
+    <Project Path="src/StormOS.Network/StormOS.Network.csproj" />
+    <Project Path="src/StormOS.Optimization/StormOS.Optimization.csproj" />
+    <Project Path="src/StormOS.Overlay/StormOS.Overlay.csproj" />
+    <Project Path="src/StormOS.Performance/StormOS.Performance.csproj" />
+    <Project Path="src/StormOS.Security/StormOS.Security.csproj" />
+    <Project Path="src/StormOS.Service/StormOS.Service.csproj" />
+    <Project Path="src/StormOS.Services/StormOS.Services.csproj" />
+    <Project Path="src/StormOS.Windows/StormOS.Windows.csproj" />
+  </Folder>
+  <Folder Name="/tests/">
+    <Project Path="tests/StormOS.Benchmark.Tests/StormOS.Benchmark.Tests.csproj" />
+    <Project Path="tests/StormOS.Core.Tests/StormOS.Core.Tests.csproj" />
+    <Project Path="tests/StormOS.Games.Tests/StormOS.Games.Tests.csproj" />
+    <Project Path="tests/StormOS.Hardware.Tests/StormOS.Hardware.Tests.csproj" />
+    <Project Path="tests/StormOS.Infrastructure.Tests/StormOS.Infrastructure.Tests.csproj" />
+    <Project Path="tests/StormOS.Integration.Tests/StormOS.Integration.Tests.csproj" />
+    <Project Path="tests/StormOS.Network.Tests/StormOS.Network.Tests.csproj" />
+    <Project Path="tests/StormOS.Optimization.Tests/StormOS.Optimization.Tests.csproj" />
+    <Project Path="tests/StormOS.Performance.Tests/StormOS.Performance.Tests.csproj" />
+    <Project Path="tests/StormOS.Security.Tests/StormOS.Security.Tests.csproj" />
+    <Project Path="tests/StormOS.Services.Tests/StormOS.Services.Tests.csproj" />
+  </Folder>
+</Solution>

@@ -1,0 +1,40 @@
+<Project>
+  <!-- Shared build settings for every .NET project in the repository. -->
+  <PropertyGroup>
+    <LangVersion>latest</LangVersion>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <AnalysisLevel>latest-recommended</AnalysisLevel>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+    <!-- Allows the Windows-targeted libraries to compile on Linux CI agents. -->
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
+    <InvariantGlobalization>false</InvariantGlobalization>
+
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <Company>Storm OS</Company>
+    <Product>STORM OS</Product>
+    <Authors>Storm OS</Authors>
+    <Copyright>Copyright © Storm OS</Copyright>
+    <NeutralLanguage>en-US</NeutralLanguage>
+
+    <StormPortableTfm>net10.0</StormPortableTfm>
+    <StormWindowsTfm>net10.0-windows</StormWindowsTfm>
+    <StormAppTfm>net10.0-windows10.0.22621.0</StormAppTfm>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(StormMockMode)' == 'true'">
+    <DefineConstants>$(DefineConstants);STORM_MOCK_MODE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="$(MSBuildProjectName.EndsWith('.Tests'))">
+    <IsPackable>false</IsPackable>
+    <IsTestProject>true</IsTestProject>
+    <NoWarn>$(NoWarn);CS1591;CA1707;CA1515;CA1861;CA2007;CA1001;CA2000</NoWarn>
+  </PropertyGroup>
+</Project>

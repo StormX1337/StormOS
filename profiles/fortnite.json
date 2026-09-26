@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "fortnite",
+  "version": "1.0.0",
+  "name": "Fortnite",
+  "publisher": "Epic Games",
+  "antiCheat": "Easy Anti-Cheat / BattlEye",
+  "detection": {
+    "executables": [{ "name": "FortniteClient-Win64-Shipping*.exe" }],
+    "launchers": [{ "launcher": "epic", "gameId": "Fortnite" }]
+  },
+  "launch": { "uri": "com.epicgames.launcher://apps/Fortnite?action=launch&silent=true" },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." },
+    { "ruleId": "windows.game-dvr", "reason": "Fortnite has its own replay system; Windows background recording is redundant." }
+  ],
+  "optimizationRules": [
+    { "ruleId": "power.plan", "parameters": { "plan": "high-performance" }, "reason": "Avoids CPU clock ramp-up delays in fights.", "sessionScoped": true }
+  ],
+  "graphicsGuidance": [
+    { "title": "Rendering Mode: Performance", "detail": "Epic's low-overhead renderer gives the highest frame rates on CPU-limited systems at reduced visual quality." },
+    { "title": "Rendering Mode: DirectX 12", "detail": "Recommended for modern GPUs; enables Nanite/Lumen at high presets." },
+    { "title": "NVIDIA Reflex Low Latency", "detail": "Set to On + Boost when GPU usage is consistently near 100 %." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "benchmark": { "durationSeconds": 60, "warmupSeconds": 10, "scenario": "Replay of the same match segment, or a Creative island with a fixed route." },
+  "minWindowsBuild": 19041
+}

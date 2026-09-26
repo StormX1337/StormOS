@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "gta5",
+  "version": "1.0.0",
+  "name": "Grand Theft Auto V",
+  "publisher": "Rockstar Games",
+  "antiCheat": "BattlEye (GTA Online)",
+  "detection": {
+    "executables": [{ "name": "GTA5.exe" }, { "name": "GTA5_Enhanced.exe" }],
+    "launchers": [{ "launcher": "steam", "gameId": "271590" }, { "launcher": "steam", "gameId": "3240220" }]
+  },
+  "launch": { "uri": "steam://rungameid/271590" },
+  "systemRecommendations": [
+    { "ruleId": "windows.game-mode", "reason": "Reduces background activity while playing." },
+    { "ruleId": "windows.game-dvr", "reason": "Rockstar Editor covers clip recording." }
+  ],
+  "optimizationRules": [
+    { "ruleId": "power.plan", "parameters": { "plan": "high-performance" }, "reason": "The open world streams assets continuously and benefits from stable CPU clocks.", "sessionScoped": true }
+  ],
+  "graphicsGuidance": [
+    { "title": "Extended Distance Scaling", "detail": "Heavily CPU-bound; lower it first if the CPU is at its limit." },
+    { "title": "MSAA", "detail": "Very expensive in the legacy edition; prefer FXAA or the Enhanced edition's upscalers." },
+    { "title": "Grass Quality", "detail": "Ultra has a large cost outside the city; High looks similar." }
+  ],
+  "rollback": { "restoreOnExit": true },
+  "benchmark": { "durationSeconds": 90, "warmupSeconds": 10, "scenario": "Built-in benchmark (Settings → Graphics → Run Benchmark Test), final scene only." },
+  "minWindowsBuild": 19041
+}
