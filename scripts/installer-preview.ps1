@@ -20,7 +20,7 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 
-Add-Type -AssemblyName UIAutomationClient, UIAutomationTypes, System.Drawing
+Add-Type -AssemblyName UIAutomationClient, UIAutomationTypes, System.Drawing, System.Windows.Forms
 Add-Type @'
 using System;
 using System.Runtime.InteropServices;
@@ -31,6 +31,8 @@ public static class PreviewNative {
   [DllImport("user32.dll")] public static extern bool SetForegroundWindow(IntPtr hWnd);
   [DllImport("user32.dll")] public static extern bool ShowWindow(IntPtr hWnd, int command);
   [DllImport("user32.dll")] public static extern bool SetWindowPos(IntPtr hWnd, IntPtr after, int x, int y, int cx, int cy, uint flags);
+  [DllImport("user32.dll")] public static extern bool SetCursorPos(int x, int y);
+  [DllImport("user32.dll")] public static extern void mouse_event(uint flags, int dx, int dy, uint data, UIntPtr extra);
   [DllImport("dwmapi.dll")] public static extern int DwmGetWindowAttribute(IntPtr hWnd, int attribute, out RECT rect, int size);
 }
 '@
@@ -101,8 +103,42 @@ function Find-Element($Root, [string[]] $Names, [int] $TimeoutSeconds = 30, [swi
   throw "UI element not found within $TimeoutSeconds s: $($Names -join ' | ')"
 }
 
+function Get-Pattern($Element, $Pattern) {
+  $provider = $null
+  if ($Element.TryGetCurrentPattern($Pattern, [ref] $provider)) { return $provider }
+  return $null
+}
+
+# Activates a control the way a user would: toggle a check box, invoke a button, select an item, or click it.
 function Invoke-Element($Element) {
-  $Element.GetCurrentPattern([System.Windows.Automation.InvokePattern]::Pattern).Invoke()
+  $toggle = Get-Pattern $Element ([System.Windows.Automation.TogglePattern]::Pattern)
+  if ($null -ne $toggle) { $toggle.Toggle(); return }
+  $invoke = Get-Pattern $Element ([System.Windows.Automation.InvokePattern]::Pattern)
+  if ($null -ne $invoke) { $invoke.Invoke(); return }
+  $select = Get-Pattern $Element ([System.Windows.Automation.SelectionItemPattern]::Pattern)
+  if ($null -ne $select) { $select.Select(); return }
+  $bounds = $Element.Current.BoundingRectangle
+  [PreviewNative]::SetCursorPos([int]($bounds.X + $bounds.Width / 2), [int]($bounds.Y + $bounds.Height / 2)) | Out-Null
+  [PreviewNative]::mouse_event(0x0002, 0, 0, 0, [UIntPtr]::Zero)
+  [PreviewNative]::mouse_event(0x0004, 0, 0, 0, [UIntPtr]::Zero)
+}
+
+function Write-Tree($Root) {
+  $all = $Root.FindAll($TreeScope::Descendants, [System.Windows.Automation.Condition]::TrueCondition)
+  foreach ($element in $all) {
+    $patterns = ($element.GetSupportedPatterns() | ForEach-Object { $_.ProgrammaticName -replace 'PatternIdentifiers.Pattern', '' }) -join ','
+    Write-Host ("  {0} '{1}' enabled={2} offscreen={3} [{4}]" -f $element.Current.ControlType.ProgrammaticName, $element.Current.Name, $element.Current.IsEnabled, $element.Current.IsOffscreen, $patterns)
+  }
+}
+
+function Save-Desktop([string] $Name) {
+  $bounds = [System.Windows.Forms.Screen]::PrimaryScreen.Bounds
+  $bitmap = New-Object System.Drawing.Bitmap $bounds.Width, $bounds.Height
+  $graphics = [System.Drawing.Graphics]::FromImage($bitmap)
+  $graphics.CopyFromScreen($bounds.Location, [System.Drawing.Point]::Empty, $bounds.Size)
+  $graphics.Dispose()
+  $bitmap.Save((Join-Path $Out "$Name.png"), [System.Drawing.Imaging.ImageFormat]::Png)
+  $bitmap.Dispose()
 }
 
 function Get-Hwnd($Element) { return [IntPtr] $Element.Current.NativeWindowHandle }
@@ -115,33 +151,47 @@ $process = Start-Process -FilePath $Setup -ArgumentList '/log', ('"' + (Join-Pat
 $window = Find-Element $AE::RootElement @('STORM OS Setup') 90
 $hwnd = Get-Hwnd $window
 
+# The Install button stays disabled until the license check box is checked.
 function Confirm-License {
-  $toggle = (Find-Element $window @('I agree to the license terms and conditions')).GetCurrentPattern([System.Windows.Automation.TogglePattern]::Pattern)
-  if ($toggle.Current.ToggleState -ne [System.Windows.Automation.ToggleState]::On) { $toggle.Toggle() }
+  $install = Find-Element $window @('Install')
+  if ($install.Current.IsEnabled) { return }
+  Invoke-Element (Find-Element $window @('I agree to the license terms and conditions'))
+  $deadline = (Get-Date).AddSeconds(5)
+  while (-not $install.Current.IsEnabled -and (Get-Date) -lt $deadline) { Start-Sleep -Milliseconds 200 }
+  if (-not $install.Current.IsEnabled) { throw 'Accepting the license did not enable the Install button.' }
 }
 
-Confirm-License
-Save-Window $hwnd '01-setup-welcome'
+try {
+  Save-Window $hwnd '00-setup-start'
+  Confirm-License
+  Save-Window $hwnd '01-setup-welcome'
 
-Invoke-Element (Find-Element $window @('Options'))
-Find-Element $window @('Setup Options') | Out-Null
-Save-Window $hwnd '02-setup-options'
-Invoke-Element (Find-Element $window @('OK'))
-Confirm-License
+  Invoke-Element (Find-Element $window @('Options'))
+  Find-Element $window @('Setup Options') | Out-Null
+  Save-Window $hwnd '02-setup-options'
+  Invoke-Element (Find-Element $window @('OK'))
+  Confirm-License
 
-Invoke-Element (Find-Element $window @('Install'))
-$progress = Find-Element $window @('Setup Progress') 60 -Optional
-if ($null -ne $progress) {
-  Start-Sleep -Milliseconds 1500
-  if ($null -ne (Find-Element $window @('Setup Progress') 1 -Optional)) { Save-Window $hwnd '03-setup-progress' }
+  Invoke-Element (Find-Element $window @('Install'))
+  $progress = Find-Element $window @('Setup Progress') 60 -Optional
+  if ($null -ne $progress) {
+    Start-Sleep -Milliseconds 1500
+    if ($null -ne (Find-Element $window @('Setup Progress') 1 -Optional)) { Save-Window $hwnd '03-setup-progress' }
+  }
+
+  $done = Find-Element $window @('Installation Successfully Completed', 'Setup Successful', 'Setup Failed') 600
+  if ($done.Current.Name -eq 'Setup Failed') {
+    Save-Window $hwnd '99-setup-failed'
+    throw "Setup failed; see $(Join-Path $Out 'setup.log')."
+  }
+  Save-Window $hwnd '04-setup-complete'
 }
-
-$done = Find-Element $window @('Installation Successfully Completed', 'Setup Successful', 'Setup Failed') 600
-if ($done.Current.Name -eq 'Setup Failed') {
-  Save-Window $hwnd '99-setup-failed'
-  throw "Setup failed; see $(Join-Path $Out 'setup.log')."
+catch {
+  Write-Host 'Setup window UI Automation tree:'
+  Write-Tree $window
+  Save-Desktop '99-desktop'
+  throw
 }
-Save-Window $hwnd '04-setup-complete'
 
 # ---- Installed product checks ------------------------------------------------------------------------------------
 $service = Get-Service -Name StormOSService
@@ -179,7 +229,7 @@ try {
     foreach ($page in 'Optimizer', 'Performance', 'Benchmark') {
       $item = Find-Element $app @($page) 10 -Optional
       if ($null -eq $item) { continue }
-      $item.GetCurrentPattern([System.Windows.Automation.SelectionItemPattern]::Pattern).Select()
+      Invoke-Element $item
       Start-Sleep -Seconds 6
       Save-Window $appHwnd ('07-app-' + $page.ToLowerInvariant())
     }
