@@ -168,6 +168,15 @@ function Send-StormQemuMonitor {
   finally { $client.Dispose() }
 }
 
+function Test-StormDisplayStable {
+  <# True when the last N frames are identical and not blank: the VM has settled on a screen (e.g. Windows Setup). #>
+  param([object[]] $Shots, [int] $Frames = 3)
+  if (-not $Shots -or $Shots.Count -lt $Frames) { return $false }
+  $recent = @($Shots | Select-Object -Last $Frames)
+  if ($recent | Where-Object { $_.Blank }) { return $false }
+  return @($recent | ForEach-Object { $_.Fingerprint } | Select-Object -Unique).Count -eq 1
+}
+
 function Save-StormQemuScreenshot {
   param([Parameter(Mandatory)] [int] $Port, [Parameter(Mandatory)] [string] $BasePath)
   $ppm = "$BasePath.ppm"
@@ -179,7 +188,9 @@ function Save-StormQemuScreenshot {
   $image = ConvertFrom-StormPpm -Bytes ([System.IO.File]::ReadAllBytes($ppm))
   $png = "$BasePath.png"
   if (Save-StormRgbPng -Rgb $image.Rgb -Width $image.Width -Height $image.Height -Path $png) { Remove-Item -LiteralPath $ppm -Force; $file = $png } else { $file = $ppm }
-  return [pscustomobject]@{ Path = $file; Blank = (Test-StormImageBlank -Rgb $image.Rgb -Width $image.Width -Height $image.Height); Width = $image.Width; Height = $image.Height }
+  $sha = [System.Security.Cryptography.SHA256]::Create()
+  try { $fingerprint = [System.BitConverter]::ToString($sha.ComputeHash($image.Rgb)) } finally { $sha.Dispose() }
+  return [pscustomobject]@{ Path = $file; Blank = (Test-StormImageBlank -Rgb $image.Rgb -Width $image.Width -Height $image.Height); Width = $image.Width; Height = $image.Height; Fingerprint = $fingerprint }
 }
 
 function Invoke-StormQemuBootTest {
@@ -229,6 +240,10 @@ function Invoke-StormQemuBootTest {
       if ($shot) {
         $shots.Add($shot)
         Write-StormLog -Phase $Phase -Message "screenshot $(Split-Path -Leaf $shot.Path)$(if ($shot.Blank) { ' (blank)' })"
+        if (Test-StormDisplayStable -Shots $shots.ToArray()) {
+          Write-StormLog -Phase $Phase -Message 'Display stable for 3 frames; ending the boot test early.'
+          break
+        }
       }
     }
     $running = -not $process.HasExited
@@ -241,7 +256,7 @@ function Invoke-StormQemuBootTest {
   }
   $last = $shots | Select-Object -Last 1
   $passed = $running -and $last -and -not $last.Blank
-  $detail = if (-not $running) { "QEMU exited early (exit code $($process.ExitCode)); see $stderr" } elseif (-not $last) { 'No screenshot could be captured.' } elseif ($last.Blank) { 'The VM is running but the display is blank.' } else { "VM running after $BootMinutes min; last frame shows output." }
+  $detail = if (-not $running) { "QEMU exited early (exit code $($process.ExitCode)); see $stderr" } elseif (-not $last) { 'No screenshot could be captured.' } elseif ($last.Blank) { 'The VM is running but the display is blank.' } else { "VM running; stable, non-blank display after $($shots.Count) screenshot(s)." }
   return [pscustomobject]@{ hypervisor = 'QEMU'; accelerator = $accelerator; passed = [bool]$passed; detail = $detail; screenshots = @($shots | ForEach-Object { Split-Path -Leaf $_.Path }) }
 }
 

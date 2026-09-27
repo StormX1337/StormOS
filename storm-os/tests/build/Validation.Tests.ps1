@@ -42,7 +42,15 @@ Describe 'Build report' {
     $report.result | Should -Be 'FAILED'
     $report.failure.fix | Should -Be 'run rollback'
   }
-  It 'reports FAILED when validation never ran' {
+  It 'reports INCOMPLETE while validation has not run' {
+    (New-StormBuildReport -State $State).result | Should -Be 'INCOMPLETE'
+  }
+  It 'reports FAILED when a phase failed even without validation' {
+    Set-StormPhaseResult -State $State -Phase '04' -Status Failed -Message 'mount failed'
+    (New-StormBuildReport -State $State).result | Should -Be 'FAILED'
+  }
+  It 'reports FAILED when a critical validation check failed' {
+    $State.validation = @((New-StormValidation -Name iso -Passed $false -Detail missing))
     (New-StormBuildReport -State $State).result | Should -Be 'FAILED'
   }
   It 'serializes to JSON' {

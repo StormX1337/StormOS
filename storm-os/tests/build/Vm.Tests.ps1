@@ -23,6 +23,16 @@ Describe 'Screenshot helpers' {
   }
 }
 
+Describe 'Display stability' {
+  It 'needs three identical, non-blank frames' {
+    $frame = { param($f, $blank) [pscustomobject]@{ Fingerprint = $f; Blank = $blank } }
+    Test-StormDisplayStable -Shots @((& $frame 'a' $false), (& $frame 'a' $false)) | Should -BeFalse
+    Test-StormDisplayStable -Shots @((& $frame 'x' $false), (& $frame 'a' $false), (& $frame 'a' $false), (& $frame 'a' $false)) | Should -BeTrue
+    Test-StormDisplayStable -Shots @((& $frame 'a' $false), (& $frame 'b' $false), (& $frame 'a' $false)) | Should -BeFalse
+    Test-StormDisplayStable -Shots @((& $frame 'a' $true), (& $frame 'a' $true), (& $frame 'a' $true)) | Should -BeFalse
+  }
+}
+
 Describe 'QEMU arguments' {
   It 'boots the ISO with UEFI flash, a monitor and no network' {
     $arguments = New-StormQemuArguments -IsoPath '/tmp/StormOS.iso' -FirmwareCode '/fw/code.fd' -FirmwareVars '/fw/vars.fd' -MonitorPort 45555 -Accelerator kvm

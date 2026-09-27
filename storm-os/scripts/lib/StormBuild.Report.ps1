@@ -1,13 +1,16 @@
 # Build report: build/output/storm-build-report.json, written after every build attempt (success or failure).
 
 function New-StormBuildReport {
-  <# Builds the report from the build state. Result is SUCCESS only if validation passed and no phase failed. #>
+  <#
+    Builds the report from the build state. Result: SUCCESS only if validation passed and no phase failed; FAILED if a
+    phase or validation failed; INCOMPLETE while phases are run one by one and validation has not run yet.
+  #>
   param([Parameter(Mandatory)] [System.Collections.IDictionary] $State, [string] $FailedPhase, [string] $FailureMessage, [string] $FailureFix)
   $started = [datetime]::Parse($State.startedAt, [System.Globalization.CultureInfo]::InvariantCulture, [System.Globalization.DateTimeStyles]::RoundtripKind)
   $finished = (Get-Date).ToUniversalTime()
-  $validation = @($State.validation)
+  $validation = @($State.validation | Where-Object { $null -ne $_ })
   $failedPhases = @($State.phases.Keys | Where-Object { $State.phases[$_].status -eq 'Failed' })
-  $result = if ($FailedPhase -or $failedPhases.Count) { 'FAILED' } else { Get-StormValidationSummary -Checks $validation }
+  $result = if ($FailedPhase -or $failedPhases.Count) { 'FAILED' } elseif ($validation.Count -eq 0) { 'INCOMPLETE' } else { Get-StormValidationSummary -Checks $validation }
   $customizations = @($State.customizations)
   return [ordered]@{
     schema          = 1

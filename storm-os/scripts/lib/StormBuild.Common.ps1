@@ -374,6 +374,7 @@ function Invoke-StormPhase {
     if ($state) {
       Set-StormPhaseResult -State $state -Phase $Phase -Status $status -Message $message -DurationSeconds $watch.Elapsed.TotalSeconds
       Save-StormState -Paths $paths -State $state
+      Save-StormBuildReport -Paths $paths -Report (New-StormBuildReport -State $state) | Out-Null
     }
     Write-StormLog -Level Success -Phase $Phase -Message "Phase $status ($([math]::Round($watch.Elapsed.TotalSeconds, 1)) s)$(if ($message) { ": $message" })"
     return 0
@@ -385,6 +386,7 @@ function Invoke-StormPhase {
     if ($state) {
       Set-StormPhaseResult -State $state -Phase $Phase -Status Failed -Message $info.Message -DurationSeconds $watch.Elapsed.TotalSeconds
       Save-StormState -Paths $paths -State $state
+      Save-StormBuildReport -Paths $paths -Report (New-StormBuildReport -State $state -FailedPhase "$Phase $Title" -FailureMessage $info.Message -FailureFix $info.Fix) | Out-Null
     }
     return $info.Code
   }
