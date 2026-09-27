@@ -30,11 +30,11 @@ public static class DxgiAdapterEnumerator
                         VendorId = (int)description.VendorId,
                         DeviceId = (int)description.DeviceId,
                         Vendor = VendorFromId(description.VendorId),
-                        DedicatedMemoryBytes = (long)description.DedicatedVideoMemory,
-                        SharedMemoryBytes = (long)description.SharedSystemMemory,
+                        DedicatedMemoryBytes = (long)(ulong)description.DedicatedVideoMemory,
+                        SharedMemoryBytes = (long)(ulong)description.SharedSystemMemory,
                         AdapterLuid = ((long)description.Luid.HighPart << 32) | description.Luid.LowPart,
                         IsSoftware = software,
-                        IsIntegrated = !software && (long)description.DedicatedVideoMemory < 512L * 1024 * 1024,
+                        IsIntegrated = !software && (long)(ulong)description.DedicatedVideoMemory < 512L * 1024 * 1024,
                     });
                 }
             }

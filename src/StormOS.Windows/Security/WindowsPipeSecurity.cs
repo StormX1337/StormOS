@@ -63,29 +63,15 @@ public sealed class WindowsClientIdentityResolver : IClientIdentityResolver
 
         int? sessionId = Kernel32.GetNamedPipeClientSessionId(pipe.SafePipeHandle, out var session) ? session : null;
         string? imagePath = null;
+        string? userName = null;
+        string? userSid = null;
         using (var process = Kernel32.OpenProcess(Kernel32.ProcessQueryLimitedInformation, false, processId))
         {
             if (!process.IsInvalid)
             {
                 imagePath = Kernel32.GetProcessImagePath(process);
+                (userName, userSid) = ReadProcessUser(process, processId);
             }
-        }
-
-        string? userName = null;
-        string? userSid = null;
-        try
-        {
-            // The client connects with SecurityIdentification: enough to read its identity, not to act as it.
-            pipe.RunAsClient(() =>
-            {
-                using var identity = WindowsIdentity.GetCurrent(TokenAccessLevels.Query);
-                userName = identity.Name;
-                userSid = identity.User?.Value;
-            });
-        }
-        catch (Exception ex) when (ex is IOException or UnauthorizedAccessException or System.ComponentModel.Win32Exception)
-        {
-            _logger.LogWarning(ex, "Could not read the identity of pipe client {ProcessId}", processId);
         }
 
         return new ClientIdentity
@@ -97,6 +83,31 @@ public sealed class WindowsClientIdentityResolver : IClientIdentityResolver
             UserSid = userSid,
             Trust = _trust.Evaluate(imagePath, userSid is not null),
         };
+    }
+
+    /// <summary>
+    /// Reads the user from the client's process token (the process id comes from the kernel via the pipe).
+    /// The service never impersonates the client, so its own threads keep the LocalSystem security context.
+    /// </summary>
+    private (string? Name, string? Sid) ReadProcessUser(Microsoft.Win32.SafeHandles.SafeProcessHandle process, int processId)
+    {
+        if (!Advapi32.OpenProcessToken(process, Advapi32.TokenQuery, out var rawToken))
+        {
+            _logger.LogWarning("Could not open the token of pipe client {ProcessId} (error {Error})", processId, System.Runtime.InteropServices.Marshal.GetLastPInvokeError());
+            return (null, null);
+        }
+
+        using var token = new Microsoft.Win32.SafeHandles.SafeAccessTokenHandle(rawToken);
+        try
+        {
+            using var identity = new WindowsIdentity(token.DangerousGetHandle());
+            return (identity.Name, identity.User?.Value);
+        }
+        catch (Exception ex) when (ex is ArgumentException or System.Security.SecurityException or UnauthorizedAccessException or IdentityNotMappedException or System.ComponentModel.Win32Exception)
+        {
+            _logger.LogWarning(ex, "Could not read the identity of pipe client {ProcessId}", processId);
+            return (null, null);
+        }
     }
 }
 

@@ -1,4 +1,3 @@
-using System.Diagnostics;
 using System.Reflection;
 using StormOS.Core.Ipc;
 using StormOS.Infrastructure.Ipc;
@@ -62,7 +61,6 @@ public sealed class HealthHandler(ServiceRuntime runtime, TelemetryHub telemetry
     /// <inheritdoc />
     protected override Task<object?> HandleAsync(NoPayload payload, IIpcSession session, CancellationToken cancellationToken)
     {
-        using var process = Process.GetCurrentProcess();
         var status = frames.GetStatus();
         var notes = new List<string>();
         if (!status.Providers.Any(p => p.Available))
@@ -79,7 +77,7 @@ public sealed class HealthHandler(ServiceRuntime runtime, TelemetryHub telemetry
             TelemetrySubscribers = telemetry.SubscriberCount,
             SamplingMode = telemetry.Mode.ToString(),
             FrameCapture = status.Source,
-            WorkingSetBytes = process.WorkingSet64,
+            WorkingSetBytes = Environment.WorkingSet,
             Notes = notes,
         });
     }

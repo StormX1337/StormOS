@@ -15,6 +15,12 @@ internal static partial class Advapi32
     public const uint ServiceDemandStart = 3;
     public const uint ServiceDisabled = 4;
 
+    public const uint TokenQuery = 0x0008;
+
+    [LibraryImport("advapi32.dll", SetLastError = true)]
+    [return: MarshalAs(UnmanagedType.Bool)]
+    public static partial bool OpenProcessToken(Microsoft.Win32.SafeHandles.SafeProcessHandle process, uint desiredAccess, out IntPtr token);
+
     [LibraryImport("advapi32.dll", EntryPoint = "OpenSCManagerW", SetLastError = true, StringMarshalling = StringMarshalling.Utf16)]
     public static partial IntPtr OpenSCManager(string? machineName, string? databaseName, uint desiredAccess);
 

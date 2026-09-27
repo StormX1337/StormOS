@@ -39,8 +39,9 @@ The optimization engine runs in two executors (`app` and `service`); each only e
   `FirstPipeInstance` prevents another process from creating the pipe first.
 - **Server identity (client side)**: the client verifies the pipe server process runs as LocalSystem or an
   administrator before sending anything (anti-squatting, `WindowsPipeServerVerifier`).
-- **Client identity (server side)**: the service reads the client PID (`GetNamedPipeClientProcessId`), impersonates
-  at *Identification* level to resolve the user, and resolves the executable path. Trust levels:
+- **Client identity (server side)**: the service reads the client PID (`GetNamedPipeClientProcessId`), resolves the
+  user from that process's token and the executable path from the process. It never impersonates the client, so its
+  own threads keep the LocalSystem security context. Clients connect with *Identification* level only. Trust levels:
   - `Untrusted` – `system.hello`, `system.health` only.
   - `LocalUser` – read-only operations (telemetry, inventory, rule catalog, history).
   - `TrustedClient` – `StormOS.exe` / `storm.exe` located in the service's own install directory (Program Files,
