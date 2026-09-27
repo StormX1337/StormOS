@@ -79,6 +79,7 @@ jobs:
           "STORM_ROOT=$root\storm-os" >> $env:GITHUB_ENV
           "STORM_SOURCE=$root\source\source.iso" >> $env:GITHUB_ENV
           Write-Host "Building on $($drive.Name): ($([math]::Round($drive.Free / 1GB, 1)) GB free)"
+          exit 0  # robocopy returns 1 for "files copied"
       - name: Install Windows ADK Deployment Tools (oscdimg) and QEMU
         shell: powershell
         run: |
@@ -86,6 +87,7 @@ jobs:
           if (-not $oscdimg) { choco install windows-adk-deploy -y --no-progress; if ($LASTEXITCODE -ne 0) { throw 'ADK installation failed' } }
           choco install qemu -y --no-progress
           if ($LASTEXITCODE -ne 0) { throw 'QEMU installation failed' }
+          exit 0
       - name: Download Windows 11 evaluation media from Microsoft
         shell: powershell
         env:
