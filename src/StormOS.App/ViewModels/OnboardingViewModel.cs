@@ -132,7 +132,7 @@ public sealed partial class OnboardingViewModel(
     }
 
     [RelayCommand]
-    private async Task SkipAsync() => await FinishAsync();
+    private async Task SkipAsync() => await FinishAsync(runScan: false);
 
     private async Task RunSystemCheckAsync()
     {
@@ -201,7 +201,7 @@ public sealed partial class OnboardingViewModel(
         }
     }
 
-    private async Task FinishAsync()
+    private async Task FinishAsync(bool runScan = true)
     {
         var current = settings.Current;
         await settings.SaveAsync(current with
@@ -211,7 +211,7 @@ public sealed partial class OnboardingViewModel(
             Overlay = current.Overlay with { Enabled = OverlayEnabled },
             Games = current.Games with { AutoDetect = DetectGames },
         });
-        if (RunScanAfterSetup)
+        if (runScan && RunScanAfterSetup)
         {
             navigation.Navigate("optimizer", "scan");
         }
