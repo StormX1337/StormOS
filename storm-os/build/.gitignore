@@ -1,0 +1,4 @@
+# Build workspace: everything here is generated (media copies, mounts, WIMs, ISOs, logs).
+*
+!.gitignore
+!README.md

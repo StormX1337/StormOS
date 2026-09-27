@@ -1,0 +1,42 @@
+{
+  "productName": "STORM OS",
+  "tagline": "Gaming performance command center",
+  "statement": "STORM OS is a Storm customization and deployment environment built on Windows.",
+  "colors": {
+    "accent": "#3FC1FF",
+    "accentDark": "#0B84C6",
+    "background": "#0F131B",
+    "surface": "#161C28",
+    "text": "#FFFFFF",
+    "textSecondary": "#8FA3BF"
+  },
+  "oem": {
+    "manufacturer": "STORM OS",
+    "modelTemplate": "Storm customization of {edition}",
+    "supportUrl": "https://stormos.app/support",
+    "logo": "%WINDIR%\\System32\\oobe\\info\\StormOS-oem-logo.bmp"
+  },
+  "oobe": {
+    "logo": "%WINDIR%\\System32\\oobe\\info\\StormOS-oobe-logo.png"
+  },
+  "theme": {
+    "displayName": "STORM OS",
+    "darkMode": true,
+    "wallpaper": "%SystemRoot%\\Web\\Wallpaper\\StormOS\\storm-dark.jpg",
+    "target": "%SystemRoot%\\Resources\\Themes\\StormOS.theme"
+  },
+  "lockScreen": {
+    "target": "%SystemRoot%\\Web\\Screen\\StormOS\\storm-lockscreen.jpg",
+    "enforceOnEditions": []
+  },
+  "assets": [
+    { "source": "wallpapers/storm-dark.jpg", "target": "Windows\\Web\\Wallpaper\\StormOS\\storm-dark.jpg" },
+    { "source": "wallpapers/storm-light.jpg", "target": "Windows\\Web\\Wallpaper\\StormOS\\storm-light.jpg" },
+    { "source": "wallpapers/storm-lockscreen.jpg", "target": "Windows\\Web\\Screen\\StormOS\\storm-lockscreen.jpg" },
+    { "source": "logos/StormOS-oem-logo.bmp", "target": "Windows\\System32\\oobe\\info\\StormOS-oem-logo.bmp" },
+    { "source": "logos/StormOS-oobe-logo.png", "target": "Windows\\System32\\oobe\\info\\StormOS-oobe-logo.png" },
+    { "source": "logos/storm-mark.png", "target": "ProgramData\\StormOS\\Branding\\storm-mark.png" },
+    { "source": "logos/storm-logo.png", "target": "ProgramData\\StormOS\\Branding\\storm-logo.png" },
+    { "source": "icons/StormOS.ico", "target": "ProgramData\\StormOS\\Branding\\StormOS.ico" }
+  ]
+}

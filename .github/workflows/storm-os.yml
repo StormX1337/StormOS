@@ -1,0 +1,148 @@
+name: STORM OS image pipeline
+
+on:
+  push:
+    branches: [main, "claude/**"]
+    paths: ["storm-os/**", ".github/workflows/storm-os.yml"]
+  pull_request:
+    paths: ["storm-os/**", ".github/workflows/storm-os.yml"]
+  workflow_dispatch:
+    inputs:
+      source_iso_url:
+        description: "Official Microsoft Windows 11 ISO URL (default: Windows 11 Enterprise evaluation media)"
+        required: false
+      edition_index:
+        description: "Edition index to build"
+        required: false
+        default: "1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: storm-os-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  pester-linux:
+    name: Build engine tests (PowerShell 7, Linux)
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pester
+        shell: pwsh
+        working-directory: storm-os
+        run: |
+          if (-not (Get-Module -ListAvailable Pester | Where-Object Version -ge '5.5.0')) { Install-Module Pester -MinimumVersion 5.5.0 -Force -Scope CurrentUser -SkipPublisherCheck }
+          Import-Module Pester -MinimumVersion 5.5.0
+          $config = New-PesterConfiguration
+          $config.Run.Path = 'tests/build'
+          $config.Run.Exit = $true
+          $config.Output.Verbosity = 'Detailed'
+          Invoke-Pester -Configuration $config
+
+  pester-windows:
+    name: Build engine tests (Windows PowerShell 5.1)
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Pester
+        shell: powershell
+        working-directory: storm-os
+        run: |
+          if (-not (Get-Module -ListAvailable Pester | Where-Object Version -ge '5.5.0')) { Install-Module Pester -MinimumVersion 5.5.0 -Force -Scope CurrentUser -SkipPublisherCheck }
+          Import-Module Pester -MinimumVersion 5.5.0
+          $config = New-PesterConfiguration
+          $config.Run.Path = 'tests/build'
+          $config.Run.Exit = $true
+          $config.Output.Verbosity = 'Detailed'
+          Invoke-Pester -Configuration $config
+
+  iso:
+    name: Build and boot StormOS.iso (Windows 11 evaluation media)
+    runs-on: windows-latest
+    needs: [pester-linux, pester-windows]
+    if: github.event_name != 'pull_request'
+    timeout-minutes: 240
+    permissions:
+      contents: write # only to publish the report and screenshots to refs/ci/storm-os-build (not a branch)
+    steps:
+      - uses: actions/checkout@v4
+      - name: Choose the build drive
+        shell: powershell
+        run: |
+          Get-PSDrive -PSProvider FileSystem | Format-Table Name, @{ n = 'FreeGB'; e = { [math]::Round($_.Free / 1GB, 1) } }, @{ n = 'UsedGB'; e = { [math]::Round($_.Used / 1GB, 1) } }
+          $drive = Get-PSDrive -PSProvider FileSystem | Where-Object { $_.Name -in 'C', 'D' } | Sort-Object Free -Descending | Select-Object -First 1
+          $root = "$($drive.Name):\StormBuild"
+          robocopy storm-os "$root\storm-os" /E /NFL /NDL /NJH /NP | Out-Null
+          if ($LASTEXITCODE -ge 8) { throw "robocopy failed: $LASTEXITCODE" }
+          "STORM_ROOT=$root\storm-os" >> $env:GITHUB_ENV
+          "STORM_SOURCE=$root\source\source.iso" >> $env:GITHUB_ENV
+          Write-Host "Building on $($drive.Name): ($([math]::Round($drive.Free / 1GB, 1)) GB free)"
+      - name: Install Windows ADK Deployment Tools (oscdimg) and QEMU
+        shell: powershell
+        run: |
+          $oscdimg = Get-ChildItem "${env:ProgramFiles(x86)}\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\oscdimg.exe" -ErrorAction SilentlyContinue
+          if (-not $oscdimg) { choco install windows-adk-deploy -y --no-progress; if ($LASTEXITCODE -ne 0) { throw 'ADK installation failed' } }
+          choco install qemu -y --no-progress
+          if ($LASTEXITCODE -ne 0) { throw 'QEMU installation failed' }
+      - name: Download Windows 11 evaluation media from Microsoft
+        shell: powershell
+        env:
+          SOURCE_URL: ${{ inputs.source_iso_url || vars.STORM_SOURCE_ISO_URL }}
+        run: |
+          $arguments = @{ Destination = $env:STORM_SOURCE }
+          if ($env:SOURCE_URL) { $arguments.Url = $env:SOURCE_URL }
+          & "$env:STORM_ROOT\tests\ci\Get-StormEvaluationIso.ps1" @arguments
+      - name: Prerequisites
+        shell: powershell
+        run: |
+          & "$env:STORM_ROOT\scripts\00-check-prerequisites.ps1" -SourceIso $env:STORM_SOURCE
+          exit $LASTEXITCODE
+      - name: Build StormOS.iso (build-all)
+        shell: powershell
+        env:
+          EDITION: ${{ inputs.edition_index || '1' }}
+        run: |
+          & "$env:STORM_ROOT\scripts\build-all.ps1" -SourceIso $env:STORM_SOURCE -EditionIndex ([int]$env:EDITION) -BuildVersion "1.0.0-ci.${{ github.run_number }}" -EnableGamingDefaults -NoBootPrompt -CleanBuild -KeepTemp
+          exit $LASTEXITCODE
+      - name: VM boot test (QEMU, UEFI)
+        shell: powershell
+        run: |
+          & "$env:STORM_ROOT\scripts\14-test-vm.ps1" -Hypervisor Qemu -VmBootMinutes 25
+          exit $LASTEXITCODE
+      - name: Collect report, logs and screenshots (never the ISO or WIM)
+        if: always()
+        shell: powershell
+        run: |
+          $out = Join-Path $env:GITHUB_WORKSPACE 'storm-os-ci'
+          New-Item -ItemType Directory -Path $out -Force | Out-Null
+          Copy-Item "$env:STORM_ROOT\build\output\storm-build-report.json" $out -ErrorAction SilentlyContinue
+          Copy-Item "$env:STORM_ROOT\build\output\*.sha256" $out -ErrorAction SilentlyContinue
+          Get-ChildItem "$env:STORM_ROOT\build\logs" -File -ErrorAction SilentlyContinue | Where-Object { $_.Name -ne 'dism.log' } | ForEach-Object { Copy-Item $_.FullName (Join-Path $out ($_.BaseName + '.txt')) }
+          if (Test-Path "$env:STORM_ROOT\build\logs\dism.log") { Get-Content "$env:STORM_ROOT\build\logs\dism.log" -Tail 400 | Set-Content (Join-Path $out 'dism-tail.txt') }
+          Get-ChildItem "$env:STORM_ROOT\build\artifacts\vm" -Include *.png, *.log -Recurse -ErrorAction SilentlyContinue | ForEach-Object { Copy-Item $_.FullName $out }
+          Copy-Item "$env:STORM_SOURCE.sha256" (Join-Path $out 'source-iso.sha256') -ErrorAction SilentlyContinue
+          Get-ChildItem $out | Format-Table Name, Length
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: storm-os-build-report
+          path: storm-os-ci
+      - name: Publish report and screenshots to refs/ci/storm-os-build
+        if: always() && github.event_name != 'pull_request'
+        shell: pwsh
+        env:
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          if (-not (Test-Path storm-os-ci) -or -not (Get-ChildItem storm-os-ci)) { Write-Host 'Nothing to publish.'; exit 0 }
+          $env:GIT_INDEX_FILE = Join-Path $env:RUNNER_TEMP 'storm-os-ci.index'
+          $files = Get-ChildItem storm-os-ci -File | Where-Object { $_.Extension -in '.png', '.txt', '.json', '.sha256', '.log', '.jsonl' -and $_.Length -lt 20MB } | ForEach-Object { "storm-os-ci/$($_.Name)" }
+          git add -f -- @files
+          $tree = git write-tree
+          $commit = git commit-tree $tree -m "STORM OS build report for ${{ github.sha }} (run ${{ github.run_number }})"
+          git push -f origin "${commit}:refs/ci/storm-os-build"
+          if ($LASTEXITCODE -ne 0) { throw 'Could not publish the report.' }

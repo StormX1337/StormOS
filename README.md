@@ -20,6 +20,7 @@ measurement. When a metric is not available on a system, STORM OS shows *Unavail
 | Game profiles | `profiles/*.json` | Versioned, validated JSON profiles (no code) |
 | Cloud | `cloud/` | NestJS API, Next.js web + admin, Prisma/PostgreSQL, Redis, Stripe (optional) |
 | Installer | `installer/` | Setup exe (WiX Burn, branded) + MSI: app, service, CLI, shortcuts, clean uninstall |
+| OS distribution | `storm-os/` | Build pipeline Windows 11 ISO -> StormOS.iso: Storm branding, defaults, apps ([storm-os/README.md](storm-os/README.md)) |
 
 ## Quick start
 
