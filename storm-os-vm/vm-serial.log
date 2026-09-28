@@ -1,0 +1,37 @@
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01HBdsDxe: failed to load Boot0002 "UEFI QEMU HARDDISK QM00013 " from PciRoot(0x0)/Pci(0x1,0x0)/Sata(0x0,0xFFFF,0x0): Not Found
+BdsDxe: loading Boot0001 "UEFI QEMU DVD-ROM QM00015 " from PciRoot(0x0)/Pci(0x1,0x0)/Sata(0x1,0xFFFF,0x0)
+BdsDxe: starting Boot0001 "UEFI QEMU DVD-ROM QM00015 " from PciRoot(0x0)/Pci(0x1,0x0)/Sata(0x1,0xFFFF,0x0)
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01HBdsDxe: loading Boot0003 "Windows Boot Manager" from HD(1,GPT,4CD76C33-F9FD-4A22-AD10-31711FE9F888,0x800,0x82000)/\EFI\Microsoft\Boot\bootmgfw.efi
+BdsDxe: starting Boot0003 "Windows Boot Manager" from HD(1,GPT,4CD76C33-F9FD-4A22-AD10-31711FE9F888,0x800,0x82000)/\EFI\Microsoft\Boot\bootmgfw.efi
+[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01H[2J[01;01H[=3h[2J[01;01HBdsDxe: loading Boot0003 "Windows Boot Manager" from HD(1,GPT,4CD76C33-F9FD-4A22-AD10-31711FE9F888,0x800,0x82000)/\EFI\Microsoft\Boot\bootmgfw.efi
+BdsDxe: starting Boot0003 "Windows Boot Manager" from HD(1,GPT,4CD76C33-F9FD-4A22-AD10-31711FE9F888,0x800,0x82000)/\EFI\Microsoft\Boot\bootmgfw.efi
+
+STORM-TOUR-STATUS:signed-in
+
+STORM-TOUR-STATUS:oem=STORM OS|Storm customization of Windows 11 Enterprise Evaluation
+
+STORM-TOUR-STATUS:theme=C:\WINDOWS\Resources\Themes\StormOS.theme
+
+STORM-TOUR-STATUS:wallpaper=C:\WINDOWS\Web\Wallpaper\StormOS\storm-dark.jpg
+
+STORM-TOUR-STATUS:apps-light=0 system-light=0
+
+STORM-TOUR-STATUS:game-mode=1
+
+STORM-TOUR-STATUS:storm-image=True
+
+STORM-TOUR:desktop
+
+STORM-TOUR:start-menu
+
+STORM-TOUR:settings-about
+
+STORM-TOUR:settings-personalization
+
+STORM-TOUR:settings-themes
+
+STORM-TOUR:settings-gaming
+
+STORM-TOUR:file-explorer
+
+STORM-TOUR:done

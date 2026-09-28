@@ -1,0 +1,22 @@
+{
+  "passed": true,
+  "screens": [
+    "desktop",
+    "start-menu",
+    "settings-about",
+    "settings-personalization",
+    "settings-themes",
+    "settings-gaming",
+    "file-explorer"
+  ],
+  "status": [
+    "STORM-TOUR-STATUS:signed-in",
+    "STORM-TOUR-STATUS:oem=STORM OS|Storm customization of Windows 11 Enterprise Evaluation",
+    "STORM-TOUR-STATUS:theme=C:\\WINDOWS\\Resources\\Themes\\StormOS.theme",
+    "STORM-TOUR-STATUS:wallpaper=C:\\WINDOWS\\Web\\Wallpaper\\StormOS\\storm-dark.jpg",
+    "STORM-TOUR-STATUS:apps-light=0 system-light=0",
+    "STORM-TOUR-STATUS:game-mode=1",
+    "STORM-TOUR-STATUS:storm-image=True"
+  ],
+  "detail": "Installed, signed in and captured the tour."
+}
