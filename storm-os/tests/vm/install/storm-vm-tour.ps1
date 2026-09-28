@@ -43,7 +43,7 @@ Send-Serial "STORM-TOUR-STATUS:game-mode=$((Get-ItemProperty 'HKCU:\Software\Mic
 Send-Serial "STORM-TOUR-STATUS:storm-image=$(Test-Path 'C:\ProgramData\StormOS\Config\storm-image.json')"
 
 Send-Serial 'STORM-TOUR:desktop'
-Start-Sleep -Seconds 20
+Start-Sleep -Seconds 45   # run 6: the host captured the desktop late (Start was already open); give it more time
 
 $shell = New-Object -ComObject WScript.Shell
 Show-Screen 'start-menu' { $shell.SendKeys('^{ESC}') } 8

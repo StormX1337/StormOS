@@ -9,7 +9,7 @@
 
 The boot test ends early once the display is stable (three identical, non-blank frames), e.g. at Windows Setup.
 
-## Manual installation test (until CI can provide a virtual TPM)
+## Manual installation test
 
 Windows 11 Setup requires TPM 2.0 and Secure Boot; STORM OS never bypasses these checks. Install in a compliant VM:
 
