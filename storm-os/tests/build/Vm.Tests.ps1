@@ -49,3 +49,29 @@ Describe 'QEMU arguments' {
     $joined | Should -Match 'tcg,thread=multi'
   }
 }
+
+Describe 'PNG encoder' {
+  It 'writes a valid PNG that round-trips the pixels' {
+    $rgb = [byte[]](255, 0, 0, 0, 255, 0, 0, 0, 255, 10, 20, 30)
+    $png = ConvertTo-StormPng -Rgb $rgb -Width 2 -Height 2
+    $png[0..7] | Should -Be @(137, 80, 78, 71, 13, 10, 26, 10)
+    [Text.Encoding]::ASCII.GetString($png, 12, 4) | Should -Be 'IHDR'
+    ($png[16] * 16777216 + $png[17] * 65536 + $png[18] * 256 + $png[19]) | Should -Be 2
+    $png[24] | Should -Be 8
+    $png[25] | Should -Be 2
+    $expectedCrc = [StormPngEncoder]::Crc32($png, 12, 17)
+    $crc = [uint32]$png[29] * 16777216 + [uint32]$png[30] * 65536 + [uint32]$png[31] * 256 + [uint32]$png[32]
+    $crc | Should -Be $expectedCrc
+    $length = $png[33] * 16777216 + $png[34] * 65536 + $png[35] * 256 + $png[36]
+    [Text.Encoding]::ASCII.GetString($png, 37, 4) | Should -Be 'IDAT'
+    $zlib = New-Object IO.MemoryStream(, $png[43..(41 + $length - 4 - 1 + 0)])
+    $inflate = New-Object IO.Compression.DeflateStream($zlib, [IO.Compression.CompressionMode]::Decompress)
+    $out = New-Object IO.MemoryStream
+    $inflate.CopyTo($out)
+    $out.ToArray() | Should -Be ([byte[]](0, 255, 0, 0, 0, 255, 0, 0, 0, 0, 255, 10, 20, 30))
+  }
+  It 'knows the standard CRC-32 check value' {
+    [StormPngEncoder]::Crc32([Text.Encoding]::ASCII.GetBytes('123456789'), 0, 9) | Should -Be ([uint32]3421780262)  # 0xCBF43926
+  }
+  It 'rejects short pixel buffers' { { ConvertTo-StormPng -Rgb ([byte[]](1, 2, 3)) -Width 2 -Height 2 } | Should -Throw }
+}

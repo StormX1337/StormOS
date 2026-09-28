@@ -58,3 +58,23 @@ Describe 'Build report' {
     { New-StormBuildReport -State $State | ConvertTo-Json -Depth 12 | ConvertFrom-Json } | Should -Not -Throw
   }
 }
+
+Describe 'Installer media answer files' {
+  It 'passes media without an answer file' {
+    (Test-StormMediaUnattended -MediaRoot $TestDrive).status | Should -Be 'PASS'
+  }
+  It 'fails media with autounattend.xml' {
+    $media = Join-Path $TestDrive 'media'
+    New-Item -ItemType Directory -Path $media -Force | Out-Null
+    Set-Content -Path (Join-Path $media 'autounattend.xml') -Value '<unattend/>'
+    (Test-StormMediaUnattended -MediaRoot $media).status | Should -Be 'FAIL'
+  }
+  It 'keeps the VM test answer file out of the product and marks it as test only' {
+    $test = Get-Content -Raw -LiteralPath (Join-Path $PSScriptRoot '..\vm\install\autounattend.xml')
+    $test | Should -Match 'TEST ONLY'
+    Test-StormUnattendSafety -XmlText $test | Should -Not -BeNullOrEmpty
+    Get-ChildItem -Path (Join-Path $PSScriptRoot '..\..\scripts') -Recurse -Include *.ps1 | ForEach-Object {
+      (Get-Content -Raw -LiteralPath $_.FullName) | Should -Not -Match 'vm[\\/]install[\\/]autounattend'
+    }
+  }
+}

@@ -56,33 +56,100 @@ function ConvertFrom-StormRgb565 {
   return , $rgb
 }
 
-function Save-StormRgbPng {
-  <# Writes RGB24 pixels as PNG via System.Drawing (Windows). Returns $false where System.Drawing is unavailable. #>
-  param([Parameter(Mandatory)] [byte[]] $Rgb, [Parameter(Mandatory)] [int] $Width, [Parameter(Mandatory)] [int] $Height, [Parameter(Mandatory)] [string] $Path)
-  if (-not (Test-StormIsWindows)) { return $false }
-  Add-Type -AssemblyName System.Drawing
-  $bitmap = New-Object System.Drawing.Bitmap($Width, $Height, [System.Drawing.Imaging.PixelFormat]::Format24bppRgb)
-  try {
-    $rect = New-Object System.Drawing.Rectangle(0, 0, $Width, $Height)
-    $data = $bitmap.LockBits($rect, [System.Drawing.Imaging.ImageLockMode]::WriteOnly, $bitmap.PixelFormat)
-    try {
-      $stride = $data.Stride
-      $row = New-Object byte[] $stride
-      for ($y = 0; $y -lt $Height; $y++) {
-        for ($x = 0; $x -lt $Width; $x++) {
-          $source = ($y * $Width + $x) * 3
-          $row[3 * $x] = $Rgb[$source + 2]      # GDI+ stores BGR
-          $row[3 * $x + 1] = $Rgb[$source + 1]
-          $row[3 * $x + 2] = $Rgb[$source]
+$script:StormPngEncoderSource = @'
+using System;
+using System.IO;
+using System.IO.Compression;
+
+public static class StormPngEncoder
+{
+    private static readonly uint[] CrcTable = CreateCrcTable();
+
+    private static uint[] CreateCrcTable()
+    {
+        var table = new uint[256];
+        for (uint n = 0; n < 256; n++)
+        {
+            uint c = n;
+            for (int k = 0; k < 8; k++) { c = (c & 1) != 0 ? 0xEDB88320u ^ (c >> 1) : c >> 1; }
+            table[n] = c;
         }
-        [System.Runtime.InteropServices.Marshal]::Copy($row, 0, [IntPtr]($data.Scan0.ToInt64() + [long]$y * $stride), $stride)
-      }
+        return table;
     }
-    finally { $bitmap.UnlockBits($data) }
-    $bitmap.Save($Path, [System.Drawing.Imaging.ImageFormat]::Png)
-    return $true
-  }
-  finally { $bitmap.Dispose() }
+
+    public static uint Crc32(byte[] data, int offset, int count)
+    {
+        uint c = 0xFFFFFFFFu;
+        for (int i = offset; i < offset + count; i++) { c = CrcTable[(c ^ data[i]) & 0xFF] ^ (c >> 8); }
+        return c ^ 0xFFFFFFFFu;
+    }
+
+    private static byte[] BigEndian(uint value)
+    {
+        return new[] { (byte)(value >> 24), (byte)(value >> 16), (byte)(value >> 8), (byte)value };
+    }
+
+    private static void WriteChunk(Stream stream, string type, byte[] data)
+    {
+        stream.Write(BigEndian((uint)data.Length), 0, 4);
+        var body = new byte[4 + data.Length];
+        System.Text.Encoding.ASCII.GetBytes(type).CopyTo(body, 0);
+        data.CopyTo(body, 4);
+        stream.Write(body, 0, body.Length);
+        stream.Write(BigEndian(Crc32(body, 0, body.Length)), 0, 4);
+    }
+
+    /// <summary>Encodes RGB24 pixels as a PNG (8-bit truecolor, filter 0, zlib/deflate).</summary>
+    public static byte[] Encode(byte[] rgb, int width, int height)
+    {
+        int stride = width * 3;
+        var raw = new byte[(stride + 1) * height];
+        for (int y = 0; y < height; y++) { Buffer.BlockCopy(rgb, y * stride, raw, y * (stride + 1) + 1, stride); }
+        byte[] zlib;
+        using (var buffer = new MemoryStream())
+        {
+            buffer.WriteByte(0x78);
+            buffer.WriteByte(0x9C);
+            using (var deflate = new DeflateStream(buffer, CompressionLevel.Optimal, true)) { deflate.Write(raw, 0, raw.Length); }
+            uint a = 1, b = 0;
+            for (int i = 0; i < raw.Length; i++) { a = (a + raw[i]) % 65521; b = (b + a) % 65521; }
+            buffer.Write(BigEndian((b << 16) | a), 0, 4);
+            zlib = buffer.ToArray();
+        }
+        using (var png = new MemoryStream())
+        {
+            png.Write(new byte[] { 137, 80, 78, 71, 13, 10, 26, 10 }, 0, 8);
+            var header = new byte[13];
+            BigEndian((uint)width).CopyTo(header, 0);
+            BigEndian((uint)height).CopyTo(header, 4);
+            header[8] = 8;  // bit depth
+            header[9] = 2;  // truecolor RGB
+            WriteChunk(png, "IHDR", header);
+            WriteChunk(png, "IDAT", zlib);
+            WriteChunk(png, "IEND", new byte[0]);
+            return png.ToArray();
+        }
+    }
+}
+'@
+
+function Initialize-StormPngEncoder {
+  if (-not ('StormPngEncoder' -as [type])) { Add-Type -TypeDefinition $script:StormPngEncoderSource -Language CSharp }
+}
+
+function ConvertTo-StormPng {
+  <# Encodes RGB24 pixels as PNG bytes on any platform (no System.Drawing). #>
+  param([Parameter(Mandatory)] [byte[]] $Rgb, [Parameter(Mandatory)] [int] $Width, [Parameter(Mandatory)] [int] $Height)
+  if ($Rgb.Length -lt $Width * $Height * 3) { throw 'Pixel data is smaller than width x height x 3.' }
+  Initialize-StormPngEncoder
+  return , ([StormPngEncoder]::Encode($Rgb, $Width, $Height))
+}
+
+function Save-StormRgbPng {
+  <# Writes RGB24 pixels as a PNG file. Returns $true. #>
+  param([Parameter(Mandatory)] [byte[]] $Rgb, [Parameter(Mandatory)] [int] $Width, [Parameter(Mandatory)] [int] $Height, [Parameter(Mandatory)] [string] $Path)
+  [System.IO.File]::WriteAllBytes($Path, (ConvertTo-StormPng -Rgb $Rgb -Width $Width -Height $Height))
+  return $true
 }
 
 function Find-StormQemu {

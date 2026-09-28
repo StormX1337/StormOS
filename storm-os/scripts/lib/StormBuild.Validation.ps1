@@ -54,10 +54,24 @@ function Test-StormIsoArtifacts {
   return $checks.ToArray()
 }
 
+function Test-StormMediaUnattended {
+  <#
+    The installer media must not carry an answer file that Windows Setup picks up automatically (autounattend.xml at
+    the root or in sources): Setup stays interactive, so the user chooses the disk. Test answer files live only on
+    separate VM media (tests/vm/install).
+  #>
+  param([Parameter(Mandatory)] [string] $MediaRoot)
+  $found = @(foreach ($relative in 'autounattend.xml', 'sources\autounattend.xml', 'unattend.xml', 'sources\unattend.xml') {
+      if (Test-Path -LiteralPath (Join-Path $MediaRoot $relative)) { $relative }
+    })
+  return New-StormValidation -Name 'No automatic answer file on media' -Passed ($found.Count -eq 0) -Detail $(if ($found.Count) { "Found: $($found -join ', ')" } else { 'Windows Setup stays interactive' })
+}
+
 function Test-StormMediaImages {
   <# WIM-level checks on the installer media folder: install.wim (single Storm edition) and boot.wim. #>
   param([Parameter(Mandatory)] [string] $MediaRoot, [Parameter(Mandatory)] [System.Collections.IDictionary] $Edition)
   $checks = New-Object System.Collections.Generic.List[object]
+  $checks.Add((Test-StormMediaUnattended -MediaRoot $MediaRoot))
   $missing = Test-StormMediaLayout -MediaRoot $MediaRoot
   $checks.Add((New-StormValidation -Name 'Installer media layout' -Passed ($missing.Count -eq 0) -Detail $(if ($missing.Count) { "Missing: $($missing -join ', ')" } else { 'boot, efi, bootmgr, setup and boot.wim present' })))
   $install = Join-Path $MediaRoot 'sources\install.wim'

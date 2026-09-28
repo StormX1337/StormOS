@@ -22,5 +22,17 @@ Windows 11 Setup requires TPM 2.0 and Secure Boot; STORM OS never bypasses these
    Task View/Widgets, Game Mode on, `C:\ProgramData\StormOS\Config\storm-image.json` present.
 4. With `-EnableStormApps`: STORM OS app in Start, StormOSService running, `%ProgramData%\StormOS\Logs\storm-apps-install.log`.
 
-A full *automated* installation test is **NOT IMPLEMENTED** yet (needs a runner with a virtual TPM). It will use a
-test-only answer file on separate virtual media; StormOS.iso itself never partitions disks.
+## Automated installation test (CI, Linux + KVM)
+
+`tests/vm/Invoke-StormVmInstallTest.ps1` installs StormOS.iso in a Windows 11-compliant VM: KVM, UEFI Secure Boot with
+Microsoft keys (OVMF secboot), TPM 2.0 (swtpm), 6 GB RAM, 80 GB disk. No requirement check is bypassed.
+
+- The test-only answer file `install/autounattend.xml` is attached as a **separate** virtual CD. StormOS.iso is used
+  unchanged and never carries an answer file (validation check "No automatic answer file on media").
+- `install/storm-vm-tour.ps1` runs at the first sign-in of the test account, opens desktop, Start, Settings (About,
+  Personalization, Themes, Gaming) and File Explorer, and signals each screen over COM1; the host captures
+  `installed-NN-<screen>.png`. The VM disk is deleted afterwards.
+- CI (`vm-install` job): the Windows job builds the ISO and encrypts it for the Linux job (AES-256 with a random key,
+  wrapped with the Linux job's one-time RSA key). The encrypted artifact lives at most one day and is deleted as soon
+  as the Linux job has it; the decrypted ISO never leaves that runner. Only screenshots and logs are published
+  (`refs/ci/storm-os-vm`).

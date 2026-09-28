@@ -113,6 +113,35 @@ jobs:
         run: |
           & "$env:STORM_ROOT\scripts\14-test-vm.ps1" -Hypervisor Qemu -VmBootMinutes 25
           exit $LASTEXITCODE
+      - name: Get the VM installation job's one-time public key
+        id: vmkey
+        continue-on-error: true
+        uses: actions/download-artifact@v4
+        with:
+          name: vm-public-key
+          path: vmkey
+      - name: Seal StormOS.iso for the VM installation job (only that job can decrypt it)
+        if: steps.vmkey.outcome == 'success'
+        shell: pwsh
+        run: |
+          $openssl = 'C:\Program Files\Git\usr\bin\openssl.exe'
+          $sealed = Join-Path $env:RUNNER_TEMP 'sealed'
+          New-Item -ItemType Directory -Path $sealed -Force | Out-Null
+          $key = Join-Path $env:RUNNER_TEMP 'iso-key.txt'
+          (& $openssl rand -hex 32) | Set-Content -Path $key -NoNewline -Encoding ascii
+          & $openssl enc -aes-256-ctr -pbkdf2 -pass "file:$key" -in "$env:STORM_ROOT\build\output\StormOS.iso" -out (Join-Path $sealed 'StormOS.iso.enc')
+          if ($LASTEXITCODE -ne 0) { throw 'Encryption failed.' }
+          & $openssl pkeyutl -encrypt -pubin -inkey vmkey/vm-public-key.pem -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -in $key -out (Join-Path $sealed 'key.enc')
+          if ($LASTEXITCODE -ne 0) { throw 'Key wrapping failed.' }
+          Remove-Item $key -Force
+      - name: Upload the sealed ISO (encrypted, deleted by the VM job)
+        if: steps.vmkey.outcome == 'success'
+        uses: actions/upload-artifact@v4
+        with:
+          name: stormos-iso-sealed
+          path: ${{ runner.temp }}/sealed
+          compression-level: 0
+          retention-days: 1
       - name: Collect report, logs and screenshots (never the ISO or WIM)
         if: always()
         shell: powershell
@@ -148,3 +177,98 @@ jobs:
           $commit = git commit-tree $tree -m "STORM OS build report for ${{ github.sha }} (run ${{ github.run_number }})"
           git push -f origin "${commit}:refs/ci/storm-os-build"
           if ($LASTEXITCODE -ne 0) { throw 'Could not publish the report.' }
+
+  vm-install:
+    name: Install StormOS.iso in a Windows 11-compliant VM (KVM, Secure Boot, TPM 2.0)
+    runs-on: ubuntu-latest
+    needs: [pester-linux, pester-windows]
+    if: github.event_name != 'pull_request'
+    timeout-minutes: 240
+    permissions:
+      contents: write # only to publish screenshots to refs/ci/storm-os-vm (not a branch)
+      actions: write # read this run's artifacts and delete the sealed ISO afterwards
+    steps:
+      - uses: actions/checkout@v4
+      - name: One-time key pair for receiving the sealed ISO (private key never leaves this runner)
+        run: |
+          mkdir -p "$RUNNER_TEMP/vmkey" vmkey-public
+          openssl genpkey -algorithm RSA -pkeyopt rsa_keygen_bits:4096 -out "$RUNNER_TEMP/vmkey/private.pem" 2>/dev/null
+          openssl pkey -in "$RUNNER_TEMP/vmkey/private.pem" -pubout -out vmkey-public/vm-public-key.pem
+      - uses: actions/upload-artifact@v4
+        with:
+          name: vm-public-key
+          path: vmkey-public/vm-public-key.pem
+          retention-days: 1
+      - name: KVM, QEMU, OVMF (Secure Boot with Microsoft keys), swtpm
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+          sudo apt-get update -q
+          sudo apt-get install -y -q qemu-system-x86 qemu-utils ovmf swtpm swtpm-tools xorriso
+          ls -l /dev/kvm /usr/share/OVMF/
+          sudo mkdir -p /mnt/storm
+          sudo chown "$USER" /mnt/storm
+          df -h / /mnt
+      - name: Wait for the sealed StormOS.iso from the Windows build job
+        id: wait
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          artifacts="repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/artifacts"
+          jobs="repos/${{ github.repository }}/actions/runs/${{ github.run_id }}/jobs"
+          for i in $(seq 1 180); do
+            id=$(gh api "$artifacts" --jq '.artifacts[] | select(.name=="stormos-iso-sealed") | .id' || true)
+            if [ -n "$id" ]; then echo "artifact_id=$id" >> "$GITHUB_OUTPUT"; echo "Sealed ISO ready (artifact $id)"; exit 0; fi
+            state=$(gh api "$jobs" --jq '.jobs[] | select(.name | startswith("Build and boot")) | .status + "/" + (.conclusion // "")' || true)
+            case "$state" in
+              completed/*) sleep 20; id=$(gh api "$artifacts" --jq '.artifacts[] | select(.name=="stormos-iso-sealed") | .id' || true)
+                           if [ -n "$id" ]; then echo "artifact_id=$id" >> "$GITHUB_OUTPUT"; exit 0; fi
+                           echo "The ISO build job finished ($state) without a sealed ISO."; exit 1 ;;
+            esac
+            sleep 60
+          done
+          echo "Timed out waiting for the ISO."; exit 1
+      - uses: actions/download-artifact@v4
+        with:
+          name: stormos-iso-sealed
+          path: /mnt/storm/sealed
+      - name: Unseal StormOS.iso
+        run: |
+          openssl pkeyutl -decrypt -inkey "$RUNNER_TEMP/vmkey/private.pem" -pkeyopt rsa_padding_mode:oaep -pkeyopt rsa_oaep_md:sha256 -in /mnt/storm/sealed/key.enc -out "$RUNNER_TEMP/vmkey/iso-key.txt"
+          openssl enc -d -aes-256-ctr -pbkdf2 -pass "file:$RUNNER_TEMP/vmkey/iso-key.txt" -in /mnt/storm/sealed/StormOS.iso.enc -out /mnt/storm/StormOS.iso
+          rm -rf /mnt/storm/sealed "$RUNNER_TEMP/vmkey/iso-key.txt"
+          ls -l /mnt/storm
+      - name: Delete the sealed ISO artifact
+        if: always() && steps.wait.outputs.artifact_id != ''
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X DELETE "repos/${{ github.repository }}/actions/artifacts/${{ steps.wait.outputs.artifact_id }}"
+      - name: Install in the VM and capture the installed system
+        shell: pwsh
+        run: ./storm-os/tests/vm/Invoke-StormVmInstallTest.ps1 -IsoPath /mnt/storm/StormOS.iso -WorkDirectory /mnt/storm/vm -OutputDirectory storm-os-vm
+      - name: Remove the ISO from the runner
+        if: always()
+        run: rm -rf /mnt/storm/StormOS.iso /mnt/storm/vm
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: storm-os-vm-screenshots
+          path: storm-os-vm
+      - name: Publish screenshots to refs/ci/storm-os-vm
+        if: always()
+        shell: pwsh
+        env:
+          GIT_AUTHOR_NAME: github-actions[bot]
+          GIT_AUTHOR_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+          GIT_COMMITTER_NAME: github-actions[bot]
+          GIT_COMMITTER_EMAIL: 41898282+github-actions[bot]@users.noreply.github.com
+        run: |
+          if (-not (Test-Path storm-os-vm) -or -not (Get-ChildItem storm-os-vm)) { Write-Host 'Nothing to publish.'; exit 0 }
+          $env:GIT_INDEX_FILE = Join-Path $env:RUNNER_TEMP 'storm-os-vm.index'
+          $files = Get-ChildItem storm-os-vm -File | Where-Object { $_.Extension -in '.png', '.json', '.log' -and $_.Length -lt 20MB } | ForEach-Object { "storm-os-vm/$($_.Name)" }
+          git add -f -- @files
+          $tree = git write-tree
+          $commit = git commit-tree $tree -m "STORM OS VM installation screenshots for ${{ github.sha }} (run ${{ github.run_number }})"
+          git push -f origin "${commit}:refs/ci/storm-os-vm"
+          if ($LASTEXITCODE -ne 0) { throw 'Could not publish the screenshots.' }
