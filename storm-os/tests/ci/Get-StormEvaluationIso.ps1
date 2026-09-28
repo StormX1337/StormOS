@@ -37,8 +37,15 @@ function Resolve-FinalUrl([string] $Candidate) {
 $candidates = @()
 if ($Url) { $candidates += $Url }
 else {
-  Write-Host "Reading $EvaluationPage"
-  $page = Invoke-WebRequest -Uri $EvaluationPage -UseBasicParsing -UserAgent 'Mozilla/5.0 (StormOS CI)'
+  # The Evaluation Center sometimes answers "Service unavailable / The request is blocked" for a few minutes.
+  $page = $null
+  foreach ($wait in 0, 30, 60, 120, 180, 300) {
+    if ($wait) { Write-Host "  retrying in $wait s"; Start-Sleep -Seconds $wait }
+    Write-Host "Reading $EvaluationPage"
+    try { $page = Invoke-WebRequest -Uri $EvaluationPage -UseBasicParsing -UserAgent 'Mozilla/5.0 (StormOS CI)'; break }
+    catch { Write-Host "  $($_.Exception.Message)" }
+  }
+  if (-not $page) { throw "The Evaluation Center page could not be read. Retry later or set the STORM_SOURCE_ISO_URL repository variable to an official Microsoft download URL." }
   $links = [regex]::Matches($page.Content, 'https://go\.microsoft\.com/fwlink/p?/?\?[^"''<>\s]*') | ForEach-Object { $_.Value.Replace('&amp;', '&') } | Select-Object -Unique
   $candidates = @($links | Where-Object { $_ -match 'culture=en-us' -and $_ -match 'country=us' })
   Write-Host "Found $($candidates.Count) en-US download links"

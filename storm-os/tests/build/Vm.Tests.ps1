@@ -16,6 +16,15 @@ Describe 'Screenshot helpers' {
     for ($i = 0; $i -lt $rgb.Length; $i += 7) { $rgb[$i] = 250 }
     Test-StormImageBlank -Rgb $rgb -Width 100 -Height 100 | Should -BeFalse
   }
+  It 'treats a nearly empty frame (QEMU "display not initialized" text) as blank' {
+    $width = 640; $height = 480
+    $text = New-Object byte[] ($width * $height * 3)
+    for ($y = 224; $y -lt 240; $y++) { for ($x = 144; $x -lt 496; $x += 4) { $o = ($y * $width + $x) * 3; $text[$o] = 192; $text[$o + 1] = 192; $text[$o + 2] = 192 } }
+    Test-StormImageBlank -Rgb $text -Width $width -Height $height | Should -BeTrue
+    $dialog = New-Object byte[] ($width * $height * 3)
+    for ($y = 120; $y -lt 360; $y++) { for ($x = 160; $x -lt 480; $x++) { $o = ($y * $width + $x) * 3; $dialog[$o] = 230; $dialog[$o + 1] = 230; $dialog[$o + 2] = 230 } }
+    Test-StormImageBlank -Rgb $dialog -Width $width -Height $height | Should -BeFalse
+  }
   It 'converts Hyper-V RGB565 thumbnails' {
     $rgb = ConvertFrom-StormRgb565 -Bytes ([byte[]](0x00, 0xF8, 0xE0, 0x07)) -Width 2 -Height 1
     $rgb[0] | Should -Be 248   # pure red

@@ -102,26 +102,23 @@ jobs:
           & "$env:STORM_ROOT\scripts\00-check-prerequisites.ps1" -SourceIso $env:STORM_SOURCE
           exit $LASTEXITCODE
       - name: Build StormOS.iso (build-all)
+        id: build
         shell: powershell
         env:
           EDITION: ${{ inputs.edition_index || '1' }}
         run: |
           & "$env:STORM_ROOT\scripts\build-all.ps1" -SourceIso $env:STORM_SOURCE -EditionIndex ([int]$env:EDITION) -BuildVersion "1.0.0-ci.${{ github.run_number }}" -EnableGamingDefaults -NoBootPrompt -CleanBuild -KeepTemp
           exit $LASTEXITCODE
-      - name: VM boot test (QEMU, UEFI)
-        shell: powershell
-        run: |
-          & "$env:STORM_ROOT\scripts\14-test-vm.ps1" -Hypervisor Qemu -VmBootMinutes 25
-          exit $LASTEXITCODE
       - name: Get the VM installation job's one-time public key
         id: vmkey
+        if: steps.build.outcome == 'success'
         continue-on-error: true
         uses: actions/download-artifact@v4
         with:
           name: vm-public-key
           path: vmkey
       - name: Seal StormOS.iso for the VM installation job (only that job can decrypt it)
-        if: steps.vmkey.outcome == 'success'
+        if: steps.build.outcome == 'success' && steps.vmkey.outcome == 'success'
         shell: pwsh
         run: |
           $openssl = 'C:\Program Files\Git\usr\bin\openssl.exe'
@@ -135,13 +132,18 @@ jobs:
           if ($LASTEXITCODE -ne 0) { throw 'Key wrapping failed.' }
           Remove-Item $key -Force
       - name: Upload the sealed ISO (encrypted, deleted by the VM job)
-        if: steps.vmkey.outcome == 'success'
+        if: steps.build.outcome == 'success' && steps.vmkey.outcome == 'success'
         uses: actions/upload-artifact@v4
         with:
           name: stormos-iso-sealed
           path: ${{ runner.temp }}/sealed
           compression-level: 0
           retention-days: 1
+      - name: VM boot test (QEMU, UEFI)
+        shell: powershell
+        run: |
+          & "$env:STORM_ROOT\scripts\14-test-vm.ps1" -Hypervisor Qemu -VmBootMinutes 25
+          exit $LASTEXITCODE
       - name: Collect report, logs and screenshots (never the ISO or WIM)
         if: always()
         shell: powershell

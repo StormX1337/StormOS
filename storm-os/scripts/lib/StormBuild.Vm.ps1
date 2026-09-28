@@ -3,19 +3,30 @@
 # (docs/STATUS.md). The VM is created and removed by the test; it never touches physical disks.
 
 function Test-StormImageBlank {
-  <# Samples an RGB24 frame; "blank" when luminance barely varies (black screen, firmware hang with an empty frame). #>
+  <#
+    Samples an RGB24 frame. "Blank" means no meaningful content: luminance barely varies (black screen, empty frame) or
+    fewer than 1 % of the samples differ from the background, e.g. QEMU's "Guest has not initialized the display
+    (yet)." placeholder, which must never count as a booted system.
+  #>
   param([Parameter(Mandatory)] [byte[]] $Rgb, [Parameter(Mandatory)] [int] $Width, [Parameter(Mandatory)] [int] $Height)
   $pixels = $Width * $Height
   if ($pixels -le 0 -or $Rgb.Length -lt $pixels * 3) { return $true }
-  $step = [math]::Max(1, [int]($pixels / 4000))
-  $min = 255.0; $max = 0.0
+  $step = [math]::Max(1, [int]($pixels / 20000))
+  $histogram = New-Object int[] 256
+  $lumas = New-Object System.Collections.Generic.List[int]
+  $min = 255; $max = 0
   for ($i = 0; $i -lt $pixels; $i += $step) {
     $o = $i * 3
-    $luma = 0.299 * $Rgb[$o] + 0.587 * $Rgb[$o + 1] + 0.114 * $Rgb[$o + 2]
+    $luma = [int](0.299 * $Rgb[$o] + 0.587 * $Rgb[$o + 1] + 0.114 * $Rgb[$o + 2])
+    $lumas.Add($luma)
+    $histogram[$luma]++
     if ($luma -lt $min) { $min = $luma }
     if ($luma -gt $max) { $max = $luma }
   }
-  return ($max - $min) -lt 12
+  if (($max - $min) -lt 12) { return $true }
+  $background = [array]::IndexOf($histogram, ($histogram | Measure-Object -Maximum).Maximum)
+  $content = @($lumas | Where-Object { [math]::Abs($_ - $background) -gt 12 }).Count
+  return ($content / $lumas.Count) -lt 0.01
 }
 
 function ConvertFrom-StormPpm {
