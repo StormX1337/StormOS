@@ -20,7 +20,9 @@ param(
   [Parameter(Mandatory)] [string] $OutputDirectory,
   [int] $TimeoutMinutes = 100,
   [int] $MemoryMB = 6144,
-  [int] $Cpus = 4
+  [int] $Cpus = 4,
+  # tcg only for smoke-testing this script on hosts without KVM; Windows installs far too slowly without it.
+  [ValidateSet('kvm', 'tcg')] [string] $Accelerator = 'kvm'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -31,10 +33,12 @@ foreach ($tool in 'qemu-system-x86_64', 'qemu-img', 'swtpm', 'xorriso') {
 }
 $code = '/usr/share/OVMF/OVMF_CODE_4M.secboot.fd'
 $varsTemplate = '/usr/share/OVMF/OVMF_VARS_4M.ms.fd'
-foreach ($file in $code, $varsTemplate, '/dev/kvm') { if (-not (Test-Path $file)) { throw "$file is required (ovmf package, KVM)." } }
+$required = @($code, $varsTemplate) + $(if ($Accelerator -eq 'kvm') { '/dev/kvm' } else { @() })
+foreach ($file in $required) { if (-not (Test-Path $file)) { throw "$file is required (ovmf package, KVM)." } }
 
 New-Item -ItemType Directory -Path $WorkDirectory, $OutputDirectory -Force | Out-Null
-$tpmDir = Join-Path $WorkDirectory 'tpm'
+# swtpm's AppArmor profile (Ubuntu) only allows its state and socket under /tmp, /var/tmp or libvirt paths.
+$tpmDir = Join-Path '/tmp' ('storm-tpm-' + [guid]::NewGuid().ToString('N').Substring(0, 8))
 New-Item -ItemType Directory -Path $tpmDir -Force | Out-Null
 $vars = Join-Path $WorkDirectory 'OVMF_VARS.fd'
 Copy-Item $varsTemplate $vars -Force
@@ -47,12 +51,16 @@ Set-Content -Path $serialLog -Value '' -NoNewline
 $socket = Join-Path $tpmDir 'swtpm.sock'
 $port = Get-Random -Minimum 45000 -Maximum 55000
 
-$swtpm = Start-Process -FilePath 'swtpm' -ArgumentList @('socket', '--tpm2', '--tpmstate', "dir=$tpmDir", '--ctrl', "type=unixio,path=$socket", '--log', "file=$(Join-Path $OutputDirectory 'swtpm.log')") -PassThru
-for ($i = 0; $i -lt 20 -and -not (Test-Path $socket); $i++) { Start-Sleep -Milliseconds 250 }
+$swtpm = Start-Process -FilePath 'swtpm' -ArgumentList @('socket', '--tpm2', '--tpmstate', "dir=$tpmDir", '--ctrl', "type=unixio,path=$socket", '--log', "file=$(Join-Path $tpmDir 'swtpm.log')") -PassThru
+for ($i = 0; $i -lt 40 -and -not (Test-Path $socket); $i++) { Start-Sleep -Milliseconds 250 }
+if (-not (Test-Path $socket)) {
+  $swtpmLog = Get-Content (Join-Path $tpmDir 'swtpm.log') -Raw -ErrorAction SilentlyContinue
+  throw "swtpm did not create its socket ($socket): $swtpmLog"
+}
 
 $arguments = @(
-  '-machine', 'q35,smm=on,accel=kvm', '-global', 'driver=cfi.pflash01,property=secure,value=on',
-  '-cpu', 'host,hv_relaxed,hv_vapic,hv_spinlocks=0x1fff,hv_time', '-smp', "$Cpus", '-m', "$MemoryMB",
+  '-machine', "q35,smm=on,accel=$Accelerator", '-global', 'driver=cfi.pflash01,property=secure,value=on',
+  '-cpu', $(if ($Accelerator -eq 'kvm') { 'host,hv_relaxed,hv_vapic,hv_spinlocks=0x1fff,hv_time' } else { 'max' }), '-smp', "$Cpus", '-m', "$MemoryMB",
   '-drive', "if=pflash,format=raw,unit=0,readonly=on,file=$code", '-drive', "if=pflash,format=raw,unit=1,file=$vars",
   '-chardev', "socket,id=chrtpm,path=$socket", '-tpmdev', 'emulator,id=tpm0,chardev=chrtpm', '-device', 'tpm-tis,tpmdev=tpm0',
   '-device', 'ahci,id=ahci',
@@ -96,19 +104,22 @@ try {
   }
 }
 finally {
+  $exitedEarly = $qemu.HasExited
   if (-not $qemu.HasExited) {
     try { Send-StormQemuMonitor -Port $port -Commands @('quit') } catch { Write-Host 'monitor quit failed' }
     if (-not $qemu.WaitForExit(20000)) { $qemu.Kill() }
   }
   if (-not $swtpm.HasExited) { $swtpm.Kill() }
   Remove-Item -LiteralPath $disk, $vars -Force -ErrorAction SilentlyContinue
+  Copy-Item (Join-Path $tpmDir 'swtpm.log') $OutputDirectory -ErrorAction SilentlyContinue
+  Remove-Item -LiteralPath $tpmDir -Recurse -Force -ErrorAction SilentlyContinue
 }
 
 $result = [ordered]@{
   passed    = $done
   screens   = @($captured | Where-Object { $_ -ne 'done' })
   status    = @($status)
-  detail    = if ($done) { 'Installed, signed in and captured the tour.' } elseif ($qemu.HasExited) { "QEMU exited (code $($qemu.ExitCode)) before the tour finished." } else { "Timed out after $TimeoutMinutes minutes." }
+  detail    = if ($done) { 'Installed, signed in and captured the tour.' } elseif ($exitedEarly) { "QEMU exited (code $($qemu.ExitCode)) before the tour finished; see qemu-stderr.log." } else { "Timed out after $TimeoutMinutes minutes." }
 }
 $result | ConvertTo-Json -Depth 4 | Set-Content (Join-Path $OutputDirectory 'vm-install-result.json')
 Write-Host ($result | ConvertTo-Json -Depth 4)
