@@ -1,0 +1,169 @@
+﻿2026-09-28T03:00:45.0064371Z INFO    STORM OS 1.0.0-ci.7 build 20260928-030044-209e85 - STORM OS is a Storm customization and deployment environment built on Windows.
+2026-09-28T03:00:45.0593541Z INFO    [00] Phase started: Prerequisites
+2026-09-28T03:00:46.6837665Z SUCCESS [00] PASS  Windows version                  Microsoft Windows Server 2025 Datacenter 10.0.26100
+2026-09-28T03:00:46.6877946Z SUCCESS [00] PASS  Administrator                    Running elevated
+2026-09-28T03:00:46.6910401Z SUCCESS [00] PASS  DISM                             C:\Windows\system32\Dism.exe (DISM module 3.0)
+2026-09-28T03:00:46.6938485Z SUCCESS [00] PASS  Windows ADK (Deployment Tools)   C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit
+2026-09-28T03:00:46.6958700Z SUCCESS [00] PASS  oscdimg                          C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\oscdimg.exe
+2026-09-28T03:00:46.6978499Z SUCCESS [00] PASS  WinPE add-on                     C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment
+2026-09-28T03:00:46.6998747Z SUCCESS [00] PASS  PowerShell                       PowerShell 5.1.26100.33438 (Desktop)
+2026-09-28T03:00:46.7031413Z SUCCESS [00] PASS  .NET SDK                         C:\Program Files\dotnet\dotnet.exe (SDKs: 8.0.131, 8.0.206, 8.0.319, 8.0.425, 9.0.121, 9.0.205, 9.0.318, 10.0.112, 10.0.204, 10.0.303, 10.0.401)
+2026-09-28T03:00:46.7069348Z SUCCESS [00] PASS  MSBuild / VS Build Tools         C:\Program Files\Microsoft Visual Studio\18\Enterprise\MSBuild\Current\Bin\MSBuild.exe
+2026-09-28T03:00:46.7089614Z SUCCESS [00] PASS  NTFS workspace                   D:\ is NTFS
+2026-09-28T03:00:46.7109867Z SUCCESS [00] PASS  Available storage                140.4 GB free on D:\
+2026-09-28T03:00:46.7130133Z SUCCESS [00] PASS  Pending restart                  No pending restart
+2026-09-28T03:00:46.7170610Z SUCCESS [00] PASS  Source image                     D:\StormBuild\source\source.iso
+2026-09-28T03:00:46.7190739Z SUCCESS [00] PASS  Workspace path                   D:\StormBuild\storm-os
+2026-09-28T03:00:46.7294243Z SUCCESS [00] Prerequisites: PASS
+2026-09-28T03:00:46.7565787Z SUCCESS [00] Completed (1.7 s): PASS
+2026-09-28T03:00:46.7626125Z INFO    [01] Phase started: Prepare workspace
+2026-09-28T03:00:47.0991840Z INFO    [01] Clean build: removing previous media, temporary files and output (source files and logs are kept).
+2026-09-28T03:00:47.1295622Z INFO    [01] Workspace ready: D:\StormBuild\storm-os\build (build 20260928-030044-209e85, STORM OS 1.0.0-ci.7)
+2026-09-28T03:00:47.1353696Z SUCCESS [01] Completed (0.4 s)
+2026-09-28T03:00:47.1414214Z INFO    [02] Phase started: Import source
+2026-09-28T03:00:47.1613354Z INFO    [02] Hashing source ISO (SHA-256)...
+2026-09-28T03:05:16.8747201Z INFO    [02] Source SHA-256: a61adeab895ef5a4db436e0a7011c92a2ff17bb0357f58b13bbc4062e535e7b9
+2026-09-28T03:05:17.3964321Z INFO    [02] Copying media from E:\ to D:\StormBuild\storm-os\build\iso
+2026-09-28T03:05:17.4103159Z DETAIL  [02] > robocopy.exe E:\ D:\StormBuild\storm-os\build\iso /E /R:2 /W:2 /NFL /NDL /NJH /NP
+2026-09-28T03:05:50.8778816Z INFO    [02] Source imported: ISO D:\StormBuild\source\source.iso -> install image D:\StormBuild\storm-os\build\iso\sources\install.wim
+2026-09-28T03:05:50.8888618Z SUCCESS [02] Completed (303.7 s)
+2026-09-28T03:05:50.8949000Z INFO    [03] Phase started: Inspect image and select edition
+2026-09-28T03:05:51.7951309Z INFO    [03] INDEX  EDITION                                   ARCH    VERSION          LANGUAGE  SIZE
+2026-09-28T03:05:51.7991593Z INFO    [03] 1      Windows 11 Enterprise Evaluation          x64     10.0.26200.6584  en-US     21.3 GB
+2026-09-28T03:05:51.8523795Z SUCCESS [03] Selected edition 1: Windows 11 Enterprise Evaluation x64 10.0.26200.6584
+2026-09-28T03:05:51.8584277Z SUCCESS [03] Completed (1 s)
+2026-09-28T03:05:51.8642285Z INFO    [04] Phase started: Export and mount edition
+2026-09-28T03:05:51.8901619Z INFO    [04] Exporting edition 1 from install.wim to D:\StormBuild\storm-os\build\temp\install.wim (this takes several minutes)...
+2026-09-28T03:06:45.9636161Z INFO    [04] Mounting install.wim index 1 at D:\StormBuild\storm-os\build\mounts\install
+2026-09-28T03:08:04.8333755Z SUCCESS [04] Mounted and verified at D:\StormBuild\storm-os\build\mounts\install
+2026-09-28T03:08:04.8414542Z SUCCESS [04] Completed (133 s)
+2026-09-28T03:08:04.8492739Z INFO    [05] Phase started: Apply Storm branding
+2026-09-28T03:08:05.1309565Z INFO    [05] asset Windows\Web\Wallpaper\StormOS\storm-dark.jpg
+2026-09-28T03:08:05.1387876Z INFO    [05] asset Windows\Web\Wallpaper\StormOS\storm-light.jpg
+2026-09-28T03:08:05.1488537Z INFO    [05] asset Windows\Web\Screen\StormOS\storm-lockscreen.jpg
+2026-09-28T03:08:05.1546533Z INFO    [05] asset Windows\System32\oobe\info\StormOS-oem-logo.bmp
+2026-09-28T03:08:05.1606927Z INFO    [05] asset Windows\System32\oobe\info\StormOS-oobe-logo.png
+2026-09-28T03:08:05.1664963Z INFO    [05] asset ProgramData\StormOS\Branding\storm-mark.png
+2026-09-28T03:08:05.1725482Z INFO    [05] asset ProgramData\StormOS\Branding\storm-logo.png
+2026-09-28T03:08:05.1806210Z INFO    [05] asset ProgramData\StormOS\Branding\StormOS.ico
+2026-09-28T03:08:05.2084598Z INFO    [05] theme Windows\Resources\Themes\StormOS.theme
+2026-09-28T03:08:05.2793031Z DETAIL  [05] > reg.exe load HKLM\STORM_BUILD_SOFTWARE D:\StormBuild\storm-os\build\mounts\install\Windows\System32\config\SOFTWARE
+2026-09-28T03:08:07.5133010Z DETAIL  [05] > reg.exe add HKLM\STORM_BUILD_SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation /v Manufacturer /t REG_SZ /d STORM OS /f
+2026-09-28T03:08:07.5450289Z INFO    [05] set   branding.oem-manufacturer: <unset> -> STORM OS
+2026-09-28T03:08:07.5677072Z DETAIL  [05] > reg.exe add HKLM\STORM_BUILD_SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation /v Model /t REG_SZ /d Storm customization of Windows 11 Enterprise Evaluation /f
+2026-09-28T03:08:07.5925988Z INFO    [05] set   branding.oem-model: <unset> -> Storm customization of Windows 11 Enterprise Evaluation
+2026-09-28T03:08:07.6064420Z DETAIL  [05] > reg.exe add HKLM\STORM_BUILD_SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation /v SupportURL /t REG_SZ /d https://stormos.app/support /f
+2026-09-28T03:08:07.6283342Z INFO    [05] set   branding.oem-support-url: <unset> -> https://stormos.app/support
+2026-09-28T03:08:07.6401651Z DETAIL  [05] > reg.exe add HKLM\STORM_BUILD_SOFTWARE\Microsoft\Windows\CurrentVersion\OEMInformation /v Logo /t REG_EXPAND_SZ /d %WINDIR%\System32\oobe\info\StormOS-oem-logo.bmp /f
+2026-09-28T03:08:07.6621125Z INFO    [05] set   branding.oem-logo: <unset> -> %WINDIR%\System32\oobe\info\StormOS-oem-logo.bmp
+2026-09-28T03:08:07.6800171Z DETAIL  [05] > reg.exe add HKLM\STORM_BUILD_SOFTWARE\Microsoft\Windows\CurrentVersion\Themes /v InstallTheme /t REG_EXPAND_SZ /d %SystemRoot%\Resources\Themes\StormOS.theme /f
+2026-09-28T03:08:07.7037219Z INFO    [05] set   branding.default-theme: X:\Windows\resources\Themes\aero.theme -> %SystemRoot%\Resources\Themes\StormOS.theme
+2026-09-28T03:08:08.1980248Z SUCCESS [05] Completed (3.3 s): 9 files, 5 registry values
+2026-09-28T03:08:08.2040614Z INFO    [06] Phase started: Apply Storm defaults
+2026-09-28T03:08:08.2863429Z DETAIL  [06] > reg.exe load HKLM\STORM_BUILD_DEFAULTUSER D:\StormBuild\storm-os\build\mounts\install\Users\Default\NTUSER.DAT
+2026-09-28T03:08:08.3279649Z DETAIL  [06] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize /v AppsUseLightTheme /t REG_DWORD /d 0 /f
+2026-09-28T03:08:08.3551737Z INFO    [06] set   desktop.apps-dark-mode: <unset> -> 0
+2026-09-28T03:08:08.3690261Z DETAIL  [06] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Software\Microsoft\Windows\CurrentVersion\Themes\Personalize /v SystemUsesLightTheme /t REG_DWORD /d 0 /f
+2026-09-28T03:08:08.3909382Z INFO    [06] set   desktop.system-dark-mode: <unset> -> 0
+2026-09-28T03:08:08.4027826Z DETAIL  [06] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v ShowTaskViewButton /t REG_DWORD /d 0 /f
+2026-09-28T03:08:08.4304918Z INFO    [06] set   desktop.taskbar-task-view-hidden: <unset> -> 0
+2026-09-28T03:08:08.4463763Z DETAIL  [06] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Software\Microsoft\Windows\CurrentVersion\Explorer\Advanced /v TaskbarDa /t REG_DWORD /d 0 /f
+2026-09-28T03:08:08.4711265Z INFO    [06] set   desktop.taskbar-widgets-hidden: <unset> -> 0
+2026-09-28T03:08:08.4822424Z DETAIL  [06] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Software\Microsoft\Windows\CurrentVersion\Search /v SearchboxTaskbarMode /t REG_DWORD /d 1 /f
+2026-09-28T03:08:08.5041731Z INFO    [06] set   desktop.taskbar-search-icon: <unset> -> 1
+2026-09-28T03:08:08.5159991Z DETAIL  [06] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager /v SilentInstalledAppsEnabled /t REG_DWORD /d 0 /f
+2026-09-28T03:08:08.5396958Z INFO    [06] set   desktop.no-silent-suggested-apps: 1 -> 0
+2026-09-28T03:08:08.5518113Z DETAIL  [06] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager /v SystemPaneSuggestionsEnabled /t REG_DWORD /d 0 /f
+2026-09-28T03:08:08.5755299Z INFO    [06] set   desktop.start-suggestions-off: 1 -> 0
+2026-09-28T03:08:08.5873770Z DETAIL  [06] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Software\Microsoft\Windows\CurrentVersion\ContentDeliveryManager /v SubscribedContent-338389Enabled /t REG_DWORD /d 0 /f
+2026-09-28T03:08:08.6098401Z INFO    [06] set   desktop.tips-notifications-off: <unset> -> 0
+2026-09-28T03:08:08.7106193Z INFO    [06] Wrote ProgramData\StormOS\Config\storm-image.json
+2026-09-28T03:08:08.7164160Z SUCCESS [06] Completed (0.5 s): 8 applied, 0 already set
+2026-09-28T03:08:08.7224583Z INFO    [07] Phase started: Apply gaming defaults
+2026-09-28T03:08:08.7660446Z DETAIL  [07] > reg.exe load HKLM\STORM_BUILD_DEFAULTUSER D:\StormBuild\storm-os\build\mounts\install\Users\Default\NTUSER.DAT
+2026-09-28T03:08:08.7957772Z DETAIL  [07] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Software\Microsoft\GameBar /v AutoGameModeEnabled /t REG_DWORD /d 1 /f
+2026-09-28T03:08:08.8177063Z INFO    [07] set   gaming.game-mode: <unset> -> 1
+2026-09-28T03:08:08.8343751Z DETAIL  [07] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Software\Microsoft\DirectX\UserGpuPreferences /v DirectXUserGlobalSettings /t REG_SZ /d SwapEffectUpgradeEnable=1; /f
+2026-09-28T03:08:08.8613436Z INFO    [07] set   gaming.windowed-optimizations: <unset> -> SwapEffectUpgradeEnable=1;
+2026-09-28T03:08:08.8732107Z DETAIL  [07] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Software\Microsoft\Windows\CurrentVersion\GameDVR /v AppCaptureEnabled /t REG_DWORD /d 0 /f
+2026-09-28T03:08:08.9012393Z INFO    [07] set   gaming.background-recording-off: <unset> -> 0
+2026-09-28T03:08:08.9229673Z DETAIL  [07] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Control Panel\Mouse /v MouseSpeed /t REG_SZ /d 0 /f
+2026-09-28T03:08:08.9508109Z INFO    [07] set   gaming.pointer-precision-off: 1 -> 0
+2026-09-28T03:08:08.9636014Z DETAIL  [07] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Control Panel\Mouse /v MouseThreshold1 /t REG_SZ /d 0 /f
+2026-09-28T03:08:08.9845376Z INFO    [07] set   gaming.pointer-threshold1-off: 6 -> 0
+2026-09-28T03:08:08.9966499Z DETAIL  [07] > reg.exe add HKLM\STORM_BUILD_DEFAULTUSER\Control Panel\Mouse /v MouseThreshold2 /t REG_SZ /d 0 /f
+2026-09-28T03:08:09.0191338Z INFO    [07] set   gaming.pointer-threshold2-off: 10 -> 0
+2026-09-28T03:08:09.1114027Z SUCCESS [07] Completed (0.4 s): 6 applied, 0 already set
+2026-09-28T03:08:09.1174418Z INFO    [08] Phase started: Integrate Storm apps
+2026-09-28T03:08:09.1292897Z WARN    [08] Skipped (0 s): Storm apps not requested (-EnableStormApps).
+2026-09-28T03:08:09.1333206Z INFO    [09] Phase started: Configure OOBE
+2026-09-28T03:08:09.2277912Z INFO    [09] Wrote Windows\System32\oobe\info\oobe.xml and Windows\Panther\unattend.xml (appearance only)
+2026-09-28T03:08:09.2318157Z SUCCESS [09] Completed (0.1 s)
+2026-09-28T03:08:09.2375982Z INFO    [10] Phase started: Build Storm WinPE
+2026-09-28T03:08:09.2416268Z WARN    [10] NotImplemented (0 s): Storm WinPE setup is development phase 6 (docs/STATUS.md). The ISO boots the unmodified Windows Setup from the source media.
+2026-09-28T03:08:09.2464478Z INFO    [11] Phase started: Commit image and build installer media
+2026-09-28T03:08:09.3057587Z INFO    [11] Committing changes and unmounting (this takes several minutes)...
+2026-09-28T03:10:56.7320447Z INFO    [11] Exporting the committed image into the installer media (recompression)...
+2026-09-28T03:15:47.2782027Z SUCCESS [11] Completed (458 s): install.wim 5.8 GB
+2026-09-28T03:15:47.2920545Z INFO    [12] Phase started: Build ISO
+2026-09-28T03:15:47.4068724Z INFO    [12] Building StormOS.iso (STORMOS_1_0_0_CI_7)...
+2026-09-28T03:15:47.4146771Z DETAIL  [12] > oscdimg.exe -m -o -u2 -udfver102 -lSTORMOS_1_0_0_CI_7 -bootdata:2#p0,e,bD:\StormBuild\storm-os\build\iso\boot\etfsboot.com#pEF,e,bD:\StormBuild\storm-os\build\iso\efi\microsoft\boot\efisys_noprompt.bin D:\StormBuild\storm-os\build\iso D:\StormBuild\storm-os\build\output\StormOS.iso
+2026-09-28T03:20:33.5534367Z SUCCESS [12] D:\StormBuild\storm-os\build\output\StormOS.iso (6.6 GB) SHA-256 7e6fdd1d26179d7ceb681cf4ddc0dcbb91b6f4bb9b0b3f19ee7dabcaba5ed623
+2026-09-28T03:20:33.5712688Z SUCCESS [12] Completed (286.3 s)
+2026-09-28T03:20:33.5790567Z INFO    [13] Phase started: Validate build
+2026-09-28T03:24:44.1782380Z INFO    [13] Mounting install.wim index 1 at D:\StormBuild\storm-os\build\mounts\verify (read-only)
+2026-09-28T03:25:51.2335664Z INFO    [13] Discarding changes and unmounting...
+2026-09-28T03:27:17.1397491Z SUCCESS [13] PASS  ISO exists                   D:\StormBuild\storm-os\build\output\StormOS.iso (6.6 GB)
+2026-09-28T03:27:17.1417671Z SUCCESS [13] PASS  ISO hash                     SHA-256 7e6fdd1d26179d7ceb681cf4ddc0dcbb91b6f4bb9b0b3f19ee7dabcaba5ed623
+2026-09-28T03:27:17.1450059Z SUCCESS [13] PASS  Installer bootable (BIOS)    El Torito platforms: 0x00, 0xEF
+2026-09-28T03:27:17.1470266Z SUCCESS [13] PASS  Installer bootable (UEFI)    Bootable entries: 2
+2026-09-28T03:27:17.1498507Z SUCCESS [13] PASS  ISO volume label             Label 'STORMOS_1_0_0_CI_7'
+2026-09-28T03:27:17.1518689Z SUCCESS [13] PASS  No automatic answer file on media Windows Setup stays interactive
+2026-09-28T03:27:17.1529048Z SUCCESS [13] PASS  Installer media layout       boot, efi, bootmgr, setup and boot.wim present
+2026-09-28T03:27:17.1548391Z SUCCESS [13] PASS  install.wim valid            1 image(s): Windows 11 Enterprise Evaluation x64 10.0.26200.6584
+2026-09-28T03:27:17.1568502Z SUCCESS [13] PASS  boot.wim valid               1: Microsoft Windows PE (amd64); 2: Microsoft Windows Setup (amd64)
+2026-09-28T03:27:17.1588670Z SUCCESS [13] PASS  Single install image         Only sources\install.wim
+2026-09-28T03:27:17.1608832Z SUCCESS [13] PASS  Storm files in image         12 files present
+2026-09-28T03:27:17.1649172Z SUCCESS [13] PASS  Answer file safe             No disk, key, account or bypass settings
+2026-09-28T03:27:17.1669300Z SUCCESS [13] PASS  Storm image identity         STORM OS 1.0.0-ci.7, build 20260928-030044-209e85
+2026-09-28T03:27:17.1686956Z SUCCESS [13] PASS  Windows image intact         Hives, default profile and shell present
+2026-09-28T03:27:17.1707104Z SUCCESS [13] PASS  Customizations verified      19 registry values written and read back
+2026-09-28T03:27:17.1787628Z SUCCESS [13] Completed (403.6 s)
+2026-09-28T03:27:17.1845430Z INFO    [14] Phase started: VM boot test
+2026-09-28T03:27:17.1925868Z WARN    [14] Skipped (0 s): VM boot test not requested (-RunVmTest).
+2026-09-28T03:27:17.3097485Z SUCCESS ========================================================================
+2026-09-28T03:27:17.3107532Z SUCCESS BUILD SUCCESS
+2026-09-28T03:27:17.3147933Z SUCCESS ISO:     D:\StormBuild\storm-os\build\output\StormOS.iso
+2026-09-28T03:27:17.3168194Z SUCCESS SHA-256: 7e6fdd1d26179d7ceb681cf4ddc0dcbb91b6f4bb9b0b3f19ee7dabcaba5ed623
+2026-09-28T03:27:17.3188442Z SUCCESS Report:  D:\StormBuild\storm-os\build\output\storm-build-report.json
+2026-09-28T03:27:17.3228873Z SUCCESS Time:    26.5 min
+2026-09-28T03:27:17.3249076Z SUCCESS ========================================================================
+2026-09-28T03:29:48.6529544Z INFO    [14] Phase started: VM boot test
+2026-09-28T03:29:50.6345410Z INFO    [14] Starting QEMU (whpx) for 25 minutes: C:\Program Files\qemu\qemu-system-x86_64.exe
+2026-09-28T03:31:38.0478990Z INFO    [14] screenshot vm-boot-01.png (blank)
+2026-09-28T03:32:40.3961481Z INFO    [14] screenshot vm-boot-02.png (blank)
+2026-09-28T03:33:42.7208576Z INFO    [14] screenshot vm-boot-03.png (blank)
+2026-09-28T03:34:44.9174755Z INFO    [14] screenshot vm-boot-04.png (blank)
+2026-09-28T03:35:47.0760089Z INFO    [14] screenshot vm-boot-05.png (blank)
+2026-09-28T03:36:49.2738035Z INFO    [14] screenshot vm-boot-06.png (blank)
+2026-09-28T03:37:51.4385245Z INFO    [14] screenshot vm-boot-07.png (blank)
+2026-09-28T03:38:53.5893550Z INFO    [14] screenshot vm-boot-08.png (blank)
+2026-09-28T03:39:55.7489773Z INFO    [14] screenshot vm-boot-09.png (blank)
+2026-09-28T03:40:57.9967463Z INFO    [14] screenshot vm-boot-10.png (blank)
+2026-09-28T03:42:00.2508417Z INFO    [14] screenshot vm-boot-11.png (blank)
+2026-09-28T03:43:02.9600461Z INFO    [14] screenshot vm-boot-12.png (blank)
+2026-09-28T03:44:06.0061547Z INFO    [14] screenshot vm-boot-13.png (blank)
+2026-09-28T03:45:08.5875853Z INFO    [14] screenshot vm-boot-14.png (blank)
+2026-09-28T03:46:10.7748936Z INFO    [14] screenshot vm-boot-15.png (blank)
+2026-09-28T03:47:13.0155414Z INFO    [14] screenshot vm-boot-16.png (blank)
+2026-09-28T03:48:15.1466277Z INFO    [14] screenshot vm-boot-17.png (blank)
+2026-09-28T03:49:17.4600605Z INFO    [14] screenshot vm-boot-18.png (blank)
+2026-09-28T03:50:19.6186524Z INFO    [14] screenshot vm-boot-19.png (blank)
+2026-09-28T03:51:21.7761501Z INFO    [14] screenshot vm-boot-20.png (blank)
+2026-09-28T03:52:23.9026737Z INFO    [14] screenshot vm-boot-21.png (blank)
+2026-09-28T03:53:26.0356199Z INFO    [14] screenshot vm-boot-22.png (blank)
+2026-09-28T03:54:28.1424523Z INFO    [14] screenshot vm-boot-23.png (blank)
+2026-09-28T03:55:30.2765587Z INFO    [14] screenshot vm-boot-24.png (blank)
+2026-09-28T03:56:32.3938548Z INFO    [14] screenshot vm-boot-25.png (blank)
+2026-09-28T03:56:33.2902863Z ERROR   [14] PHASE FAILED: VM boot test failed: The VM is running but the display is blank.
+2026-09-28T03:56:33.2944286Z WARN    [14] Suggested fix: Inspect the screenshots in D:\StormBuild\storm-os\build\artifacts\vm.

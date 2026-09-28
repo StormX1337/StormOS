@@ -1,0 +1,100 @@
+﻿[
+    {
+        "Name":  "Windows version",
+        "Status":  "PASS",
+        "Detail":  "Microsoft Windows Server 2025 Datacenter 10.0.26100",
+        "Fix":  "",
+        "Mandatory":  true
+    },
+    {
+        "Name":  "Administrator",
+        "Status":  "PASS",
+        "Detail":  "Running elevated",
+        "Fix":  "",
+        "Mandatory":  true
+    },
+    {
+        "Name":  "DISM",
+        "Status":  "PASS",
+        "Detail":  "C:\\Windows\\system32\\Dism.exe (DISM module 3.0)",
+        "Fix":  "",
+        "Mandatory":  true
+    },
+    {
+        "Name":  "Windows ADK (Deployment Tools)",
+        "Status":  "PASS",
+        "Detail":  "C:\\Program Files (x86)\\Windows Kits\\10\\Assessment and Deployment Kit",
+        "Fix":  "",
+        "Mandatory":  true
+    },
+    {
+        "Name":  "oscdimg",
+        "Status":  "PASS",
+        "Detail":  "C:\\Program Files (x86)\\Windows Kits\\10\\Assessment and Deployment Kit\\Deployment Tools\\amd64\\Oscdimg\\oscdimg.exe",
+        "Fix":  "",
+        "Mandatory":  true
+    },
+    {
+        "Name":  "WinPE add-on",
+        "Status":  "PASS",
+        "Detail":  "C:\\Program Files (x86)\\Windows Kits\\10\\Assessment and Deployment Kit\\Windows Preinstallation Environment",
+        "Fix":  "",
+        "Mandatory":  false
+    },
+    {
+        "Name":  "PowerShell",
+        "Status":  "PASS",
+        "Detail":  "PowerShell 5.1.26100.33438 (Desktop)",
+        "Fix":  "",
+        "Mandatory":  true
+    },
+    {
+        "Name":  ".NET SDK",
+        "Status":  "PASS",
+        "Detail":  "C:\\Program Files\\dotnet\\dotnet.exe (SDKs: 8.0.131, 8.0.206, 8.0.319, 8.0.425, 9.0.121, 9.0.205, 9.0.318, 10.0.112, 10.0.204, 10.0.303, 10.0.401)",
+        "Fix":  "",
+        "Mandatory":  false
+    },
+    {
+        "Name":  "MSBuild / VS Build Tools",
+        "Status":  "PASS",
+        "Detail":  "C:\\Program Files\\Microsoft Visual Studio\\18\\Enterprise\\MSBuild\\Current\\Bin\\MSBuild.exe",
+        "Fix":  "",
+        "Mandatory":  false
+    },
+    {
+        "Name":  "NTFS workspace",
+        "Status":  "PASS",
+        "Detail":  "D:\\ is NTFS",
+        "Fix":  "",
+        "Mandatory":  true
+    },
+    {
+        "Name":  "Available storage",
+        "Status":  "PASS",
+        "Detail":  "140.4 GB free on D:\\",
+        "Fix":  "",
+        "Mandatory":  true
+    },
+    {
+        "Name":  "Pending restart",
+        "Status":  "PASS",
+        "Detail":  "No pending restart",
+        "Fix":  "",
+        "Mandatory":  true
+    },
+    {
+        "Name":  "Source image",
+        "Status":  "PASS",
+        "Detail":  "D:\\StormBuild\\source\\source.iso",
+        "Fix":  "",
+        "Mandatory":  true
+    },
+    {
+        "Name":  "Workspace path",
+        "Status":  "PASS",
+        "Detail":  "D:\\StormBuild\\storm-os",
+        "Fix":  "",
+        "Mandatory":  true
+    }
+]

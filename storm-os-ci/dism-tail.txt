@@ -1,0 +1,281 @@
+Initializing wimgapi.
+Shutting down wimgapi.
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                            - DismInitializeInternal
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: <----- Starting DismApi.dll session -----> - DismInitializeInternal
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                            - DismInitializeInternal
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: Host machine information: OS Version=10.0.26100, Running architecture=amd64, Number of processors=4 - DismInitializeInternal
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: API Version 10.0.26100.33438 - DismInitializeInternal
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: Parent process command line: "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE" -command ". 'D:\a\_temp\61f5aa5a-e4b8-4fc9-b12f-0245d81cebd7.ps1'" - DismInitializeInternal
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 Input parameters: LogLevel: 2, LogFilePath: D:\StormBuild\storm-os\build\logs\dism.log, ScratchDirectory: (null) - DismInitializeInternal
+2026-09-28 03:06:45, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 Initialized GlobalConfig - DismInitializeInternal
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 Initialized SessionTable - DismInitializeInternal
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: DummyPath-2BA51B78-C7F7-4910-B99D-BB7345357CDC - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 Waiting for m_pInternalThread to start - CCommandThread::Start
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=620 Enter CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=620 Enter CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 CommandThread StartupEvent signaled - CCommandThread::WaitForStartup
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 m_pInternalThread started - CCommandThread::Start
+2026-09-28 03:06:45, Info                  DISM   API: PID=6336 TID=3940 Created g_internalDismSession - DismInitializeInternal
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=3940 Input parameters: ImageFilePath: D:\StormBuild\storm-os\build\temp\install.wim, MountPath: D:\StormBuild\storm-os\build\mounts\install, ImageIndex: 1, ImageName: (null), ImageIdentifier: 0,                             Flags: 4, Cancel: 0x0000000000000E18, Progress: 0x000001F34B808E1C, UserData: 0x0000000000000000 - DismMountImageInternal
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: 3199463384_65536_1740 - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: 3199463384_65536_1740 - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=3940 Waiting for m_pInternalThread to start - CCommandThread::Start
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=7224 Enter CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=7224 Enter CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=3940 CommandThread StartupEvent signaled - CCommandThread::WaitForStartup
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=3940 m_pInternalThread started - CCommandThread::Start
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=3940 Copied Cancel event - MountImageInternal
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=7224 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:06:46, Info                  DISM   API: PID=6336 TID=7224 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:06:46, Info                  DISM   PID=6336 TID=7224 Scratch directory set to 'C:\Users\RUNNER~1\AppData\Local\Temp\'. - CDISMManager::put_ScratchDir
+2026-09-28 03:06:46, Info                  DISM   PID=6336 TID=7224 DismCore.dll version: 10.0.26100.7019 - CDISMManager::FinalConstruct
+2026-09-28 03:06:46, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:06:46, Info                  DISM   PID=6336 TID=7224 Successfully loaded the ImageSession at "C:\Windows\SYSTEM32\Dism" - CDISMManager::LoadLocalImageSession
+2026-09-28 03:06:46, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:06:46, Info                  DISM   DISM Provider Store: PID=6336 TID=7224 Found and Initialized the DISM Logger. - CDISMProviderStore::Internal_InitializeLogger
+2026-09-28 03:06:46, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:06:46, Info                  DISM   DISM Manager: PID=6336 TID=7224 Successfully created the local image session and provider store. - CDISMManager::CreateLocalImageSession
+2026-09-28 03:06:46, Info                  DISM   DISM Imaging Provider: PID=6336 TID=7224 WIM image specified - CGenericImagingManager::GetImageInfoCollection
+[6336.7224] Mounting new image.
+Wim:         [D:\StormBuild\storm-os\build\temp\install.wim]
+Image Index: [1]
+Mount Guid:  [60373e4c-fd8e-44bc-9bfc-5e6d85fce0a9]
+Mount Path:  [D:\StormBuild\storm-os\build\mounts\install]
+[6336.7224] Wimserv process started for mount guid 60373e4c-fd8e-44bc-9bfc-5e6d85fce0a9; PID is 1212
+[1212.2424] Registered log file(s) for mount of wim at D:\StormBuild\storm-os\build\temp\install.wim.
+[1212.2424] Mount complete.
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=3940 GetReferenceCount hr: 0x0 - CSessionTable::RemoveSession
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=3940 Refcount for DismSession= 2s 0 - CSessionTable::RemoveSession
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=7224 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=7224 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=7224 ExecuteLoop: Cancel signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=7224 Leave CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=7224 Leave CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=3940 GetReferenceCount hr: 0x0 - CSessionTable::RemoveSession
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=3940 Refcount for DismSession= 1s 0 - CSessionTable::RemoveSession
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=620 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=620 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=620 ExecuteLoop: Cancel signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=620 Leave CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=620 Leave CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=3940 Deleted g_internalDismSession - DismShutdownInternal
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=3940 Shutdown SessionTable - DismShutdownInternal
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                          - DismShutdownInternal
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: <----- Ending DismApi.dll session -----> - DismShutdownInternal
+2026-09-28 03:08:04, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                          - DismShutdownInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                            - DismInitializeInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: <----- Starting DismApi.dll session -----> - DismInitializeInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                            - DismInitializeInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: Host machine information: OS Version=10.0.26100, Running architecture=amd64, Number of processors=4 - DismInitializeInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: API Version 10.0.26100.33438 - DismInitializeInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: Parent process command line: "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE" -command ". 'D:\a\_temp\61f5aa5a-e4b8-4fc9-b12f-0245d81cebd7.ps1'" - DismInitializeInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Input parameters: LogLevel: 2, LogFilePath: D:\StormBuild\storm-os\build\logs\dism.log, ScratchDirectory: (null) - DismInitializeInternal
+2026-09-28 03:08:09, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Initialized GlobalConfig - DismInitializeInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Initialized SessionTable - DismInitializeInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: DummyPath-2BA51B78-C7F7-4910-B99D-BB7345357CDC - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Waiting for m_pInternalThread to start - CCommandThread::Start
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=7272 Enter CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=7272 Enter CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 CommandThread StartupEvent signaled - CCommandThread::WaitForStartup
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 m_pInternalThread started - CCommandThread::Start
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Created g_internalDismSession - DismInitializeInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=7272 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=7272 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:08:09, Info                  DISM   PID=6336 TID=7272 Scratch directory set to 'C:\Users\RUNNER~1\AppData\Local\Temp\'. - CDISMManager::put_ScratchDir
+2026-09-28 03:08:09, Info                  DISM   PID=6336 TID=7272 DismCore.dll version: 10.0.26100.7019 - CDISMManager::FinalConstruct
+2026-09-28 03:08:09, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:08:09, Info                  DISM   PID=6336 TID=7272 Successfully loaded the ImageSession at "C:\Windows\SYSTEM32\Dism" - CDISMManager::LoadLocalImageSession
+2026-09-28 03:08:09, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:08:09, Info                  DISM   DISM Provider Store: PID=6336 TID=7272 Found and Initialized the DISM Logger. - CDISMProviderStore::Internal_InitializeLogger
+2026-09-28 03:08:09, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:08:09, Info                  DISM   DISM Manager: PID=6336 TID=7272 Successfully created the local image session and provider store. - CDISMManager::CreateLocalImageSession
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Input parameters: MountPath: D:\StormBuild\storm-os\build\mounts\install, Flags: 65536, Cancel: 0x0000000000001C60, Progress: 0x000001F34B8083CC, UserData: 0x0000000000000000 - DismUnmountImageInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: 3199463384_65536_1740 - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: 3199463384_65536_1740 - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Waiting for m_pInternalThread to start - CCommandThread::Start
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=1048 Enter CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=1048 Enter CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 CommandThread StartupEvent signaled - CCommandThread::WaitForStartup
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 m_pInternalThread started - CCommandThread::Start
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Copied Cancel event - DismUnmountImageInternal
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=1048 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:08:09, Info                  DISM   API: PID=6336 TID=1048 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:08:09, Info                  DISM   PID=6336 TID=1048 Scratch directory set to 'C:\Users\RUNNER~1\AppData\Local\Temp\'. - CDISMManager::put_ScratchDir
+2026-09-28 03:08:09, Info                  DISM   PID=6336 TID=1048 DismCore.dll version: 10.0.26100.7019 - CDISMManager::FinalConstruct
+2026-09-28 03:08:09, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:08:09, Info                  DISM   PID=6336 TID=1048 Successfully loaded the ImageSession at "C:\Windows\SYSTEM32\Dism" - CDISMManager::LoadLocalImageSession
+2026-09-28 03:08:09, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:08:09, Info                  DISM   DISM Provider Store: PID=6336 TID=1048 Found and Initialized the DISM Logger. - CDISMProviderStore::Internal_InitializeLogger
+2026-09-28 03:08:09, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:08:09, Info                  DISM   DISM Manager: PID=6336 TID=1048 Successfully created the local image session and provider store. - CDISMManager::CreateLocalImageSession
+2026-09-28 03:08:09, Info                  DISM   DISM FFU Provider: PID=6336 TID=1048 [D:\StormBuild\storm-os\build\mounts\install] is not recognized by the DISM FFU provider. - CFfuImage::Initialize
+2026-09-28 03:08:09, Info                  DISM   DISM Imaging Provider: PID=6336 TID=1048 The provider FfuManager does not support CreateDismImage on D:\StormBuild\storm-os\build\mounts\install - CGenericImagingManager::CreateDismImage
+2026-09-28 03:08:09, Info                  DISM   DISM VHD Provider: PID=6336 TID=1048 [D:\StormBuild\storm-os\build\mounts\install] is not recognized by the DISM VHD provider. - CVhdImage::Initialize
+2026-09-28 03:08:09, Info                  DISM   DISM Imaging Provider: PID=6336 TID=1048 The provider VHDManager does not support CreateDismImage on D:\StormBuild\storm-os\build\mounts\install - CGenericImagingManager::CreateDismImage
+[1212.2424] Received unmount request.
+[1212.2424] Unmount complete.
+[1212.2600] Wimserv exiting per terminate event.
+[1212.2600] Wimserv stopped.
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=3940 GetReferenceCount hr: 0x0 - CSessionTable::RemoveSession
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=3940 Refcount for DismSession= 2s 0 - CSessionTable::RemoveSession
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=1048 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=1048 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=1048 ExecuteLoop: Cancel signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=1048 Leave CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=1048 Leave CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=3940 GetReferenceCount hr: 0x0 - CSessionTable::RemoveSession
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=3940 Refcount for DismSession= 1s 0 - CSessionTable::RemoveSession
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=7272 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=7272 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=7272 ExecuteLoop: Cancel signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=7272 Leave CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=7272 Leave CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=3940 Deleted g_internalDismSession - DismShutdownInternal
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=3940 Shutdown SessionTable - DismShutdownInternal
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                          - DismShutdownInternal
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: <----- Ending DismApi.dll session -----> - DismShutdownInternal
+2026-09-28 03:10:56, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                          - DismShutdownInternal
+Initializing wimgapi.
+Shutting down wimgapi.
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                            - DismInitializeInternal
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: <----- Starting DismApi.dll session -----> - DismInitializeInternal
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                            - DismInitializeInternal
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: Host machine information: OS Version=10.0.26100, Running architecture=amd64, Number of processors=4 - DismInitializeInternal
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: API Version 10.0.26100.33438 - DismInitializeInternal
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: Parent process command line: "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE" -command ". 'D:\a\_temp\61f5aa5a-e4b8-4fc9-b12f-0245d81cebd7.ps1'" - DismInitializeInternal
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Input parameters: LogLevel: 2, LogFilePath: D:\StormBuild\storm-os\build\logs\dism.log, ScratchDirectory: (null) - DismInitializeInternal
+2026-09-28 03:24:44, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Initialized GlobalConfig - DismInitializeInternal
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Initialized SessionTable - DismInitializeInternal
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: DummyPath-2BA51B78-C7F7-4910-B99D-BB7345357CDC - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Waiting for m_pInternalThread to start - CCommandThread::Start
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=6560 Enter CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=6560 Enter CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 CommandThread StartupEvent signaled - CCommandThread::WaitForStartup
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 m_pInternalThread started - CCommandThread::Start
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Created g_internalDismSession - DismInitializeInternal
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Input parameters: ImageFilePath: D:\StormBuild\storm-os\build\iso\sources\install.wim, MountPath: D:\StormBuild\storm-os\build\mounts\verify, ImageIndex: 1, ImageName: (null), ImageIdentifier: 0,                             Flags: 1, Cancel: 0x0000000000000BB8, Progress: 0x000001F34B80846C, UserData: 0x0000000000000000 - DismMountImageInternal
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: 3199463384_131072_2821 - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: 3199463384_131072_2821 - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Waiting for m_pInternalThread to start - CCommandThread::Start
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=5548 Enter CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=5548 Enter CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 CommandThread StartupEvent signaled - CCommandThread::WaitForStartup
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 m_pInternalThread started - CCommandThread::Start
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Copied Cancel event - MountImageInternal
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=5548 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:24:44, Info                  DISM   API: PID=6336 TID=5548 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:24:44, Info                  DISM   PID=6336 TID=5548 Scratch directory set to 'C:\Users\RUNNER~1\AppData\Local\Temp\'. - CDISMManager::put_ScratchDir
+2026-09-28 03:24:44, Info                  DISM   PID=6336 TID=5548 DismCore.dll version: 10.0.26100.7019 - CDISMManager::FinalConstruct
+2026-09-28 03:24:44, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:24:44, Info                  DISM   PID=6336 TID=5548 Successfully loaded the ImageSession at "C:\Windows\SYSTEM32\Dism" - CDISMManager::LoadLocalImageSession
+2026-09-28 03:24:44, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:24:44, Info                  DISM   DISM Provider Store: PID=6336 TID=5548 Found and Initialized the DISM Logger. - CDISMProviderStore::Internal_InitializeLogger
+2026-09-28 03:24:44, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:24:44, Info                  DISM   DISM Manager: PID=6336 TID=5548 Successfully created the local image session and provider store. - CDISMManager::CreateLocalImageSession
+2026-09-28 03:24:44, Info                  DISM   DISM Imaging Provider: PID=6336 TID=5548 WIM image specified - CGenericImagingManager::GetImageInfoCollection
+[6336.5548] Mounting new image.
+Wim:         [D:\StormBuild\storm-os\build\iso\sources\install.wim]
+Image Index: [1]
+Mount Guid:  [1a76f125-421a-46e9-a290-48282b55cedb]
+Mount Path:  [D:\StormBuild\storm-os\build\mounts\verify]
+[6336.5548] Wimserv process started for mount guid 1a76f125-421a-46e9-a290-48282b55cedb; PID is 7904
+[7904.8728] Registered log file(s) for mount of wim at D:\StormBuild\storm-os\build\iso\sources\install.wim.
+[7904.8728] Mount complete.
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 GetReferenceCount hr: 0x0 - CSessionTable::RemoveSession
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Refcount for DismSession= 2s 0 - CSessionTable::RemoveSession
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=5548 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=5548 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=5548 ExecuteLoop: Cancel signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=5548 Leave CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=5548 Leave CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 GetReferenceCount hr: 0x0 - CSessionTable::RemoveSession
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Refcount for DismSession= 1s 0 - CSessionTable::RemoveSession
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=6560 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=6560 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=6560 ExecuteLoop: Cancel signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=6560 Leave CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=6560 Leave CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Deleted g_internalDismSession - DismShutdownInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Shutdown SessionTable - DismShutdownInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                          - DismShutdownInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: <----- Ending DismApi.dll session -----> - DismShutdownInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                          - DismShutdownInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                            - DismInitializeInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: <----- Starting DismApi.dll session -----> - DismInitializeInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                            - DismInitializeInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: Host machine information: OS Version=10.0.26100, Running architecture=amd64, Number of processors=4 - DismInitializeInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: API Version 10.0.26100.33438 - DismInitializeInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: Parent process command line: "C:\Windows\System32\WindowsPowerShell\v1.0\powershell.EXE" -command ". 'D:\a\_temp\61f5aa5a-e4b8-4fc9-b12f-0245d81cebd7.ps1'" - DismInitializeInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Input parameters: LogLevel: 2, LogFilePath: D:\StormBuild\storm-os\build\logs\dism.log, ScratchDirectory: (null) - DismInitializeInternal
+2026-09-28 03:25:51, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Initialized GlobalConfig - DismInitializeInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Initialized SessionTable - DismInitializeInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: DummyPath-2BA51B78-C7F7-4910-B99D-BB7345357CDC - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Waiting for m_pInternalThread to start - CCommandThread::Start
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=5276 Enter CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=5276 Enter CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 CommandThread StartupEvent signaled - CCommandThread::WaitForStartup
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 m_pInternalThread started - CCommandThread::Start
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Created g_internalDismSession - DismInitializeInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Input parameters: MountPath: D:\StormBuild\storm-os\build\mounts\verify, Flags: 1, Cancel: 0x00000000000003B0, Progress: 0x000001F34B8085AC, UserData: 0x0000000000000000 - DismUnmountImageInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: 3199463384_131072_2821 - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Lookup in table by path failed for: 3199463384_131072_2821 - CTransactionalImageTable::LookupImagePath
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Waiting for m_pInternalThread to start - CCommandThread::Start
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=2656 Enter CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=2656 Enter CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 CommandThread StartupEvent signaled - CCommandThread::WaitForStartup
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 m_pInternalThread started - CCommandThread::Start
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Copied Cancel event - DismUnmountImageInternal
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=2656 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:25:51, Info                  DISM   API: PID=6336 TID=2656 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:25:51, Info                  DISM   PID=6336 TID=2656 Scratch directory set to 'C:\Users\RUNNER~1\AppData\Local\Temp\'. - CDISMManager::put_ScratchDir
+2026-09-28 03:25:51, Info                  DISM   PID=6336 TID=2656 DismCore.dll version: 10.0.26100.7019 - CDISMManager::FinalConstruct
+2026-09-28 03:25:51, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:25:51, Info                  DISM   PID=6336 TID=2656 Successfully loaded the ImageSession at "C:\Windows\SYSTEM32\Dism" - CDISMManager::LoadLocalImageSession
+2026-09-28 03:25:51, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:25:51, Info                  DISM   DISM Provider Store: PID=6336 TID=2656 Found and Initialized the DISM Logger. - CDISMProviderStore::Internal_InitializeLogger
+2026-09-28 03:25:51, Info                  DISM   Initialized Panther logging at D:\StormBuild\storm-os\build\logs\dism.log
+2026-09-28 03:25:51, Info                  DISM   DISM Manager: PID=6336 TID=2656 Successfully created the local image session and provider store. - CDISMManager::CreateLocalImageSession
+2026-09-28 03:25:51, Info                  DISM   DISM FFU Provider: PID=6336 TID=2656 [D:\StormBuild\storm-os\build\mounts\verify] is not recognized by the DISM FFU provider. - CFfuImage::Initialize
+2026-09-28 03:25:51, Info                  DISM   DISM Imaging Provider: PID=6336 TID=2656 The provider FfuManager does not support CreateDismImage on D:\StormBuild\storm-os\build\mounts\verify - CGenericImagingManager::CreateDismImage
+2026-09-28 03:25:51, Info                  DISM   DISM VHD Provider: PID=6336 TID=2656 [D:\StormBuild\storm-os\build\mounts\verify] is not recognized by the DISM VHD provider. - CVhdImage::Initialize
+2026-09-28 03:25:51, Info                  DISM   DISM Imaging Provider: PID=6336 TID=2656 The provider VHDManager does not support CreateDismImage on D:\StormBuild\storm-os\build\mounts\verify - CGenericImagingManager::CreateDismImage
+[7904.8728] Received unmount request.
+[7904.8728] Unmount complete.
+[7904.1068] Wimserv exiting per terminate event.
+[7904.1068] Wimserv stopped.
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=3940 GetReferenceCount hr: 0x0 - CSessionTable::RemoveSession
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=3940 Refcount for DismSession= 2s 0 - CSessionTable::RemoveSession
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=2656 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=2656 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=2656 ExecuteLoop: Cancel signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=2656 Leave CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=2656 Leave CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=3940 GetReferenceCount hr: 0x0 - CSessionTable::RemoveSession
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=3940 Refcount for DismSession= 1s 0 - CSessionTable::RemoveSession
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=3940 Successfully enqueued command object - CCommandThread::EnqueueCommandObject
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=5276 ExecuteLoop: CommandQueue signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=5276 Successfully dequeued command object - CCommandThread::DequeueCommandObject
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=5276 ExecuteLoop: Cancel signaled - CCommandThread::ExecuteLoop
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=5276 Leave CCommandThread::ExecuteLoop - CCommandThread::ExecuteLoop
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=5276 Leave CCommandThread::CommandThreadProcedureStub - CCommandThread::CommandThreadProcedureStub
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=3940 Deleted g_internalDismSession - DismShutdownInternal
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=3940 Shutdown SessionTable - DismShutdownInternal
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                          - DismShutdownInternal
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll: <----- Ending DismApi.dll session -----> - DismShutdownInternal
+2026-09-28 03:27:17, Info                  DISM   API: PID=6336 TID=3940 DismApi.dll:                                          - DismShutdownInternal

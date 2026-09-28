@@ -1,0 +1,11 @@
+﻿{
+    "Index":  1,
+    "Name":  "Windows 11 Enterprise Evaluation",
+    "EditionId":  "EnterpriseEval",
+    "Architecture":  "x64",
+    "Version":  "10.0.26200.6584",
+    "Languages":  [
+                      "en-US"
+                  ],
+    "SizeBytes":  22823889428
+}

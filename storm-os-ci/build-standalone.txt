@@ -1,0 +1,17 @@
+﻿2026-09-28T03:00:35.1189282Z INFO    [00] Phase started: Prerequisites
+2026-09-28T03:00:44.1409908Z SUCCESS [00] PASS  Windows version                  Microsoft Windows Server 2025 Datacenter 10.0.26100
+2026-09-28T03:00:44.1447843Z SUCCESS [00] PASS  Administrator                    Running elevated
+2026-09-28T03:00:44.1467986Z SUCCESS [00] PASS  DISM                             C:\Windows\system32\Dism.exe (DISM module 3.0)
+2026-09-28T03:00:44.1488213Z SUCCESS [00] PASS  Windows ADK (Deployment Tools)   C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit
+2026-09-28T03:00:44.1528478Z SUCCESS [00] PASS  oscdimg                          C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Deployment Tools\amd64\Oscdimg\oscdimg.exe
+2026-09-28T03:00:44.1548675Z SUCCESS [00] PASS  WinPE add-on                     C:\Program Files (x86)\Windows Kits\10\Assessment and Deployment Kit\Windows Preinstallation Environment
+2026-09-28T03:00:44.1568927Z SUCCESS [00] PASS  PowerShell                       PowerShell 5.1.26100.33438 (Desktop)
+2026-09-28T03:00:44.1586560Z SUCCESS [00] PASS  .NET SDK                         C:\Program Files\dotnet\dotnet.exe (SDKs: 8.0.131, 8.0.206, 8.0.319, 8.0.425, 9.0.121, 9.0.205, 9.0.318, 10.0.112, 10.0.204, 10.0.303, 10.0.401)
+2026-09-28T03:00:44.1606687Z SUCCESS [00] PASS  MSBuild / VS Build Tools         C:\Program Files\Microsoft Visual Studio\18\Enterprise\MSBuild\Current\Bin\MSBuild.exe
+2026-09-28T03:00:44.1634447Z SUCCESS [00] PASS  NTFS workspace                   D:\ is NTFS
+2026-09-28T03:00:44.2202550Z SUCCESS [00] PASS  Available storage                140.4 GB free on D:\
+2026-09-28T03:00:44.2220249Z SUCCESS [00] PASS  Pending restart                  No pending restart
+2026-09-28T03:00:44.2240516Z SUCCESS [00] PASS  Source image                     D:\StormBuild\source\source.iso
+2026-09-28T03:00:44.2281026Z SUCCESS [00] PASS  Workspace path                   D:\StormBuild\storm-os
+2026-09-28T03:00:44.2480161Z SUCCESS [00] Prerequisites: PASS
+2026-09-28T03:00:44.2599234Z SUCCESS [00] Phase Completed (8 s): PASS

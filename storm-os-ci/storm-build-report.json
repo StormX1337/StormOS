@@ -1,0 +1,583 @@
+{
+    "schema":  1,
+    "product":  "STORM OS",
+    "statement":  "STORM OS is a Storm customization and deployment environment built on Windows.",
+    "stormVersion":  "1.0.0-ci.7",
+    "buildId":  "20260928-030044-209e85",
+    "result":  "FAILED",
+    "startedAt":  "2026-09-28T03:00:44.9844668Z",
+    "finishedAt":  "2026-09-28T03:56:33.3342955Z",
+    "durationSeconds":  3348.3,
+    "windowsSource":  {
+                          "type":  "ISO",
+                          "path":  "D:\\StormBuild\\source\\source.iso",
+                          "sha256":  "a61adeab895ef5a4db436e0a7011c92a2ff17bb0357f58b13bbc4062e535e7b9",
+                          "editionIndex":  1,
+                          "edition":  "Windows 11 Enterprise Evaluation",
+                          "editionId":  "EnterpriseEval",
+                          "architecture":  "x64",
+                          "version":  "10.0.26200.6584",
+                          "languages":  [
+                                            "en-US"
+                                        ]
+                      },
+    "options":  {
+                    "sourceIso":  "D:\\StormBuild\\source\\source.iso",
+                    "sourceWim":  null,
+                    "sourceMediaDirectory":  null,
+                    "editionIndex":  1,
+                    "outputDirectory":  "D:\\StormBuild\\storm-os\\build\\output",
+                    "enableGamingDefaults":  true,
+                    "enableStormApps":  false,
+                    "enableOverlay":  false,
+                    "enableBenchmarks":  false,
+                    "stormAppsInstaller":  null,
+                    "noBootPrompt":  true,
+                    "isoName":  "StormOS.iso",
+                    "cleanBuild":  true
+                },
+    "phases":  {
+                   "00":  {
+                              "status":  "Completed",
+                              "message":  "PASS",
+                              "durationSeconds":  1.7,
+                              "finishedAt":  "2026-09-28T03:00:46.7495923Z"
+                          },
+                   "01":  {
+                              "status":  "Completed",
+                              "message":  "",
+                              "durationSeconds":  0.4,
+                              "finishedAt":  "2026-09-28T03:00:47.1315825Z"
+                          },
+                   "02":  {
+                              "status":  "Completed",
+                              "message":  "",
+                              "durationSeconds":  303.7,
+                              "finishedAt":  "2026-09-28T03:05:50.8828321Z"
+                          },
+                   "03":  {
+                              "status":  "Completed",
+                              "message":  "",
+                              "durationSeconds":  1,
+                              "finishedAt":  "2026-09-28T03:05:51.8564044Z"
+                          },
+                   "04":  {
+                              "status":  "Completed",
+                              "message":  "",
+                              "durationSeconds":  133,
+                              "finishedAt":  "2026-09-28T03:08:04.8394340Z"
+                          },
+                   "05":  {
+                              "status":  "Completed",
+                              "message":  "9 files, 5 registry values",
+                              "durationSeconds":  3.3,
+                              "finishedAt":  "2026-09-28T03:08:08.1960150Z"
+                          },
+                   "06":  {
+                              "status":  "Completed",
+                              "message":  "8 applied, 0 already set",
+                              "durationSeconds":  0.5,
+                              "finishedAt":  "2026-09-28T03:08:08.7143973Z"
+                          },
+                   "07":  {
+                              "status":  "Completed",
+                              "message":  "6 applied, 0 already set",
+                              "durationSeconds":  0.4,
+                              "finishedAt":  "2026-09-28T03:08:09.1093879Z"
+                          },
+                   "08":  {
+                              "status":  "Skipped",
+                              "message":  "Storm apps not requested (-EnableStormApps).",
+                              "durationSeconds":  0,
+                              "finishedAt":  "2026-09-28T03:08:09.1272746Z"
+                          },
+                   "09":  {
+                              "status":  "Completed",
+                              "message":  "",
+                              "durationSeconds":  0.1,
+                              "finishedAt":  "2026-09-28T03:08:09.2297988Z"
+                          },
+                   "10":  {
+                              "status":  "NotImplemented",
+                              "message":  "Storm WinPE setup is development phase 6 (docs/STATUS.md). The ISO boots the unmodified Windows Setup from the source media.",
+                              "durationSeconds":  0,
+                              "finishedAt":  "2026-09-28T03:08:09.2403887Z"
+                          },
+                   "11":  {
+                              "status":  "Completed",
+                              "message":  "install.wim 5.8 GB",
+                              "durationSeconds":  458,
+                              "finishedAt":  "2026-09-28T03:15:47.2741678Z"
+                          },
+                   "12":  {
+                              "status":  "Completed",
+                              "message":  "",
+                              "durationSeconds":  286.3,
+                              "finishedAt":  "2026-09-28T03:20:33.5652421Z"
+                          },
+                   "13":  {
+                              "status":  "Completed",
+                              "message":  "",
+                              "durationSeconds":  403.6,
+                              "finishedAt":  "2026-09-28T03:27:17.1767523Z"
+                          },
+                   "14":  {
+                              "status":  "Failed",
+                              "message":  "VM boot test failed: The VM is running but the display is blank.",
+                              "durationSeconds":  1604.6,
+                              "finishedAt":  "2026-09-28T03:56:33.3138440Z"
+                          },
+                   "15":  {
+                              "status":  "Skipped",
+                              "message":  "-KeepTemp",
+                              "durationSeconds":  0,
+                              "finishedAt":  "2026-09-28T03:27:17.1986161Z"
+                          }
+               },
+    "applications":  [
+
+                     ],
+    "gamingFeatures":  {
+                           "gamingDefaults":  true,
+                           "overlay":  false,
+                           "benchmarks":  false,
+                           "note":  "Overlay and benchmark flags are defaults for the Storm apps; they have an effect only when Storm apps are installed."
+                       },
+    "customizations":  {
+                           "applied":  19,
+                           "alreadySet":  0,
+                           "notApplicable":  0,
+                           "items":  [
+                                         {
+                                             "id":  "branding.oem-manufacturer",
+                                             "source":  "branding",
+                                             "category":  "BRANDING",
+                                             "risk":  "None",
+                                             "hive":  "Software",
+                                             "key":  "Microsoft\\Windows\\CurrentVersion\\OEMInformation",
+                                             "valueName":  "Manufacturer",
+                                             "target":  "STORM OS",
+                                             "before":  null,
+                                             "after":  "STORM OS",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "branding.oem-model",
+                                             "source":  "branding",
+                                             "category":  "BRANDING",
+                                             "risk":  "None",
+                                             "hive":  "Software",
+                                             "key":  "Microsoft\\Windows\\CurrentVersion\\OEMInformation",
+                                             "valueName":  "Model",
+                                             "target":  "Storm customization of Windows 11 Enterprise Evaluation",
+                                             "before":  null,
+                                             "after":  "Storm customization of Windows 11 Enterprise Evaluation",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "branding.oem-support-url",
+                                             "source":  "branding",
+                                             "category":  "BRANDING",
+                                             "risk":  "None",
+                                             "hive":  "Software",
+                                             "key":  "Microsoft\\Windows\\CurrentVersion\\OEMInformation",
+                                             "valueName":  "SupportURL",
+                                             "target":  "https://stormos.app/support",
+                                             "before":  null,
+                                             "after":  "https://stormos.app/support",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "branding.oem-logo",
+                                             "source":  "branding",
+                                             "category":  "BRANDING",
+                                             "risk":  "None",
+                                             "hive":  "Software",
+                                             "key":  "Microsoft\\Windows\\CurrentVersion\\OEMInformation",
+                                             "valueName":  "Logo",
+                                             "target":  "%WINDIR%\\System32\\oobe\\info\\StormOS-oem-logo.bmp",
+                                             "before":  null,
+                                             "after":  "%WINDIR%\\System32\\oobe\\info\\StormOS-oem-logo.bmp",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "branding.default-theme",
+                                             "source":  "branding",
+                                             "category":  "BRANDING",
+                                             "risk":  "None",
+                                             "hive":  "Software",
+                                             "key":  "Microsoft\\Windows\\CurrentVersion\\Themes",
+                                             "valueName":  "InstallTheme",
+                                             "target":  "%SystemRoot%\\Resources\\Themes\\StormOS.theme",
+                                             "before":  "X:\\Windows\\resources\\Themes\\aero.theme",
+                                             "after":  "%SystemRoot%\\Resources\\Themes\\StormOS.theme",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "desktop.apps-dark-mode",
+                                             "source":  "defaults",
+                                             "category":  "SYSTEM",
+                                             "risk":  "None",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                                             "valueName":  "AppsUseLightTheme",
+                                             "target":  "0",
+                                             "before":  null,
+                                             "after":  "0",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "desktop.system-dark-mode",
+                                             "source":  "defaults",
+                                             "category":  "SYSTEM",
+                                             "risk":  "None",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Software\\Microsoft\\Windows\\CurrentVersion\\Themes\\Personalize",
+                                             "valueName":  "SystemUsesLightTheme",
+                                             "target":  "0",
+                                             "before":  null,
+                                             "after":  "0",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "desktop.taskbar-task-view-hidden",
+                                             "source":  "defaults",
+                                             "category":  "SYSTEM",
+                                             "risk":  "None",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+                                             "valueName":  "ShowTaskViewButton",
+                                             "target":  "0",
+                                             "before":  null,
+                                             "after":  "0",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "desktop.taskbar-widgets-hidden",
+                                             "source":  "defaults",
+                                             "category":  "BACKGROUND",
+                                             "risk":  "None",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Software\\Microsoft\\Windows\\CurrentVersion\\Explorer\\Advanced",
+                                             "valueName":  "TaskbarDa",
+                                             "target":  "0",
+                                             "before":  null,
+                                             "after":  "0",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "desktop.taskbar-search-icon",
+                                             "source":  "defaults",
+                                             "category":  "SYSTEM",
+                                             "risk":  "None",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Software\\Microsoft\\Windows\\CurrentVersion\\Search",
+                                             "valueName":  "SearchboxTaskbarMode",
+                                             "target":  "1",
+                                             "before":  null,
+                                             "after":  "1",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "desktop.no-silent-suggested-apps",
+                                             "source":  "defaults",
+                                             "category":  "BACKGROUND",
+                                             "risk":  "None",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                                             "valueName":  "SilentInstalledAppsEnabled",
+                                             "target":  "0",
+                                             "before":  "1",
+                                             "after":  "0",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "desktop.start-suggestions-off",
+                                             "source":  "defaults",
+                                             "category":  "BACKGROUND",
+                                             "risk":  "None",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                                             "valueName":  "SystemPaneSuggestionsEnabled",
+                                             "target":  "0",
+                                             "before":  "1",
+                                             "after":  "0",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "desktop.tips-notifications-off",
+                                             "source":  "defaults",
+                                             "category":  "BACKGROUND",
+                                             "risk":  "None",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Software\\Microsoft\\Windows\\CurrentVersion\\ContentDeliveryManager",
+                                             "valueName":  "SubscribedContent-338389Enabled",
+                                             "target":  "0",
+                                             "before":  null,
+                                             "after":  "0",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "gaming.game-mode",
+                                             "source":  "gaming",
+                                             "category":  "GAMING",
+                                             "risk":  "None",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Software\\Microsoft\\GameBar",
+                                             "valueName":  "AutoGameModeEnabled",
+                                             "target":  "1",
+                                             "before":  null,
+                                             "after":  "1",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "gaming.windowed-optimizations",
+                                             "source":  "gaming",
+                                             "category":  "GRAPHICS",
+                                             "risk":  "Low",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Software\\Microsoft\\DirectX\\UserGpuPreferences",
+                                             "valueName":  "DirectXUserGlobalSettings",
+                                             "target":  "SwapEffectUpgradeEnable=1;",
+                                             "before":  null,
+                                             "after":  "SwapEffectUpgradeEnable=1;",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "gaming.background-recording-off",
+                                             "source":  "gaming",
+                                             "category":  "GAMING",
+                                             "risk":  "None",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Software\\Microsoft\\Windows\\CurrentVersion\\GameDVR",
+                                             "valueName":  "AppCaptureEnabled",
+                                             "target":  "0",
+                                             "before":  null,
+                                             "after":  "0",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "gaming.pointer-precision-off",
+                                             "source":  "gaming",
+                                             "category":  "GAMING",
+                                             "risk":  "Low",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Control Panel\\Mouse",
+                                             "valueName":  "MouseSpeed",
+                                             "target":  "0",
+                                             "before":  "1",
+                                             "after":  "0",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "gaming.pointer-threshold1-off",
+                                             "source":  "gaming",
+                                             "category":  "GAMING",
+                                             "risk":  "Low",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Control Panel\\Mouse",
+                                             "valueName":  "MouseThreshold1",
+                                             "target":  "0",
+                                             "before":  "6",
+                                             "after":  "0",
+                                             "status":  "Applied"
+                                         },
+                                         {
+                                             "id":  "gaming.pointer-threshold2-off",
+                                             "source":  "gaming",
+                                             "category":  "GAMING",
+                                             "risk":  "Low",
+                                             "hive":  "DefaultUser",
+                                             "key":  "Control Panel\\Mouse",
+                                             "valueName":  "MouseThreshold2",
+                                             "target":  "0",
+                                             "before":  "10",
+                                             "after":  "0",
+                                             "status":  "Applied"
+                                         }
+                                     ]
+                       },
+    "validation":  [
+                       {
+                           "name":  "ISO exists",
+                           "status":  "PASS",
+                           "detail":  "D:\\StormBuild\\storm-os\\build\\output\\StormOS.iso (6.6 GB)",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "ISO hash",
+                           "status":  "PASS",
+                           "detail":  "SHA-256 7e6fdd1d26179d7ceb681cf4ddc0dcbb91b6f4bb9b0b3f19ee7dabcaba5ed623",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "Installer bootable (BIOS)",
+                           "status":  "PASS",
+                           "detail":  "El Torito platforms: 0x00, 0xEF",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "Installer bootable (UEFI)",
+                           "status":  "PASS",
+                           "detail":  "Bootable entries: 2",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "ISO volume label",
+                           "status":  "PASS",
+                           "detail":  "Label \u0027STORMOS_1_0_0_CI_7\u0027",
+                           "critical":  false
+                       },
+                       {
+                           "name":  "No automatic answer file on media",
+                           "status":  "PASS",
+                           "detail":  "Windows Setup stays interactive",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "Installer media layout",
+                           "status":  "PASS",
+                           "detail":  "boot, efi, bootmgr, setup and boot.wim present",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "install.wim valid",
+                           "status":  "PASS",
+                           "detail":  "1 image(s): Windows 11 Enterprise Evaluation x64 10.0.26200.6584",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "boot.wim valid",
+                           "status":  "PASS",
+                           "detail":  "1: Microsoft Windows PE (amd64); 2: Microsoft Windows Setup (amd64)",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "Single install image",
+                           "status":  "PASS",
+                           "detail":  "Only sources\\install.wim",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "Storm files in image",
+                           "status":  "PASS",
+                           "detail":  "12 files present",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "Answer file safe",
+                           "status":  "PASS",
+                           "detail":  "No disk, key, account or bypass settings",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "Storm image identity",
+                           "status":  "PASS",
+                           "detail":  "STORM OS 1.0.0-ci.7, build 20260928-030044-209e85",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "Windows image intact",
+                           "status":  "PASS",
+                           "detail":  "Hives, default profile and shell present",
+                           "critical":  true
+                       },
+                       {
+                           "name":  "Customizations verified",
+                           "status":  "PASS",
+                           "detail":  "19 registry values written and read back",
+                           "critical":  true
+                       }
+                   ],
+    "vmTest":  {
+                   "hypervisor":  "QEMU",
+                   "accelerator":  "whpx",
+                   "passed":  false,
+                   "detail":  "The VM is running but the display is blank.",
+                   "screenshots":  [
+                                       "vm-boot-01.png",
+                                       "vm-boot-02.png",
+                                       "vm-boot-03.png",
+                                       "vm-boot-04.png",
+                                       "vm-boot-05.png",
+                                       "vm-boot-06.png",
+                                       "vm-boot-07.png",
+                                       "vm-boot-08.png",
+                                       "vm-boot-09.png",
+                                       "vm-boot-10.png",
+                                       "vm-boot-11.png",
+                                       "vm-boot-12.png",
+                                       "vm-boot-13.png",
+                                       "vm-boot-14.png",
+                                       "vm-boot-15.png",
+                                       "vm-boot-16.png",
+                                       "vm-boot-17.png",
+                                       "vm-boot-18.png",
+                                       "vm-boot-19.png",
+                                       "vm-boot-20.png",
+                                       "vm-boot-21.png",
+                                       "vm-boot-22.png",
+                                       "vm-boot-23.png",
+                                       "vm-boot-24.png",
+                                       "vm-boot-25.png"
+                                   ]
+               },
+    "hashes":  {
+                   "workingWim":  null,
+                   "brandingFiles":  [
+                                         {
+                                             "path":  "Windows\\Web\\Wallpaper\\StormOS\\storm-dark.jpg",
+                                             "sha256":  "01214bb01c92ee7f4edde850c11e9e06aa02300f999e9bb2fd9a55765a9d34e1"
+                                         },
+                                         {
+                                             "path":  "Windows\\Web\\Wallpaper\\StormOS\\storm-light.jpg",
+                                             "sha256":  "c0ac900fd8761fe53ee2735d0c12e54af47d8756864b67585fefb154bf2478db"
+                                         },
+                                         {
+                                             "path":  "Windows\\Web\\Screen\\StormOS\\storm-lockscreen.jpg",
+                                             "sha256":  "00ec08c16d6d6ee84e1a780e7f4e5d36e29ae090c75b5b8ccb0b619f3e99efb7"
+                                         },
+                                         {
+                                             "path":  "Windows\\System32\\oobe\\info\\StormOS-oem-logo.bmp",
+                                             "sha256":  "80e8ef69e8ffd06fadfa175945fbdbc1d3588e9ccae871efe80aff0d1ea778e3"
+                                         },
+                                         {
+                                             "path":  "Windows\\System32\\oobe\\info\\StormOS-oobe-logo.png",
+                                             "sha256":  "756bc42e37ad978e150657a0c8444f3387a3599caec259315c6134f23a9d6b11"
+                                         },
+                                         {
+                                             "path":  "ProgramData\\StormOS\\Branding\\storm-mark.png",
+                                             "sha256":  "4c627f79696c5cb2029dbc75ccf9a4149d48ffdc31ad898633310d8d13b0d8cd"
+                                         },
+                                         {
+                                             "path":  "ProgramData\\StormOS\\Branding\\storm-logo.png",
+                                             "sha256":  "5ed36ed4d40a011c49a9ec8a2af5859d124d2b56d88dd9babf0579b84afcdd9e"
+                                         },
+                                         {
+                                             "path":  "ProgramData\\StormOS\\Branding\\StormOS.ico",
+                                             "sha256":  "e6577580672acbe107b8bb2397e116cf70452febccfe1a72637e47859811bc11"
+                                         },
+                                         {
+                                             "path":  "Windows\\Resources\\Themes\\StormOS.theme",
+                                             "sha256":  "2ef085c27deeae5bb6158253ce72c51592796e218afba562d76af7242cf4933b"
+                                         }
+                                     ],
+                   "installWim":  {
+                                      "path":  "D:\\StormBuild\\storm-os\\build\\iso\\sources\\install.wim",
+                                      "sha256":  "3e1c5e10fdb1225d32fd92607ac1cbcc2b9246276ab0eb8f43312fab3a984d75",
+                                      "sizeBytes":  6224227492
+                                  },
+                   "iso":  {
+                               "path":  "D:\\StormBuild\\storm-os\\build\\output\\StormOS.iso",
+                               "sha256":  "7e6fdd1d26179d7ceb681cf4ddc0dcbb91b6f4bb9b0b3f19ee7dabcaba5ed623",
+                               "sizeBytes":  7077468160,
+                               "label":  "STORMOS_1_0_0_CI_7",
+                               "bootPrompt":  false
+                           }
+               },
+    "failure":  {
+                    "phase":  "14 VM boot test",
+                    "message":  "VM boot test failed: The VM is running but the display is blank.",
+                    "fix":  "Inspect the screenshots in D:\\StormBuild\\storm-os\\build\\artifacts\\vm."
+                }
+}
