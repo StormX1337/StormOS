@@ -1,0 +1,16 @@
+
+STORM OS
+------------
+  Service                    Running · v0.1.0-ci.35+94766d98927f92cd7617c4c09f7d2547fb0e42cb · healthy
+  Windows                    Windows Server 2025 Datacenter 24H2 (10.0.26100.33438)
+  Host                       runnervm99s1a
+  Uptime                     00:02:11
+
+LIVE
+--------
+  CPU                        79 %
+  GPU                        No GPU telemetry
+  RAM                        3.1 GB / 16.0 GB (19 %)
+  Latency                    Unavailable (Latency has not been measured yet.)
+  Active game                None
+

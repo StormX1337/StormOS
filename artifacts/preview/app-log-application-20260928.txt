@@ -1,0 +1,14 @@
+{"@t":"2026-09-28T02:49:12.8584421Z","@mt":"Service connection: {State}","State":"Connecting","SourceContext":"StormOS.Services.Client.StormServiceClient","LogCategory":"Application","ProcessId":4508}
+{"@t":"2026-09-28T02:49:12.9521716Z","@mt":"Service connection: {State}","State":"Connected","SourceContext":"StormOS.Services.Client.StormServiceClient","LogCategory":"Application","ProcessId":4508}
+{"@t":"2026-09-28T02:49:14.1772896Z","@mt":"Loaded {Count} game profiles","Count":13,"SourceContext":"StormOS.Games.Profiles.GameProfileRepository","LogCategory":"Application","ProcessId":9032}
+{"@t":"2026-09-28T02:49:14.2049667Z","@mt":"Telemetry sampling started","SourceContext":"StormOS.Performance.Telemetry.TelemetryHub","LogCategory":"Hardware","ProcessId":9032}
+{"@t":"2026-09-28T02:49:14.2096221Z","@mt":"Service connection: {State}","State":"Connecting","SourceContext":"StormOS.Services.Client.StormServiceClient","LogCategory":"Application","ProcessId":9032}
+{"@t":"2026-09-28T02:49:14.2400225Z","@mt":"STORM OS started (mock mode compiled in: {Mock})","Mock":false,"SourceContext":"StormOS.App.App","LogCategory":"Application","ProcessId":9032}
+{"@t":"2026-09-28T02:49:14.2591986Z","@mt":"Service connection: {State}","State":"Connected","SourceContext":"StormOS.Services.Client.StormServiceClient","LogCategory":"Application","ProcessId":9032}
+{"@t":"2026-09-28T02:49:14.2752164Z","@mt":"Telemetry sampling paused (no subscribers)","SourceContext":"StormOS.Performance.Telemetry.TelemetryHub","LogCategory":"Hardware","ProcessId":9032}
+{"@t":"2026-09-28T02:49:14.2755035Z","@mt":"Telemetry: using the STORM OS service","SourceContext":"StormOS.App.Services.TelemetryFeed","LogCategory":"Application","ProcessId":9032}
+{"@t":"2026-09-28T02:49:14.2759370Z","@mt":"Game scan found {Count} games across {Launchers} launchers","Count":0,"Launchers":0,"SourceContext":"StormOS.Games.GameRegistry","LogCategory":"Application","ProcessId":9032}
+{"@t":"2026-09-28T02:49:14.4242510Z","@mt":"CPU telemetry initialized: thermal zone {Thermal}, energy meter {Energy}","Thermal":"present","Energy":"present","SourceContext":"StormOS.Hardware.Cpu.CpuMetricCollector","LogCategory":"Hardware","ProcessId":9032}
+{"@t":"2026-09-28T02:49:14.4521641Z","@mt":"GPU telemetry initialized for {Count} adapter(s); NVML {Nvml}; engine counters {Engine}","Count":0,"Nvml":"unavailable","Engine":"available","SourceContext":"StormOS.Hardware.Gpu.GpuMetricCollector","LogCategory":"Hardware","ProcessId":9032}
+{"@t":"2026-09-28T02:49:57.7598302Z","@mt":"Service connection: {State}","State":"Connecting","SourceContext":"StormOS.Services.Client.StormServiceClient","LogCategory":"Application","ProcessId":9312}
+{"@t":"2026-09-28T02:49:57.8145566Z","@mt":"Service connection: {State}","State":"Connected","SourceContext":"StormOS.Services.Client.StormServiceClient","LogCategory":"Application","ProcessId":9312}

@@ -1,0 +1,200 @@
+{
+  "service": {
+    "status": "healthy",
+    "version": "0.1.0-ci.35\u002B94766d98927f92cd7617c4c09f7d2547fb0e42cb",
+    "uptime": "00:00:48.6942758",
+    "connectedClients": 1,
+    "telemetrySubscribers": 0,
+    "samplingMode": "Idle",
+    "workingSetBytes": 87293952,
+    "notes": []
+  },
+  "os": {
+    "productName": "Windows Server 2025 Datacenter",
+    "displayVersion": "24H2",
+    "buildNumber": 26100,
+    "revision": 33438,
+    "architecture": "x64",
+    "hostName": "runnervm99s1a",
+    "bootTime": "2026-09-28T02:47:01.7969738+00:00",
+    "isWindows11": true,
+    "versionString": "10.0.26100.33438"
+  },
+  "snapshot": {
+    "timestamp": "2026-09-28T02:49:57.8212057+00:00",
+    "sequence": 43,
+    "cpu": {
+      "usage": {
+        "value": 9.948356852992557,
+        "source": "PDH",
+        "isAvailable": true
+      },
+      "frequencyMhz": {
+        "value": 4244.991593681992,
+        "source": "PDH",
+        "isAvailable": true
+      },
+      "temperatureCelsius": {
+        "unavailableReason": "Windows exposes no CPU temperature sensor on this system (no ACPI thermal zone). STORM OS does not install kernel drivers to read sensors directly.",
+        "source": "ACPI thermal zone",
+        "isAvailable": false
+      },
+      "packagePowerWatts": {
+        "unavailableReason": "The Energy Meter reports no CPU package channel.",
+        "source": "Energy Meter",
+        "isAvailable": false
+      },
+      "cores": [
+        {
+          "index": 0,
+          "usagePercent": 18.728862973760933,
+          "frequencyMhz": 4237.918176861776
+        },
+        {
+          "index": 1,
+          "usagePercent": 4.486348830568655,
+          "frequencyMhz": 4249.332688591914
+        },
+        {
+          "index": 2,
+          "usagePercent": 6.70270306426628,
+          "frequencyMhz": 4246.963199044926
+        },
+        {
+          "index": 3,
+          "usagePercent": 9.87552444713642,
+          "frequencyMhz": 4255.212738592071
+        }
+      ]
+    },
+    "gpus": [],
+    "memory": {
+      "totalBytes": 17174360064,
+      "availableBytes": 14230515712,
+      "committedBytes": 2691313664,
+      "commitLimitBytes": 20261367808,
+      "cachedBytes": 3130974208,
+      "usedBytes": 2943844352,
+      "usagePercent": 17.140926014301595
+    },
+    "disks": [
+      {
+        "name": "0 C:",
+        "readBytesPerSecond": 50780.532138044124,
+        "writeBytesPerSecond": 382034.9336431924,
+        "activeTimePercent": {
+          "value": 1.0430808978641721,
+          "source": "PDH",
+          "isAvailable": true
+        }
+      },
+      {
+        "name": "1 D:",
+        "readBytesPerSecond": 0,
+        "writeBytesPerSecond": 31885.450412260263,
+        "activeTimePercent": {
+          "value": 0,
+          "source": "PDH",
+          "isAvailable": true
+        }
+      }
+    ],
+    "network": [
+      {
+        "id": "{062999E1-4A19-4D45-97C0-8FDD9507E566}",
+        "name": "Ethernet 3",
+        "receivedBytesPerSecond": 4742.233050884841,
+        "sentBytesPerSecond": 1008.5318100678,
+        "linkSpeedBitsPerSecond": 200000000000
+      },
+      {
+        "id": "{5CD15ABE-E62A-447E-8AEE-34595C85823F}",
+        "name": "vEthernet (nat)",
+        "receivedBytesPerSecond": 0,
+        "sentBytesPerSecond": 0,
+        "linkSpeedBitsPerSecond": 10000000000
+      },
+      {
+        "id": "{E257CC0C-BAE6-11F1-85BB-6045BD3626FF}",
+        "name": "vSwitch (nat)-Hyper-V Virtual Switch Extension Filter-0000",
+        "receivedBytesPerSecond": 0,
+        "sentBytesPerSecond": 0,
+        "linkSpeedBitsPerSecond": 10000000000
+      },
+      {
+        "id": "{E257CC10-BAE6-11F1-85BB-6045BD3626FF}",
+        "name": "vEthernet (nat)-WFP Native MAC Layer LightWeight Filter-0000",
+        "receivedBytesPerSecond": 0,
+        "sentBytesPerSecond": 0,
+        "linkSpeedBitsPerSecond": 10000000000
+      },
+      {
+        "id": "{E257CC11-BAE6-11F1-85BB-6045BD3626FF}",
+        "name": "vEthernet (nat)-QoS Packet Scheduler-0000",
+        "receivedBytesPerSecond": 0,
+        "sentBytesPerSecond": 0,
+        "linkSpeedBitsPerSecond": 10000000000
+      },
+      {
+        "id": "{E257CC12-BAE6-11F1-85BB-6045BD3626FF}",
+        "name": "vEthernet (nat)-WFP 802.3 MAC Layer LightWeight Filter-0000",
+        "receivedBytesPerSecond": 0,
+        "sentBytesPerSecond": 0,
+        "linkSpeedBitsPerSecond": 10000000000
+      },
+      {
+        "id": "{E257CB91-BAE6-11F1-85BB-010101010000}",
+        "name": "Ethernet 3-WFP Native MAC Layer LightWeight Filter-0000",
+        "receivedBytesPerSecond": 4742.233050884841,
+        "sentBytesPerSecond": 1008.5318100678,
+        "linkSpeedBitsPerSecond": 200000000000
+      },
+      {
+        "id": "{E257CB92-BAE6-11F1-85BB-010101010000}",
+        "name": "Ethernet 3-QoS Packet Scheduler-0000",
+        "receivedBytesPerSecond": 4742.233050884841,
+        "sentBytesPerSecond": 1008.5318100678,
+        "linkSpeedBitsPerSecond": 200000000000
+      },
+      {
+        "id": "{E257CB93-BAE6-11F1-85BB-010101010000}",
+        "name": "Ethernet 3-WFP 802.3 MAC Layer LightWeight Filter-0000",
+        "receivedBytesPerSecond": 4742.233050884841,
+        "sentBytesPerSecond": 1008.5318100678,
+        "linkSpeedBitsPerSecond": 200000000000
+      },
+      {
+        "id": "{2DC545A4-1D26-4C97-A1EA-FB3682CBE74B}",
+        "name": "vSwitch (nat)",
+        "receivedBytesPerSecond": 0,
+        "sentBytesPerSecond": 0,
+        "linkSpeedBitsPerSecond": 10000000000
+      },
+      {
+        "id": "{9112513B-364F-47CC-84CC-B9BAE16D6775}",
+        "name": "Ethernet 4",
+        "receivedBytesPerSecond": 4804.509457681481,
+        "sentBytesPerSecond": 1008.5318100678,
+        "linkSpeedBitsPerSecond": 200000000000
+      }
+    ],
+    "system": {
+      "processCount": 151,
+      "threadCount": 1660,
+      "handleCount": 55358,
+      "contextSwitchesPerSecond": {
+        "value": 1899.4846797247685,
+        "source": "PDH",
+        "isAvailable": true
+      },
+      "uptime": "00:02:56.0310000",
+      "latencyMs": {
+        "unavailableReason": "No reply from 1.1.1.1 (TimedOut).",
+        "source": "ICMP",
+        "isAvailable": false
+      }
+    },
+    "isMock": false
+  }
+}
+

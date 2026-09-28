@@ -1,0 +1,4 @@
+{"@t":"2026-09-28T02:49:13.1174070Z","@mt":"CPU telemetry initialized: thermal zone {Thermal}, energy meter {Energy}","Thermal":"present","Energy":"present","SourceContext":"StormOS.Hardware.Cpu.CpuMetricCollector","LogCategory":"Hardware","ProcessId":10168}
+{"@t":"2026-09-28T02:49:13.1556683Z","@mt":"GPU telemetry initialized for {Count} adapter(s); NVML {Nvml}; engine counters {Engine}","Count":0,"Nvml":"unavailable","Engine":"available","SourceContext":"StormOS.Hardware.Gpu.GpuMetricCollector","LogCategory":"Hardware","ProcessId":10168}
+{"@t":"2026-09-28T02:49:14.2676476Z","@mt":"Telemetry sampling started","SourceContext":"StormOS.Performance.Telemetry.TelemetryHub","LogCategory":"Hardware","ProcessId":10168}
+{"@t":"2026-09-28T02:49:54.5764005Z","@mt":"Telemetry sampling paused (no subscribers)","SourceContext":"StormOS.Performance.Telemetry.TelemetryHub","LogCategory":"Hardware","ProcessId":10168}
